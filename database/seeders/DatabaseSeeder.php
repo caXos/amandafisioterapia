@@ -34,6 +34,12 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Visitante',
                 'email' => 'visitante@amfisioterapia.fisio.br',
                 'password' => bcrypt('amfisioterapia'),
-            ]); 
+            ]);
+            $this->call([
+                PacienteSeeder::class,
+                FinanceiroSeeder::class,
+                AgendaSeeder::class,
+                AparelhoSeeder::class,
+            ]);
     }
 }
