@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Agenda;
-use App\Http\Requests\StoreAgendaRequest;
-use App\Http\Requests\UpdateAgendaRequest;
+use App\Models\Atividade;
+use App\Http\Requests\StoreAtividadeRequest;
+use App\Http\Requests\UpdateAtividadeRequest;
 use Inertia\Inertia;
 
-class AgendaController extends Controller
+class AtividadeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class AgendaController extends Controller
      */
     public function index()
     {
-        $agendas = Agenda::all()->toArray();
-        return Inertia::render('Agenda/Agenda',['agendas' => $agendas]);
+        $atividades = Atividade::all()->toArray();
+        return Inertia::render('Atividades/Atividades',['atividades' => $atividades]);
     }
 
     /**
@@ -33,10 +33,10 @@ class AgendaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreAgendaRequest  $request
+     * @param  \App\Http\Requests\StoreAtividadeRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreAgendaRequest $request)
+    public function store(StoreAtividadeRequest $request)
     {
         //
     }
@@ -44,10 +44,10 @@ class AgendaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Agenda  $agenda
+     * @param  \App\Models\Atividade  $atividade
      * @return \Illuminate\Http\Response
      */
-    public function show(Agenda $agenda)
+    public function show(Atividade $atividade)
     {
         //
     }
@@ -55,10 +55,10 @@ class AgendaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Agenda  $agenda
+     * @param  \App\Models\Atividade  $atividade
      * @return \Illuminate\Http\Response
      */
-    public function edit(Agenda $agenda)
+    public function edit(Atividade $atividade)
     {
         //
     }
@@ -66,11 +66,11 @@ class AgendaController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateAgendaRequest  $request
-     * @param  \App\Models\Agenda  $agenda
+     * @param  \App\Http\Requests\UpdateAtividadeRequest  $request
+     * @param  \App\Models\Atividade  $atividade
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateAgendaRequest $request, Agenda $agenda)
+    public function update(UpdateAtividadeRequest $request, Atividade $atividade)
     {
         //
     }
@@ -78,10 +78,10 @@ class AgendaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Agenda  $agenda
+     * @param  \App\Models\Atividade  $atividade
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Agenda $agenda)
+    public function destroy(Atividade $atividade)
     {
         //
     }

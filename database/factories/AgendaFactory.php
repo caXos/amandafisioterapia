@@ -17,7 +17,10 @@ class AgendaFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'date' => fake()->dateTimeThisYear('+1 week'),
+            'time' => fake()->time(),
+            'done' => false,
+            'user_id' => 1,
         ];
     }
 }

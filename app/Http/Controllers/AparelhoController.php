@@ -16,8 +16,8 @@ class AparelhoController extends Controller
      */
     public function index()
     {
-        $aparelhos = Aparelho::all()->toArray();
-        return Inertia::render('Aparelhos',['aparelhos' => $aparelhos]);
+        $aparelhos = Aparelho::all();
+        return Inertia::render('Aparelhos/Aparelhos',['aparelhos' => $aparelhos]);
     }
 
     /**

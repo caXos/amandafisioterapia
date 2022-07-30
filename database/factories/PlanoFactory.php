@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Aparelho>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Plano>
  */
-class AparelhoFactory extends Factory
+class PlanoFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,7 +18,9 @@ class AparelhoFactory extends Factory
     {
         return [
             'name' => fake()->word(),
-            'description' => fake()->sentence(),
+            'time' => fake()->sentence(),
+            'frequency' => fake()->sentence(),
+            'totalValue' => fake()->randomFloat(2,0,9999),
         ];
     }
 }

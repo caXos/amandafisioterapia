@@ -21,25 +21,29 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         \App\Models\User::factory()->create([
-                 'name' => 'Amanda Zagui Mendes Marciniak',
-                 'email' => 'amanda@amfisioterapia.fisio.br',
-                 'password' => bcrypt('amfisioterapia'),
-             ]);
-             \App\Models\User::factory()->create([
-                'name' => 'Jorge Gomez',
-                'email' => 'jorgegomez@amfisioterapia.fisio.br',
+                'name' => 'Amanda Zagui Mendes Marciniak',
+                'email' => 'amanda@amfisioterapia.fisio.br',
                 'password' => bcrypt('amfisioterapia'),
             ]);
             \App\Models\User::factory()->create([
-                'name' => 'Visitante',
-                'email' => 'visitante@amfisioterapia.fisio.br',
-                'password' => bcrypt('amfisioterapia'),
-            ]);
-            $this->call([
-                PacienteSeeder::class,
-                FinanceiroSeeder::class,
-                AgendaSeeder::class,
-                AparelhoSeeder::class,
-            ]);
+            'name' => 'Jorge Gomez',
+            'email' => 'jorgegomez@amfisioterapia.fisio.br',
+            'password' => bcrypt('amfisioterapia'),
+        ]);
+        \App\Models\User::factory()->create([
+            'name' => 'Visitante',
+            'email' => 'visitante@amfisioterapia.fisio.br',
+            'password' => bcrypt('amfisioterapia'),
+        ]);
+        $this->call([
+            AgendaSeeder::class,
+            AparelhoSeeder::class,
+            AtividadeSeeder::class,
+            DocumentoSeeder::class,
+            FinanceiroSeeder::class,
+            PacienteSeeder::class,
+            PlanoSeeder::class,
+            ProntuarioSeeder::class,
+        ]);
     }
 }

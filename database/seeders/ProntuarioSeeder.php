@@ -14,6 +14,6 @@ class ProntuarioSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \App\Models\Prontuario::factory(10)->create();
     }
 }

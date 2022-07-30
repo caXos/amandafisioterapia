@@ -14,6 +14,6 @@ class PacienteSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \App\Models\Paciente::factory(10)->create();
     }
 }

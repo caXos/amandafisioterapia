@@ -6,8 +6,11 @@ use Inertia\Inertia;
 
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\AparelhoController;
+use App\Http\Controllers\AtividadeController;
+use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\FinanceiroController;
 use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\PlanoController;
 use App\Http\Controllers\ProntuarioController;
 use App\Http\Controllers\UserController;
 
@@ -39,14 +42,15 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/agenda', function () {
-    return Inertia::render('Agenda');
-})->middleware(['auth', 'verified'])->name('agenda');
+Route::get('/agenda', [AgendaController::class, 'index'])->middleware(['auth', 'verified'])->name('agenda');
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
-    Route::get('pacientes', [PacienteController::class, 'index'])->name('pacientes');
-    Route::get('financeiro',[FinanceiroController::class, 'index'])->name('financeiro');
     Route::get('aparelhos',[AparelhoController::class, 'index'])->name('aparelhos');
+    Route::get('atividades',[AtividadeController::class, 'index'])->name('atividades');
+    Route::get('documentos',[DocumentoController::class, 'index'])->name('documentos');
+    Route::get('financeiro',[FinanceiroController::class, 'index'])->name('financeiro');
+    Route::get('pacientes', [PacienteController::class, 'index'])->name('pacientes');
+    Route::get('planos',[PlanoController::class, 'index'])->name('planos');
 });
 
 require __DIR__.'/auth.php';

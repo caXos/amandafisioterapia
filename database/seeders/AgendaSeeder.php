@@ -14,6 +14,6 @@ class AgendaSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \App\Models\Agenda::factory(10)->create();
     }
 }

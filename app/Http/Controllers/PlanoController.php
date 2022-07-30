@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Agenda;
-use App\Http\Requests\StoreAgendaRequest;
-use App\Http\Requests\UpdateAgendaRequest;
+use App\Models\Plano;
+use App\Http\Requests\StorePlanoRequest;
+use App\Http\Requests\UpdatePlanoRequest;
 use Inertia\Inertia;
 
-class AgendaController extends Controller
+class PlanoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class AgendaController extends Controller
      */
     public function index()
     {
-        $agendas = Agenda::all()->toArray();
-        return Inertia::render('Agenda/Agenda',['agendas' => $agendas]);
+        $planos = Plano::all()->toArray();
+        return Inertia::render('Planos/Planos',['planos' => $planos]);
     }
 
     /**
@@ -33,10 +33,10 @@ class AgendaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreAgendaRequest  $request
+     * @param  \App\Http\Requests\StorePlanoRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreAgendaRequest $request)
+    public function store(StorePlanoRequest $request)
     {
         //
     }
@@ -44,10 +44,10 @@ class AgendaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Agenda  $agenda
+     * @param  \App\Models\Plano  $plano
      * @return \Illuminate\Http\Response
      */
-    public function show(Agenda $agenda)
+    public function show(Plano $plano)
     {
         //
     }
@@ -55,10 +55,10 @@ class AgendaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Agenda  $agenda
+     * @param  \App\Models\Plano  $plano
      * @return \Illuminate\Http\Response
      */
-    public function edit(Agenda $agenda)
+    public function edit(Plano $plano)
     {
         //
     }
@@ -66,11 +66,11 @@ class AgendaController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateAgendaRequest  $request
-     * @param  \App\Models\Agenda  $agenda
+     * @param  \App\Http\Requests\UpdatePlanoRequest  $request
+     * @param  \App\Models\Plano  $plano
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateAgendaRequest $request, Agenda $agenda)
+    public function update(UpdatePlanoRequest $request, Plano $plano)
     {
         //
     }
@@ -78,10 +78,10 @@ class AgendaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Agenda  $agenda
+     * @param  \App\Models\Plano  $plano
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Agenda $agenda)
+    public function destroy(Plano $plano)
     {
         //
     }

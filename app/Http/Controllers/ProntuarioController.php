@@ -16,7 +16,8 @@ class ProntuarioController extends Controller
      */
     public function index()
     {
-        //
+        $prontuarios = Prontuarios::all()->toArray();
+        return null;//Inertia::render('Agenda/Agenda',['agenda' => $agenda]);
     }
 
     /**

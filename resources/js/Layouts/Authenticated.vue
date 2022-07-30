@@ -46,6 +46,21 @@ const showingNavigationDropdown = ref(false);
                                     Aparelhos
                                 </BreezeNavLink>
                             </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <BreezeNavLink :href="route('atividades')" :active="route().current('atividades')">
+                                    Atividades
+                                </BreezeNavLink>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <BreezeNavLink :href="route('planos')" :active="route().current('planos')">
+                                    Planos
+                                </BreezeNavLink>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <BreezeNavLink :href="route('documentos')" :active="route().current('documentos')">
+                                    Documentos
+                                </BreezeNavLink>
+                            </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -105,6 +120,21 @@ const showingNavigationDropdown = ref(false);
                     <div class="pt-2 pb-3 space-y-1">
                         <BreezeResponsiveNavLink :href="route('aparelhos')" :active="route().current('aparelhos')">
                             Aparelhos
+                        </BreezeResponsiveNavLink>
+                    </div>   
+                    <div class="pt-2 pb-3 space-y-1">
+                        <BreezeResponsiveNavLink :href="route('atividades')" :active="route().current('atividades')">
+                            Atividades
+                        </BreezeResponsiveNavLink>
+                    </div>
+                    <div class="pt-2 pb-3 space-y-1">
+                        <BreezeResponsiveNavLink :href="route('planos')" :active="route().current('planos')">
+                            Planos
+                        </BreezeResponsiveNavLink>
+                    </div>
+                    <div class="pt-2 pb-3 space-y-1">
+                        <BreezeResponsiveNavLink :href="route('documentos')" :active="route().current('documentos')">
+                            Documentos
                         </BreezeResponsiveNavLink>
                     </div>
 

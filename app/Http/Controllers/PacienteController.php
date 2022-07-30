@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Paciente;
+use App\Models\User;
 use App\Http\Requests\StorePacienteRequest;
 use App\Http\Requests\UpdatePacienteRequest;
 use Inertia\Inertia;
@@ -16,8 +17,12 @@ class PacienteController extends Controller
      */
     public function index()
     {
-        $pacientes = Paciente::all()->toArray();
-        return Inertia::render('Pacientes',['pacientes' => $pacientes]);
+        $pacientes = Paciente::all();
+        foreach($pacientes as $paciente) {
+            $fisio = User::select('name')->where('id',$paciente->user_id)->value('name');
+            $paciente->user_id = $fisio;
+        }
+        return Inertia::render('Pacientes/Pacientes',['pacientes' => $pacientes]);
     }
 
     /**

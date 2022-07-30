@@ -23,7 +23,7 @@ class FinanceiroController extends Controller
             if ($lancamentos[$contador]['type'] == 1) $soma += $lancamentos[$contador]['value'];
             else if ($lancamentos[$contador]['type'] == 2) $soma -= $lancamentos[$contador]['value'];
         }
-        return Inertia::render('Financeiro',['lancamentos' => $lancamentos, 'soma' => $soma]);
+        return Inertia::render('Financeiro/Financeiro',['lancamentos' => $lancamentos, 'soma' => $soma]);
     }
 
     /**

@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Prontuario extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'date',
+        'time',
+        'description',
+        'paciente_id',
+    ];
 }
