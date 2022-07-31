@@ -21,12 +21,16 @@ class AgendaController extends Controller
     public function index()
     {
         // $agendas = Agenda::all()->toArray();
-        $agendas = Agenda::all();
+        $agendas = Agenda::all()->where('done',false);
         foreach($agendas as $agenda) {
+            $fisio = User::select('name')->where('id',$agenda->user_id)->value('name');
             $paciente = Paciente::select('name')->where('id',$agenda->paciente_id)->value('name');
             $atividade = Atividade::select('name')->where('id',$agenda->atividade_id)->value('name');
+            $aparelho = Aparelho::select('name')->where('id',$agenda->aparelho_id)->value('name');
+            $agenda->user_id = $fisio;
             $agenda->paciente_id = $paciente;
             $agenda->atividade_id = $atividade;
+            $agenda->aparelho_id = $aparelho;
         }
         return Inertia::render('Agenda/Agenda',['agendas' => $agendas]);
     }
@@ -58,7 +62,8 @@ class AgendaController extends Controller
      */
     public function store(StoreAgendaRequest $request)
     {
-        $this->authorize('create');
+        $this->authorize('create', Agenda::class);
+        // error_log($request);
         $agenda = new Agenda([
             'user_id' => $request->fisio,
             'date' => $request->date,
@@ -69,8 +74,9 @@ class AgendaController extends Controller
             'done' => false,
         ]);
         $agenda->save();
-        // return redirect()->route("agenda")->with('status','Compromisso criado');
-        return Inertia::render('Agenda/Agenda');
+        return redirect()->route("agenda",)->with('status','Compromisso criado');
+        // return redirect()->route("agenda",['status'=>'Compromisso criado']);
+        // return Inertia::render('Agenda/Agenda',['status'=>'Compromisso criado']);
     }
 
     /**
@@ -105,6 +111,17 @@ class AgendaController extends Controller
     public function update(UpdateAgendaRequest $request, Agenda $agenda)
     {
         //
+    }
+
+    public function completarCompromisso(UpdateAgendaRequest $request)
+    {
+        if ($request->user()->id <= 2) $this->authorize('completarCompromisso', Agenda::class);
+
+        $agenda = Agenda::find($request->id);
+        error_log($agenda);
+        $agenda->done = true;
+        $agenda->save();
+        return response(['status','Compromisso completado']);
     }
 
     /**

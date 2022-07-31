@@ -26,5 +26,7 @@
         <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
         {{-- DataTables JS --}}
         <script type="text/javascript" src="./DataTables/datatables.min.js"></script>
+        {{-- Sweet Alert 2 --}}
+        <script type="text/javascript" src="./../js/sweetalert2.all.min.js"></script>
     </body>
 </html>

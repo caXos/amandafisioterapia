@@ -20,12 +20,12 @@ const props = defineProps({
 });
 
 const form = useForm({
-    date: '',
-    time: '',
-    paciente: '',
-    atividade: '',
-    aparelho: '',
-    fisio: '',
+    date: Date,
+    time: Date,
+    paciente: Number,
+    atividade: Number,
+    aparelho: Number,
+    fisio: Number,
 });
 
 const submit = () => {
@@ -81,7 +81,8 @@ function trocaAtividade_bckp(evt) {
 
                             <div class="mt-4">
                                 <BreezeLabel for="paciente" value="Paciente" />
-                                <PacienteSelect id="paciente" class="mt-1 block w-full" v-model="form.paciente"
+                                <PacienteSelect id="paciente" class="mt-1 block w-full" 
+                                    v-model="form.paciente"
                                     :pacientes="pacientes" required />
                             </div>
 

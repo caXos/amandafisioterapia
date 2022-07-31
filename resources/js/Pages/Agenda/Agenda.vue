@@ -7,6 +7,7 @@ import { computed } from 'vue';
 
 const props = defineProps({
     agendas: Object,
+    status: String
 });
 
 </script>
@@ -28,15 +29,17 @@ const props = defineProps({
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
-                        <Link :href="route('adicionarAgenda')">Teste</Link>
-                        <FAB model="Compromisso" acao="alert('Adicionar Compromisso');"></FAB>
+                        <FAB model="Compromisso" rota="adicionarAgenda"></FAB>
                         <AgendaCard v-for="(agenda, index) in agendas" 
                                 :key="index" 
                                 :date="agenda.date"
                                 :time="agenda.time"
                                 :id="agenda.id"
-                                :paciente_id="agenda.paciente_id" 
-                                :atividade_id="agenda.atividade_id" />
+                                :paciente="agenda.paciente_id" 
+                                :atividade="agenda.atividade_id"
+                                :fisio="agenda.user_id"
+                                :aparelho="agenda.aparelho_id"
+                                :completado=false />
                     </div>
                 </div>
             </div>

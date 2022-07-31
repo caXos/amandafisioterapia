@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+// use Illuminate\Support\Facades\Auth;
 
 class UpdateAgendaRequest extends FormRequest
 {
@@ -13,7 +14,10 @@ class UpdateAgendaRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        // return false;
+        // if(Auth::id <= 2) return true;
+        // else return false;
+        return true;
     }
 
     /**

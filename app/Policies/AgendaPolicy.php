@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Agenda;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class AgendaPolicy
 {
@@ -43,6 +44,7 @@ class AgendaPolicy
     {
         //
         // return $user->id <= 2;
+        return $user->id <= 2 ? Response::allow() : Response::deny('teste deny');
     }
 
     /**
@@ -55,6 +57,11 @@ class AgendaPolicy
     public function update(User $user, Agenda $agenda)
     {
         //
+    }
+
+    public function completarCompromisso(User $user)
+    {
+        return $user->id <= 2 ? Response::allow() : Response::deny('teste deny');
     }
 
     /**
