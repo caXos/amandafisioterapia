@@ -5,7 +5,7 @@ import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
 import { Head, useForm } from '@inertiajs/inertia-vue3';
-import { computed, ref } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 import FisioSelect from '@/Components/FisioSelect.vue';
 import PacienteSelect from '@/Components/PacienteSelect.vue';
 import AtividadeSelect from '@/Components/AtividadeSelect.vue';
@@ -17,6 +17,12 @@ const props = defineProps({
     aparelhos: Object,
     fisios: Object,
     status: String,
+
+    agenda: Object,
+    fisio_id: Number,
+    paciente_id: Number,
+    atividade_id: Number,
+    apareho_id: Number,
 });
 
 const form = useForm({
@@ -35,6 +41,9 @@ const submit = () => {
     });
 };
 
+// onMounted(() => {
+//     console.log(props.paciente_id);
+// });
 const atividadeTeste = null;
 </script>
 
@@ -70,7 +79,7 @@ function trocaAtividade_bckp(evt) {
                             <div>
                                 <BreezeLabel for="date" value="Data" />
                                 <BreezeInput id="date" type="date" class="mt-1 block w-full" v-model="form.date"
-                                    required autofocus />
+                                    required autofocus  />
                             </div>
 
                             <div class="mt-4">
@@ -83,24 +92,32 @@ function trocaAtividade_bckp(evt) {
                                 <BreezeLabel for="paciente" value="Paciente" />
                                 <PacienteSelect id="paciente" class="mt-1 block w-full" 
                                     v-model="form.paciente"
-                                    :pacientes="pacientes" required />
+                                    :pacientes="pacientes"
+                                    :selectedIndex="paciente_id"
+                                    required />
                             </div>
 
                             <div class="mt-4">
                                 <BreezeLabel for="atividade" value="Atividade" />
                                 <AtividadeSelect id="atividade" class="mt-1 block w-full" v-model="form.atividade"
-                                    :atividades="atividades" required @change="trocaAtividade($event)" />
+                                    :atividades="atividades" 
+                                    required 
+                                    @change="trocaAtividade($event)" 
+                                    :selectedIndex="atividade_id" />
                             </div>
 
                             <div v-if="atividadeTeste" class="mt-4">
                                 <BreezeLabel for="aparelho" value="Aparelho" />
                                 <AparelhoSelect id="aparelho" class="mt-1 block w-full" v-model="form.aparelho"
-                                    :aparelhos="aparelhos" required />
+                                    :aparelhos="aparelhos" 
+                                    :selectedIndex="aparelho_id" required />
                             </div>
 
                             <div class="mt-4">
                                 <BreezeLabel for="fisio" value="Fisioterapeuta" />
-                                <FisioSelect id="fisio" class="mt-1 block w-full" v-model="form.fisio" :fisios="fisios"
+                                <FisioSelect id="fisio" class="mt-1 block w-full" v-model="form.fisio" 
+                                :fisios="fisios"
+                                :selectedIndex="fisio_id"
                                     required />
                             </div>
 

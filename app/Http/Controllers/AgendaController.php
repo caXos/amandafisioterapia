@@ -96,9 +96,34 @@ class AgendaController extends Controller
      * @param  \App\Models\Agenda  $agenda
      * @return \Illuminate\Http\Response
      */
-    public function edit(Agenda $agenda)
+    // public function edit(Agenda $agenda)
+    // {
+    //     //
+    // }
+    public function edit(UpdateAgendaRequest $request)
     {
-        //
+        $agenda = Agenda::find($request->id);
+        $fisio = User::select('id')->where('id',$agenda->user_id)->value('id');
+        $paciente = Paciente::select('id')->where('id',$agenda->paciente_id)->value('id');
+        $atividade = Atividade::select('id')->where('id',$agenda->atividade_id)->value('id');
+        $aparelho = Aparelho::select('id')->where('id',$agenda->aparelho_id)->value('id');
+        $pacientes = Paciente::all('id','name');
+        $atividades = Atividade::all('id','name','usesAparatus');
+        $aparelhos = Aparelho::all('id','name');
+        $fisios = User::all('id','name');
+        error_log($fisio);
+        return Inertia::render('Agenda/AgendaForm',[
+            'agenda'=>$agenda,
+            'fisio_id'=>$fisio,
+            'paciente_id'=>$paciente,
+            'atividade_id'=>$atividade,
+            'aparelho_id'=>$aparelho,
+
+            'fisios'=>$fisios,
+            'pacientes'=>$pacientes,
+            'atividades'=>$atividades,
+            'aparelhos'=>$aparelhos,
+        ]);
     }
 
     /**

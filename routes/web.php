@@ -54,7 +54,8 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
 
     Route::get('adicionarAgenda',[AgendaController::class, 'create'])->name('adicionarAgenda');
     Route::post('adicionarAgenda',[AgendaController::class, 'store'])->name('gravarAgenda');
-    Route::post('editarAgenda',[AgendaController::class, 'edit'])->name('editarAgenda');
+    Route::get('editarAgenda/{id}',[AgendaController::class, 'edit'])->name('editarAgenda');
+    Route::post('atualizarAgenda',[AgendaController::class, 'edit'])->name('atualizarAgenda');
     Route::post('completarCompromisso/{id}',[AgendaController::class, 'completarCompromisso'])->name('completarCompromisso');
 });
 

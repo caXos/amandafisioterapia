@@ -52,10 +52,10 @@ function deletarCompromisso(id) {
             </div>
             <div>{{ fisio }}</div>
             <div>
-                <!-- <Link :href="route(editarAgenda,[id])"> -->
+                <Link :href="route('editarAgenda',[id])">
                 <span class="material-symbols-outlined text-color-inherit mx-1 cursor-pointer"
                     :title="'Editar compromisso'">edit</span>
-                <!-- </Link> -->
+                </Link>
                 <span class="material-symbols-outlined text-color-inherit mx-1 cursor-pointer"
                     :title="`Notificar ${paciente}`">notifications</span>
                 <span class="material-symbols-outlined text-color-inherit mx-1 cursor-pointer"

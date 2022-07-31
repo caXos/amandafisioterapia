@@ -27,6 +27,6 @@
         {{-- DataTables JS --}}
         <script type="text/javascript" src="./DataTables/datatables.min.js"></script>
         {{-- Sweet Alert 2 --}}
-        <script type="text/javascript" src="./../js/sweetalert2.all.min.js"></script>
+        {{-- <script type="text/javascript" src="./../js/sweetalert2.all.min.js"></script> --}}
     </body>
 </html>
