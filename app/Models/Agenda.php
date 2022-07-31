@@ -18,6 +18,9 @@ class Agenda extends Model
         'user_id',
         'date',
         'time',
+        'paciente_id',
+        'atividade_id',
+        'aparelho_id',
         'done',
     ];
 }

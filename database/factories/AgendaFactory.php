@@ -21,6 +21,8 @@ class AgendaFactory extends Factory
             'time' => fake()->time(),
             'done' => false,
             'user_id' => 1,
+            'paciente_id' => random_int(1,10),
+            'atividade_id' => random_int(1,2),
         ];
     }
 }

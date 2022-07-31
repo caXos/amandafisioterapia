@@ -42,6 +42,7 @@ class AgendaPolicy
     public function create(User $user)
     {
         //
+        // return $user->id <= 2;
     }
 
     /**

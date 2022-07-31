@@ -19,6 +19,7 @@ class AtividadeFactory extends Factory
         return [
             'name' => fake()->word(),
             'description' => fake()->sentence(),
+            'usesAparatus' => false,
         ];
     }
 }

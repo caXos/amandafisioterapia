@@ -36,12 +36,14 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('amfisioterapia'),
         ]);
         $this->call([
+            PacienteSeeder::class,
+            AtividadeSeeder::class,
             AgendaSeeder::class,
             AparelhoSeeder::class,
-            AtividadeSeeder::class,
+            // AtividadeSeeder::class,
             DocumentoSeeder::class,
             FinanceiroSeeder::class,
-            PacienteSeeder::class,
+            // PacienteSeeder::class,
             PlanoSeeder::class,
             ProntuarioSeeder::class,
         ]);

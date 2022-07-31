@@ -16,6 +16,10 @@ return new class extends Migration
         Schema::create('agendas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('paciente_id')->constrained('pacientes');
+            // $table->foreignId('atividade_id')->constrained('atividades');
+            $table->integer('atividade_id');
+            $table->integer('aparelho_id')->constrained('aparelhos')->nullable();
             $table->date('date');
             $table->time('time');
             $table->boolean('done');

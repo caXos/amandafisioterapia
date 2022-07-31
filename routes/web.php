@@ -51,6 +51,9 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('financeiro',[FinanceiroController::class, 'index'])->name('financeiro');
     Route::get('pacientes', [PacienteController::class, 'index'])->name('pacientes');
     Route::get('planos',[PlanoController::class, 'index'])->name('planos');
+
+    Route::get('adicionarAgenda',[AgendaController::class, 'create'])->name('adicionarAgenda');
+    Route::post('adicionarAgenda',[AgendaController::class, 'store'])->name('gravarAgenda');
 });
 
 require __DIR__.'/auth.php';

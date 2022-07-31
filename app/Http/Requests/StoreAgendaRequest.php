@@ -13,7 +13,7 @@ class StoreAgendaRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
