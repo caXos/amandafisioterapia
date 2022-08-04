@@ -21,7 +21,8 @@ class AgendaController extends Controller
     public function index()
     {
         // $agendas = Agenda::all()->toArray();
-        $agendas = Agenda::all()->where('done',false);
+        // $agendas = Agenda::all()->where('done',false);
+        $agendas = Agenda::orderBy('date')->where('done',false)->get();
         foreach($agendas as $agenda) {
             $fisio = User::select('name')->where('id',$agenda->user_id)->value('name');
             $paciente = Paciente::select('name')->where('id',$agenda->paciente_id)->value('name');

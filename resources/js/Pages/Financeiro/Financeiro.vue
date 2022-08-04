@@ -35,7 +35,8 @@ $(document).ready(function () {
                     sortAscending: ": Ordem crescente",
                     sortDescending: ": Ordem decrescente"
                 }
-            }
+            },
+            responsive: true,
         }
     );
 });
@@ -72,27 +73,23 @@ let formatBrazilianReal = Intl.NumberFormat('pt-BR');
                                 </tr>
                             </thead>
                             <tbody>
-                                <TableRow v-for="lancamento in lancamentos" 
-                                :key="lancamento.id" 
-                                :date="lancamento.date"
-                                :time="lancamento.time" 
-                                :description="lancamento.description" 
-                                :detail="lancamento.detail"
-                                :type="lancamento.type" 
-                                :value="lancamento.value" />
+                                <TableRow v-for="lancamento in lancamentos" :key="lancamento.id" :date="lancamento.date"
+                                    :time="lancamento.time" :description="lancamento.description"
+                                    :detail="lancamento.detail" :type="lancamento.type" :value="lancamento.value" />
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <td colspan="5" class="dt-right">Subtotal:</td>
                                     <td class="espaco-entre" :class="{
-                                                                'bg-green-100 !important hover:bg-green-100 hover:text-green-900': soma >= 0
-                                                                ,'bg-red-100 !important hover:bg-red-100 hover:text-red-900': soma < 0
-                                                                }">
+                                        'bg-green-100 !important hover:bg-green-100 hover:text-green-900': soma >= 0
+                                        , 'bg-red-100 !important hover:bg-red-100 hover:text-red-900': soma < 0
+                                    }">
                                         <span>R$</span><span> {{ formatBrazilianReal.format(soma) }}</span>
                                     </td>
                                     <td class="dt-center">
                                         <!-- <span class="material-symbols-outlined">edit</span> -->
-                                        <span class="material-symbols-outlined" style="cursor:pointer;" title="Deletar todos">delete</span>
+                                        <span class="material-symbols-outlined" style="cursor:pointer;"
+                                            title="Deletar todos">delete</span>
                                     </td>
                                 </tr>
                             </tfoot>

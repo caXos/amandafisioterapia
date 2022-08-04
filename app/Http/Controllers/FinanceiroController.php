@@ -16,7 +16,9 @@ class FinanceiroController extends Controller
      */
     public function index()
     {
-        $lancamentos = Financeiro::all()->toArray();
+        // $lancamentos = Financeiro::all()->toArray();
+        // $lancamentos = Financeiro::orderBy('date')->get()->toArray();
+        $lancamentos = Financeiro::orderBy('date')->get();
         $soma = 0;
         for ($contador = 0; $contador < sizeof($lancamentos); $contador++) {
             number_format($lancamentos[$contador]['value'], 2, ',', '.');

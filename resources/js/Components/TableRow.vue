@@ -1,6 +1,7 @@
 <script setup>
 const props = defineProps({
-    date: String,
+    // date: String,
+    date: Date,
     time: String,
     description: String,
     detail: String,
@@ -19,7 +20,8 @@ let formatBrazilianReal = Intl.NumberFormat('pt-BR');
         'bg-green-100 hover:bg-green-100 hover:text-green-900': type === 1
         ,'bg-red-100 hover:bg-red-100 hover:text-red-900': type === 2
         }">
-        <td>{{ new Date(date).toLocaleDateString() }}</td>
+        <!-- <td>{{ new Date(date).toLocaleDateString() }}</td> -->
+        <td>{{ date }}</td>
         <!-- <td>{{ date.toLocaleDateString() }}</td> -->
         <td>{{ time }}</td>
         <td>{{ description }}</td>

@@ -2,14 +2,15 @@
 import { onMounted, ref } from 'vue';
 
 // defineProps(['modelValue','pacientes', 'selectedIndex']);
-const props = defineProps(['modelValue','pacientes', 'selectedIndex']);
+// const props = defineProps(['modelValue','pacientes', 'selectedIndex']);
+defineProps(['modelValue','pacientes']);
 
 defineEmits(['update:modelValue']);
 
 const input = ref(null);
 
 onMounted(() => {
-    $('#paciente').val(props.selectedIndex);
+    // $('#paciente').val(props.selectedIndex);
     if (input.value.hasAttribute('autofocus')) {
         input.value.focus();
     }

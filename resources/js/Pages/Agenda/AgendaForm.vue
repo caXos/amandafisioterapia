@@ -2,6 +2,7 @@
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import BreezeButton from '@/Components/Button.vue';
 import BreezeInput from '@/Components/Input.vue';
+import BreezeInputEdit from '@/Components/InputEdit.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
 import { Head, useForm } from '@inertiajs/inertia-vue3';
@@ -36,9 +37,17 @@ const form = useForm({
 
 const submit = () => {
     // console.log(form);
-    form.post(route('gravarAgenda'), {
-        onFinish: () => form.reset(),
-    });
+    if (props.agenda == null) {
+        form.post(route('gravarAgenda'), {
+            onFinish: () => form.reset(),
+        });
+    } else {
+        // form.post(route('editarAgenda'), {
+        //     onFinish: () => form.reset(),
+        // });
+        alert('Editar Agenda!');
+    }
+
 };
 
 // onMounted(() => {
@@ -49,7 +58,7 @@ const atividadeTeste = null;
 
 <script>
 function trocaAtividade(evt) {
-    this.atividadeTeste = this.props.atividades[evt.target.selectedIndex-1].usesAparatus;
+    this.atividadeTeste = this.props.atividades[evt.target.selectedIndex - 1].usesAparatus;
 }
 
 function trocaAtividade_bckp(evt) {
@@ -78,53 +87,51 @@ function trocaAtividade_bckp(evt) {
                         <form @submit.prevent="submit">
                             <div>
                                 <BreezeLabel for="date" value="Data" />
-                                <BreezeInput id="date" type="date" class="mt-1 block w-full" v-model="form.date"
-                                    required autofocus  />
+                                <BreezeInput v-if="agenda == null" id="date" type="date" class="mt-1 block w-full"
+                                    v-model="form.date" required autofocus />
+                                <BreezeInputEdit v-else id="date" type="date" class="mt-1 block w-full"
+                                    v-model="form.date" :valorParaEditar="agenda.date" :container="'date'" required
+                                    autofocus />
                             </div>
 
                             <div class="mt-4">
                                 <BreezeLabel for="time" value="Hora" />
-                                <BreezeInput id="time" type="time" class="mt-1 block w-full" v-model="form.time"
-                                    required />
+                                <BreezeInput v-if="agenda == null" id="time" type="time" class="mt-1 block w-full"
+                                    v-model="form.time" required />
+                                <BreezeInputEdit v-else id="time" type="time" class="mt-1 block w-full"
+                                    v-model="form.time" :valorParaEditar="agenda.time" :container="'time'" required
+                                    autofocus />
                             </div>
 
                             <div class="mt-4">
                                 <BreezeLabel for="paciente" value="Paciente" />
-                                <PacienteSelect id="paciente" class="mt-1 block w-full" 
-                                    v-model="form.paciente"
-                                    :pacientes="pacientes"
-                                    :selectedIndex="paciente_id"
-                                    required />
+                                <PacienteSelect id="paciente" class="mt-1 block w-full" v-model="form.paciente"
+                                    :pacientes="pacientes" :selectedIndex="paciente_id" required />
                             </div>
 
                             <div class="mt-4">
                                 <BreezeLabel for="atividade" value="Atividade" />
                                 <AtividadeSelect id="atividade" class="mt-1 block w-full" v-model="form.atividade"
-                                    :atividades="atividades" 
-                                    required 
-                                    @change="trocaAtividade($event)" 
+                                    :atividades="atividades" required @change="trocaAtividade($event)"
                                     :selectedIndex="atividade_id" />
                             </div>
 
                             <div v-if="atividadeTeste" class="mt-4">
                                 <BreezeLabel for="aparelho" value="Aparelho" />
                                 <AparelhoSelect id="aparelho" class="mt-1 block w-full" v-model="form.aparelho"
-                                    :aparelhos="aparelhos" 
-                                    :selectedIndex="aparelho_id" required />
+                                    :aparelhos="aparelhos" :selectedIndex="aparelho_id" required />
                             </div>
 
                             <div class="mt-4">
                                 <BreezeLabel for="fisio" value="Fisioterapeuta" />
-                                <FisioSelect id="fisio" class="mt-1 block w-full" v-model="form.fisio" 
-                                :fisios="fisios"
-                                :selectedIndex="fisio_id"
-                                    required />
+                                <FisioSelect id="fisio" class="mt-1 block w-full" v-model="form.fisio" :fisios="fisios"
+                                    :selectedIndex="fisio_id" required />
                             </div>
 
                             <div class="flex items-center justify-end mt-4">
                                 <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }"
                                     :disabled="form.processing">
-                                    Cadastrar
+                                    Salvar
                                 </BreezeButton>
                             </div>
                         </form>
