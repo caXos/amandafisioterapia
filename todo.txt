@@ -1,0 +1,18 @@
+nome
+plano
+vencimento (data - ultimo dia do plano)
+inicio (primeiro do dia to plano)
+fisio
+observaco
+telefone
+data nascimento
+
+
+
+plano - tem férias?
+
+
+perfis
+adm - 1
+profissional - 2
+visitante - 3

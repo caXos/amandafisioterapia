@@ -36,6 +36,7 @@ class FinanceiroController extends Controller
     public function create()
     {
         //
+        return Inertia::render('Financeiro/FinanceiroForm');
     }
 
     /**
@@ -47,6 +48,17 @@ class FinanceiroController extends Controller
     public function store(StoreFinanceiroRequest $request)
     {
         //
+    $this->authorize('create', Financeiro::class);
+        $financeiro = new Agenda([
+            'date' => $request->date,
+            'time' => $request->time,
+            'description' => $request->description,
+            'detail' => $request->detail,
+            'type' => $request->type,
+            'value' => $request->value,
+        ]);
+        $financeiro->save();
+        return redirect()->route("financeiro",)->with('status','Lançamento criado');
     }
 
     /**

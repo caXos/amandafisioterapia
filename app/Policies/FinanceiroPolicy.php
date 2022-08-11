@@ -42,6 +42,8 @@ class FinanceiroPolicy
     public function create(User $user)
     {
         //
+        // return $user->role <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
+        return $user->id <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
     }
 
     /**

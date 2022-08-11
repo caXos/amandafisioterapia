@@ -44,7 +44,7 @@ class AgendaPolicy
     {
         //
         // return $user->id <= 2;
-        return $user->id <= 2 ? Response::allow() : Response::deny('teste deny');
+        return $user->id <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
     }
 
     /**

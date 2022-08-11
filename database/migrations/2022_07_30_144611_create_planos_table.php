@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('time');
             $table->string('frequency');
+            $table->string('vacation');
             $table->decimal('totalValue',5,2);
             $table->timestamps();
         });
