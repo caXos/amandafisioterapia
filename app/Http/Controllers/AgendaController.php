@@ -24,8 +24,9 @@ class AgendaController extends Controller
         // $agendas = Agenda::all()->where('done',false);
         $agendas = Agenda::orderBy('date')->where('done',false)->get();
         foreach($agendas as $agenda) {
+            $agenda->time = substr($agenda->time,0,5);
             $fisio = User::select('name')->where('id',$agenda->user_id)->value('name');
-            $paciente = Paciente::select('name')->where('id',$agenda->paciente_id)->value('name');
+            $paciente = Paciente::select('nome')->where('id',$agenda->paciente_id)->value('nome');
             $atividade = Atividade::select('name')->where('id',$agenda->atividade_id)->value('name');
             $aparelho = Aparelho::select('name')->where('id',$agenda->aparelho_id)->value('name');
             $agenda->user_id = $fisio;
@@ -141,6 +142,7 @@ class AgendaController extends Controller
 
     public function completarCompromisso(UpdateAgendaRequest $request)
     {
+        error_log($request->user());
         if ($request->user()->id <= 2) $this->authorize('completarCompromisso', Agenda::class);
 
         $agenda = Agenda::find($request->id);

@@ -8,6 +8,10 @@ import BreezeResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/inertia-vue3';
 
 const showingNavigationDropdown = ref(false);
+
+const props = defineProps({
+    usuarioLogado: Object,
+});
 </script>
 
 <template>

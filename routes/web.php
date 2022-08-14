@@ -60,7 +60,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::post('deletarCompromisso/{id}',[AgendaController::class, 'deletarCompromisso'])->name('deletarCompromisso');
 
     Route::get('adicionarFinanceiro',[FinanceiroController::class, 'create'])->name('adicionarFinanceiro');
-    Route::post('adicionarFinanceiro',[FinanceiroController::class, 'store'])->name('gravarFinanceiro');
+    Route::post('adicionarFinanceiro',[FinanceiroController::class, 'store'])->name('gravarfinanceiro');
 });
 
 require __DIR__.'/auth.php';

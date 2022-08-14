@@ -16,16 +16,18 @@ class PlanoSeeder extends Seeder
     {
         // \App\Models\Plano::factory(10)->create();
         \App\Models\Plano::factory()->create([
-            'name' => 'Pilates Mensal',
-            'time' => '1 mês',
-            'frequency' => '1 vez por semana',
-            'totalValue' => '100.00',
+            'nome' => 'Pilates Mensal',
+            'tempo' => '1 mês',
+            'frequencia' => '1 vez por semana',
+            'ferias' => '0',
+            'valorTotal' => '100.00',
         ]);
         \App\Models\Plano::factory()->create([
-            'name' => 'RPG 10 Sessões',
-            'time' => '2 meses',
-            'frequency' => '1 vez por semana',
-            'totalValue' => '600.00',
+            'nome' => 'RPG 10 Sessões',
+            'tempo' => '2 meses',
+            'frequencia' => '1 vez por semana',
+            'ferias' => '0',
+            'valorTotal' => '600.00',
         ]);
     }
 }

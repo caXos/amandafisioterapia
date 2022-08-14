@@ -48,19 +48,28 @@ function notificarPaciente(time) {
     <div v-if="localCompletado == false"
         class="container shadow-lg shadow-sky-200 text-center text-sky-600 hover:bg-sky-200 transition-all">
         <div class="grid grid-cols-5 mb-5 border-2 rounded border-sky-600 divide-x-2 divide-inherit items-center content-center">
-            <div>{{ date }} {{ time }}</div>
             <div class="grid grid-rows-2 items-center">
-                <div class="flex shrink justify-center">
-                    <img src="../../../public/img/abstract-user-flat-4.svg" style="height:50px;width:50px;"
-                        :title="`${paciente}`">
-                </div>
-                <div>{{ paciente }}</div>
+                <div>{{ date }}</div>
+                <div>{{ time }}</div>
             </div>
-            <div class="grid grid-rows-2 items-center">
-                <div>{{ atividade }}</div>
-                <div v-if="aparelho !== null">{{ aparelho }}</div>
+            <div class="grid grid-rows-4 items-center">
+                <div class="flex shrink justify-center"><span>{{ paciente }}</span></div>
+                <div class="flex shrink justify-center"><span>{{ atividade }}</span></div>
+                <div v-if="aparelho !== null" class="flex shrink justify-center"><span>{{ aparelho }}</span></div>
+                <div class="flex shrink justify-center"><span>{{ fisio }}</span></div>
             </div>
-            <div>{{ fisio }}</div>
+            <div class="grid grid-rows-4 items-center">
+                <div class="flex shrink justify-center"><span>{{ paciente }}</span></div>
+                <div class="flex shrink justify-center"><span>{{ atividade }}</span></div>
+                <div v-if="aparelho !== null" class="flex shrink justify-center"><span>{{ aparelho }}</span></div>
+                <div class="flex shrink justify-center"><span>{{ fisio }}</span></div>
+            </div>
+            <div class="grid grid-rows-4 items-center">
+                <div class="flex shrink justify-center"><span>{{ paciente }}</span></div>
+                <div class="flex shrink justify-center"><span>{{ atividade }}</span></div>
+                <div v-if="aparelho !== null" class="flex shrink justify-center"><span>{{ aparelho }}</span></div>
+                <div class="flex shrink justify-center"><span>{{ fisio }}</span></div>
+            </div>
             <div>
                 <Link :href="route('editarAgenda',[id])">
                 <span class="material-symbols-outlined text-color-inherit mx-1 cursor-pointer"

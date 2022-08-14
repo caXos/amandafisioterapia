@@ -43,6 +43,7 @@ class FinanceiroPolicy
     {
         //
         // return $user->role <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
+        // if ($request->user()->id <= 2) $this->authorize('completarCompromisso', Agenda::class);
         return $user->id <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
     }
 

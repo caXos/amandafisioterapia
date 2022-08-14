@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('planos', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('time');
-            $table->string('frequency');
-            $table->string('vacation');
-            $table->decimal('totalValue',5,2);
+            $table->string('nome');
+            $table->string('tempo');
+            $table->string('frequencia');
+            $table->string('ferias')->nullable();
+            $table->decimal('valorTotal',5,2);
             $table->timestamps();
         });
     }

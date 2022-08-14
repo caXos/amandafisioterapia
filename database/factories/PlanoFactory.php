@@ -17,10 +17,11 @@ class PlanoFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->word(),
-            'time' => fake()->sentence(),
-            'frequency' => fake()->sentence(),
-            'totalValue' => fake()->randomFloat(2,0,9999),
+            'nome' => fake()->word(),
+            'tempo' => fake()->sentence(),
+            'frequencia' => fake()->sentence(),
+            'ferias' => fake()->numberBetween(1,30),
+            'valorTotal' => fake()->randomFloat(2,0,9999),
         ];
     }
 }

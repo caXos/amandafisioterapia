@@ -18,12 +18,13 @@ class PacienteFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => bcrypt('amfisioterapia'),
-            'remember_token' => Str::random(10),
-            'user_id' => 1,
+            'nome' => fake()->name(),
+            'plano_id' => fake()->numberBetween(1,2),
+            'fisio_id' => fake()->numberBetween(1,3),
+            'observacao' => null,
+            'telefone' => fake()->cellphoneNumber(),
+            'nascimento' => fake()->dateTime(),
+            'ativo' => true
         ];
     }
 

@@ -6,11 +6,13 @@ import BreezeInputEdit from '@/Components/InputEdit.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
 import { Head, useForm } from '@inertiajs/inertia-vue3';
-import { onMounted, computed, ref } from 'vue';
+import { onBeforeMount, onMounted, computed, ref } from 'vue';
 import FinanceiroTipoSelect from '@/Components/FinanceiroTipoSelect.vue';
 
 const props = defineProps({
-    financeiro: Object,
+    // financeiro: Object,
+    date: Date,
+    time: Date
 });
 
 const form = useForm({
@@ -36,6 +38,25 @@ const submit = () => {
     }
 
 };
+
+// onBeforeMount(() => {
+//     let diaHoje = new Date().toLocaleDateString();
+//     let horaAgora = new Date().toLocaleTimeString();
+//     $('#date').val(diaHoje);
+//     $('#time').val(horaAgora);
+// });
+
+onMounted(() => {
+    console.log("props", props);
+    var novaData = new Date();
+    // var diaHoje = novaData.getDate().toString()+"/"+novaData.toISOString().getMonth()+"/"+novaData.getFullYear().toString();
+    var diaHoje = novaData.toLocaleDateString();
+    diaHoje = diaHoje.toString();
+    var horaAgora = novaData.getHours().toString()+":"+novaData.getMinutes().toString();
+    console.log(diaHoje, horaAgora);
+    $('#date').val(diaHoje);
+    $('#time').val(horaAgora);
+});
 </script>
 
 <script>
@@ -64,7 +85,7 @@ const submit = () => {
                             <div>
                                 <BreezeLabel for="date" value="Data" />
                                 <BreezeInput v-if="financeiro == null" id="date" type="date" class="mt-1 block w-full"
-                                    v-model="form.date" required autofocus />
+                                    v-model="form.date" required autofocus value=props.date />
                                 <!-- <BreezeInputEdit v-else id="date" type="date" class="mt-1 block w-full"
                                     v-model="form.date" :valorParaEditar="agenda.date" :container="'date'" required
                                     autofocus /> -->

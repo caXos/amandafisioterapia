@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Paciente;
 use App\Models\User;
+use App\Models\Plano;
+use App\Models\PlanoPaciente;
 use App\Http\Requests\StorePacienteRequest;
 use App\Http\Requests\UpdatePacienteRequest;
 use Inertia\Inertia;
@@ -17,10 +19,22 @@ class PacienteController extends Controller
      */
     public function index()
     {
-        $pacientes = Paciente::all();
+        // $usuarioLogado = Auth::user();
+        $usuarioLogado = auth()->user();
+        if ($usuarioLogado->perfil == 1) {
+            $pacientes = Paciente::all();
+        } else {
+            $pacientes = Paciente::all()->where('fisio_id', $usuarioLogado->id);
+        }
         foreach($pacientes as $paciente) {
-            $fisio = User::select('name')->where('id',$paciente->user_id)->value('name');
-            $paciente->user_id = $fisio;
+            // error_log($paciente);
+            $fisio = User::select('name')->where('id',$paciente->fisio_id)->value('name');
+            $paciente->fisio_nome = $fisio;
+            $planoPaciente = PlanoPaciente::find($paciente->plano_id);
+            $plano = Plano::find($planoPaciente->plano_id);
+            $paciente->plano_nome = $plano->nome;
+            $paciente->plano_inicio = $planoPaciente->inicio;
+            $paciente->plano_fim = $planoPaciente->fim;
         }
         return Inertia::render('Pacientes/Pacientes',['pacientes' => $pacientes]);
     }

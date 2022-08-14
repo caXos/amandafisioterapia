@@ -24,16 +24,19 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Amanda Zagui Mendes Marciniak',
                 'email' => 'amanda@amfisioterapia.fisio.br',
                 'password' => bcrypt('amfisioterapia'),
+                'perfil' => 1,
             ]);
             \App\Models\User::factory()->create([
             'name' => 'Jorge Gomez',
             'email' => 'jorgegomez@amfisioterapia.fisio.br',
             'password' => bcrypt('amfisioterapia'),
+            'perfil' => 1,
         ]);
         \App\Models\User::factory()->create([
             'name' => 'Visitante',
             'email' => 'visitante@amfisioterapia.fisio.br',
             'password' => bcrypt('amfisioterapia'),
+            'perfil' => 3,
         ]);
         $this->call([
             PacienteSeeder::class,
@@ -46,6 +49,7 @@ class DatabaseSeeder extends Seeder
             // PacienteSeeder::class,
             PlanoSeeder::class,
             ProntuarioSeeder::class,
+            PlanoPacienteSeeder::class,
         ]);
     }
 }

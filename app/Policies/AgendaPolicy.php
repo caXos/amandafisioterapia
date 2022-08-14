@@ -61,7 +61,7 @@ class AgendaPolicy
 
     public function completarCompromisso(User $user)
     {
-        return $user->id <= 2 ? Response::allow() : Response::deny('teste deny');
+        return $user->id <= 2 ? Response::allow() : Response::deny('teste deny completar compromisso');
     }
 
     /**

@@ -13,15 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('pacientes', function (Blueprint $table) {
+        Schema::create('plano_pacientes', function (Blueprint $table) {
             $table->id();
-            $table->string('nome');
-            $table->integer('plano_id')->nullable();
-            $table->integer('fisio_id')->nullable();
-            $table->string('observacao')->nullable();
-            $table->string('telefone')->nullable();
-            $table->date('nascimento')->nullable();
-            $table->boolean('ativo')->default(true);
+            $table->integer('paciente_id');
+            $table->integer('plano_id');
+            $table->date('inicio');
+            $table->date('fim');
             $table->timestamps();
         });
     }
@@ -33,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pacientes');
+        Schema::dropIfExists('plano_pacientes');
     }
 };

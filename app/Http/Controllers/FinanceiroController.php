@@ -36,7 +36,10 @@ class FinanceiroController extends Controller
     public function create()
     {
         //
-        return Inertia::render('Financeiro/FinanceiroForm');
+        $dateToday = date('d/m/Y');
+        $timeNow = gmdate('h:i');
+        // $timeNow = localtime();
+        return Inertia::render('Financeiro/FinanceiroForm', ['date' => $dateToday, 'time' => $timeNow]);
     }
 
     /**
@@ -48,7 +51,8 @@ class FinanceiroController extends Controller
     public function store(StoreFinanceiroRequest $request)
     {
         //
-    $this->authorize('create', Financeiro::class);
+        // $request->user()->id <= 2 ? $this->authorize('create', Financeiro::class) : Response::deny('Permissão negada para criar lançamentos!');
+        $this->authorize('create', Financeiro::class);
         $financeiro = new Agenda([
             'date' => $request->date,
             'time' => $request->time,
