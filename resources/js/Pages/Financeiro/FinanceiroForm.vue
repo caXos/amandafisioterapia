@@ -27,7 +27,7 @@ const form = useForm({
 const submit = () => {
     // console.log(form);
     if (props.agenda == null) {
-        form.post(route('gravarfinanceiro'), {
+        form.post(route('gravarFinanceiro'), {
             onFinish: () => form.reset(),
         });
     } else {
@@ -85,7 +85,7 @@ onMounted(() => {
                             <div>
                                 <BreezeLabel for="date" value="Data" />
                                 <BreezeInput v-if="financeiro == null" id="date" type="date" class="mt-1 block w-full"
-                                    v-model="form.date" required autofocus value=props.date />
+                                    v-model="form.date" required autofocus :=props.date />
                                 <!-- <BreezeInputEdit v-else id="date" type="date" class="mt-1 block w-full"
                                     v-model="form.date" :valorParaEditar="agenda.date" :container="'date'" required
                                     autofocus /> -->

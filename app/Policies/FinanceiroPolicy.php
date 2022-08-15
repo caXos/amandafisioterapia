@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Financeiro;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class FinanceiroPolicy
 {
@@ -44,8 +45,9 @@ class FinanceiroPolicy
         //
         // return $user->role <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
         // if ($request->user()->id <= 2) $this->authorize('completarCompromisso', Agenda::class);
-        echo($user);
-        return $user->id <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
+        // if ($user->id <= 2) dd("Usuário é admin");
+        // else dd("usuário não é admin");
+        return $user->perfil <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
     }
 
     /**
@@ -69,7 +71,7 @@ class FinanceiroPolicy
      */
     public function delete(User $user, Financeiro $financeiro)
     {
-        //
+        return $user->perfil <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
     }
 
     /**

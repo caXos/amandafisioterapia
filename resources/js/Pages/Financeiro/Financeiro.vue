@@ -1,14 +1,13 @@
 <script setup>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
-import TableRow from '@/Components/TableRow.vue';
+import FinanceiroTableRow from '@/Components/FinanceiroTableRow.vue';
 import { Head } from '@inertiajs/inertia-vue3';
 import { onMounted } from 'vue';
 import FAB from '@/Components/FloatingActionButton.vue';
 
-defineProps({
+const props = defineProps({
     lancamentos: Object,
-    soma: Number,
-    loggedUser: Number
+    resultado: Number
 });
 
 onMounted(() => {
@@ -44,38 +43,7 @@ onMounted(() => {
 </script>
 
 <script>
-// $(document).ready(function () {
-//     $('#tabela-financeiro').DataTable(
-//         {
-//             language: {
-//                 processing: "Processando...",
-//                 search: "Pesquisar:",
-//                 lengthMenu: "Quantos elementos mostrar _MENU_",
-//                 info: "Mostrando os elementos de _START_ a _END_ de um total de _TOTAL_ ",
-//                 infoEmpty: "Mostrando os elementos de 0 a 0 de um total de 0",
-//                 infoFiltered: "(filtrados de um total de _MAX_ elementos)",
-//                 infoPostFix: "",
-//                 loadingRecords: "Carregando...",
-//                 zeroRecords: "Nada para sugestões paramostrar",
-//                 emptyTable: "Não há nenhuma sugestão nesta tabela!",
-//                 paginate: {
-//                     first: "Primeira",
-//                     previous: "Anterior",
-//                     next: "Próxima",
-//                     last: "Última"
-//                 },
-//                 aria: {
-//                     sortAscending: ": Ordem crescente",
-//                     sortDescending: ": Ordem decrescente"
-//                 }
-//             },
-//             responsive: true,
-//         }
-//     );
-// });
-
 let formatBrazilianReal = Intl.NumberFormat('pt-BR');
-
 </script>
 
 <template>
@@ -87,6 +55,9 @@ let formatBrazilianReal = Intl.NumberFormat('pt-BR');
             <p class="font-semibold text-sky-800 leading-tight">
                 Financeiro
             </p>
+            <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+                {{ status }}
+            </div>
         </template>
 
         <div class="py-2 justify-center align-center">
@@ -107,18 +78,16 @@ let formatBrazilianReal = Intl.NumberFormat('pt-BR');
                                 </tr>
                             </thead>
                             <tbody>
-                                <TableRow v-for="lancamento in lancamentos" :key="lancamento.id" :date="lancamento.date"
-                                    :time="lancamento.time" :description="lancamento.description"
-                                    :detail="lancamento.detail" :type="lancamento.type" :value="lancamento.value" />
+                                <FinanceiroTableRow v-for="lancamento in lancamentos" :key="lancamento.id" :lancamento="lancamento"/>
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <td colspan="5" class="dt-right">Subtotal:</td>
                                     <td class="espaco-entre" :class="{
-                                        'bg-green-100 !important hover:bg-green-100 hover:text-green-900': soma >= 0
-                                        , 'bg-red-100 !important hover:bg-red-100 hover:text-red-900': soma < 0
+                                        'bg-green-100 !important hover:bg-green-100 hover:text-green-900': resultado >= 0
+                                        , 'bg-red-100 !important hover:bg-red-100 hover:text-red-900': resultado < 0
                                     }">
-                                        <span>R$</span><span> {{ formatBrazilianReal.format(soma) }}</span>
+                                        <span>R$</span><span> {{ formatBrazilianReal.format(resultado) }}</span>
                                     </td>
                                     <td class="dt-center">
                                         <!-- <span class="material-symbols-outlined">edit</span> -->

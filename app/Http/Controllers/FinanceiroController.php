@@ -19,13 +19,14 @@ class FinanceiroController extends Controller
         // $lancamentos = Financeiro::all()->toArray();
         // $lancamentos = Financeiro::orderBy('date')->get()->toArray();
         $lancamentos = Financeiro::orderBy('date')->get();
-        $soma = 0;
+        $resultado = 0;
         for ($contador = 0; $contador < sizeof($lancamentos); $contador++) {
             number_format($lancamentos[$contador]['value'], 2, ',', '.');
-            if ($lancamentos[$contador]['type'] == 1) $soma += $lancamentos[$contador]['value'];
-            else if ($lancamentos[$contador]['type'] == 2) $soma -= $lancamentos[$contador]['value'];
+            if ($lancamentos[$contador]['type'] == 1) $resultado += $lancamentos[$contador]['value'];
+            else if ($lancamentos[$contador]['type'] == 2) $resultado -= $lancamentos[$contador]['value'];
         }
-        return Inertia::render('Financeiro/Financeiro',['lancamentos' => $lancamentos, 'soma' => $soma]);
+        // $lancamentos->resultado = $resultado;
+        return Inertia::render('Financeiro/Financeiro',['lancamentos' => $lancamentos, 'resultado'=>$resultado]);
     }
 
     /**
@@ -36,10 +37,11 @@ class FinanceiroController extends Controller
     public function create()
     {
         //
-        $dateToday = date('d/m/Y');
-        $timeNow = gmdate('h:i');
+        // $dateToday = date('d/m/Y');
+        // $timeNow = gmdate('h:i');
         // $timeNow = localtime();
-        return Inertia::render('Financeiro/FinanceiroForm', ['date' => $dateToday, 'time' => $timeNow]);
+        // return Inertia::render('Financeiro/FinanceiroForm', ['date' => $dateToday, 'time' => $timeNow]);
+        return Inertia::render('Financeiro/FinanceiroForm');
     }
 
     /**
@@ -53,7 +55,8 @@ class FinanceiroController extends Controller
         //
         // $request->user()->id <= 2 ? $this->authorize('create', Financeiro::class) : Response::deny('Permissão negada para criar lançamentos!');
         $this->authorize('create', Financeiro::class);
-        $financeiro = new Agenda([
+        // dd($request);
+        $financeiro = new Financeiro([
             'date' => $request->date,
             'time' => $request->time,
             'description' => $request->description,
@@ -99,6 +102,16 @@ class FinanceiroController extends Controller
         //
     }
 
+    public function deletarFinanceiro(UpdateFinanceiroRequest $request)
+    {
+        dd($request);
+        $this->authorize('delete', Financeiro::class);
+        $financeiro = Financeiro::find($request->id);
+        $financeiro->delete();
+ 
+        return redirect('financeiro')->with('success', 'Financeiro removido.'); 
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -107,6 +120,6 @@ class FinanceiroController extends Controller
      */
     public function destroy(Financeiro $financeiro)
     {
-        //
+        
     }
 }
