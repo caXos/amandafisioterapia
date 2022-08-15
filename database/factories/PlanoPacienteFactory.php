@@ -18,7 +18,7 @@ class PlanoPacienteFactory extends Factory
     {
         return [
             'paciente_id' => fake()->numberBetween(1,10),
-            'plano_id' => fake()->numberBetween(1,2),
+            'plano_id' => fake()->numberBetween(1,29),
             'inicio' => fake()->dateTimeThisYear('+1 week'),
             'fim' => fake()->dateTimeThisYear('+3 week'),
         ];
