@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('tempo');
             $table->string('frequencia');
             $table->string('ferias')->nullable();
-            $table->decimal('valorTotal',5,2);
+            $table->float('valorTotal');
             $table->timestamps();
         });
     }

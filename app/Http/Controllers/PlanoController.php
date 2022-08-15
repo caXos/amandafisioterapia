@@ -16,7 +16,7 @@ class PlanoController extends Controller
      */
     public function index()
     {
-        $planos = Plano::all()->toArray();
+        $planos = Plano::all();
         return Inertia::render('Planos/Planos',['planos' => $planos]);
     }
 

@@ -19,7 +19,7 @@ onMounted(() => {
                 infoFiltered: "(filtrados de um total de _MAX_ elementos)",
                 infoPostFix: "",
                 loadingRecords: "Carregando...",
-                zeroRecords: "Nada para sugestões paramostrar",
+                zeroRecords: "Nada para mostrar",
                 emptyTable: "Não há nenhuma sugestão nesta tabela!",
                 paginate: {
                     first: "Primeira",
@@ -75,11 +75,7 @@ onMounted(() => {
                                     <td>{{paciente.plano_fim}}</td>
                                     <!-- <th>{{paciente.fisio_id}}</th> -->
                                     <td>{{paciente.fisio_nome}}</td>
-                                    <td>
-                                        <tr><td>p1</td></tr>
-                                        <tr><td>p2</td></tr>
-                                        <tr><td>p3{{paciente.observacao}}</td></tr>
-                                    </td>
+                                    <td>{{paciente.observacao}}</td>
                                     <td>{{paciente.telefone}}</td>
                                     <td>{{paciente.nascimento}}</td>
                                     <td>Ações</td>

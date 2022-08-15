@@ -23,7 +23,7 @@ onMounted(() => {
                 infoFiltered: "(filtrados de um total de _MAX_ elementos)",
                 infoPostFix: "",
                 loadingRecords: "Carregando...",
-                zeroRecords: "Nada para sugestões paramostrar",
+                zeroRecords: "Nada para mostrar",
                 emptyTable: "Não há nenhuma sugestão nesta tabela!",
                 paginate: {
                     first: "Primeira",
