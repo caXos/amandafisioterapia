@@ -57,9 +57,9 @@ class FinanceiroPolicy
      * @param  \App\Models\Financeiro  $financeiro
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Financeiro $financeiro)
+    public function update(User $user/*, Financeiro $financeiro*/)
     {
-        //
+        return $user->perfil <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
     }
 
     /**
@@ -69,7 +69,7 @@ class FinanceiroPolicy
      * @param  \App\Models\Financeiro  $financeiro
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Financeiro $financeiro)
+    public function delete(User $user/*, Financeiro $financeiro*/)
     {
         return $user->perfil <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
     }

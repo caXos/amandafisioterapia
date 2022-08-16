@@ -15,11 +15,11 @@ class Financeiro extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'date',
-        'time',
-        'description',
-        'detail',
-        'type',
-        'value',
+        'dia',
+        'hora',
+        'descricao',
+        'detalhe',
+        'tipo',
+        'valor',
     ];
 }

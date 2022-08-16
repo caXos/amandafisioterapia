@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('financeiros', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-            $table->time('time')->nullable();
-            $table->text('description')->nullable();
-            $table->string('detail')->nullable();
-            $table->integer('type');
-            $table->decimal('value',100,2);
+            $table->date('dia');
+            $table->time('hora')->nullable();
+            $table->text('descricao')->nullable();
+            $table->string('detalhe')->nullable();
+            $table->integer('tipo');
+            $table->decimal('valor',100,2);
             $table->timestamps();
         });
     }

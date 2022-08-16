@@ -17,12 +17,12 @@ class FinanceiroFactory extends Factory
     public function definition()
     {
         return [
-            'date' => fake()->dateTimeThisYear('-1 week'),
-            'time' => fake()->time(),
-            'description' => fake()->word(),
-            'detail' => fake()->sentence(),
-            'type' => random_int(1,2),
-            'value' => fake()->randomFloat(2,0,9999),
+            'dia' => fake()->dateTimeThisYear('-1 week'),
+            'hora' => fake()->time(),
+            'descricao' => fake()->word(),
+            'detalhe' => fake()->sentence(),
+            'tipo' => random_int(1,2),
+            'valor' => fake()->randomFloat(2,0,9999),
         ];
     }
 }

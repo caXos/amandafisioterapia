@@ -61,6 +61,8 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
 
     Route::get('adicionarFinanceiro',[FinanceiroController::class, 'create'])->name('adicionarFinanceiro');
     Route::post('adicionarFinanceiro',[FinanceiroController::class, 'store'])->name('gravarFinanceiro');
+    Route::get('editarFinanceiro/{id}',[FinanceiroController::class, 'edit'])->name('editarFinanceiro');
+    Route::post('editarFinanceiro/{id}',[FinanceiroController::class, 'update'])->name('editarFinanceiro');
     Route::delete('deletarFinanceiro/{id}',[FinanceiroController::class, 'deletarFinanceiro'])->name('deletarFinanceiro');
 });
 

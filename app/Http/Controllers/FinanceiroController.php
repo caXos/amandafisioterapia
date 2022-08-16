@@ -18,12 +18,12 @@ class FinanceiroController extends Controller
     {
         // $lancamentos = Financeiro::all()->toArray();
         // $lancamentos = Financeiro::orderBy('date')->get()->toArray();
-        $lancamentos = Financeiro::orderBy('date')->get();
+        $lancamentos = Financeiro::orderBy('dia')->get();
         $resultado = 0;
         for ($contador = 0; $contador < sizeof($lancamentos); $contador++) {
-            number_format($lancamentos[$contador]['value'], 2, ',', '.');
-            if ($lancamentos[$contador]['type'] == 1) $resultado += $lancamentos[$contador]['value'];
-            else if ($lancamentos[$contador]['type'] == 2) $resultado -= $lancamentos[$contador]['value'];
+            number_format($lancamentos[$contador]['valor'], 2, ',', '.');
+            if ($lancamentos[$contador]['tipo'] == 1) $resultado += $lancamentos[$contador]['valor'];
+            else if ($lancamentos[$contador]['tipo'] == 2) $resultado -= $lancamentos[$contador]['valor'];
         }
         // $lancamentos->resultado = $resultado;
         return Inertia::render('Financeiro/Financeiro',['lancamentos' => $lancamentos, 'resultado'=>$resultado]);
@@ -57,12 +57,12 @@ class FinanceiroController extends Controller
         $this->authorize('create', Financeiro::class);
         // dd($request);
         $financeiro = new Financeiro([
-            'date' => $request->date,
-            'time' => $request->time,
-            'description' => $request->description,
-            'detail' => $request->detail,
-            'type' => $request->type,
-            'value' => $request->value,
+            'dia' => $request->dia,
+            'hora' => $request->hora,
+            'descricao' => $request->descricao,
+            'detalhe' => $request->detalhe,
+            'tipo' => $request->tipo,
+            'valor' => $request->valor,
         ]);
         $financeiro->save();
         return redirect()->route("financeiro",)->with('status','Lançamento criado');
@@ -85,9 +85,11 @@ class FinanceiroController extends Controller
      * @param  \App\Models\Financeiro  $financeiro
      * @return \Illuminate\Http\Response
      */
-    public function edit(Financeiro $financeiro)
+    public function edit(UpdateFinanceiroRequest $request)
     {
-        //
+        $financeiro = Financeiro::find($request->id);
+        // dd($financeiro);
+        return Inertia::render('Financeiro/FinanceiroForm',['financeiro'=>$financeiro]);
     }
 
     /**
@@ -97,9 +99,11 @@ class FinanceiroController extends Controller
      * @param  \App\Models\Financeiro  $financeiro
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateFinanceiroRequest $request, Financeiro $financeiro)
+    public function update(UpdateFinanceiroRequest $request/*, Financeiro $financeiro*/)
     {
         //
+        $this->authorize('update', Financeiro::class);
+        dd($request);
     }
 
     public function deletarFinanceiro(UpdateFinanceiroRequest $request)
