@@ -44,10 +44,9 @@ onMounted(function () {
         $('#tipo').val(finan._rawValue.tipo).trigger('input')
         $('#valor').val(finan._rawValue.valor).trigger('input')
     }
-    console.log(da);
+    // console.log(da);
 });
 const submit = () => {
-    // console.log(form);
     if (props.financeiro == null) {
         form.post(route('gravarFinanceiro'), {
             onFinish: () => {
@@ -62,7 +61,6 @@ const submit = () => {
                 form.reset()
             }
         });
-        // alert('Editar Financeiro!');
     }
 
 };
@@ -70,14 +68,7 @@ const submit = () => {
 </script>
 
 <script>
-async function deletarFinanceiro(id) {
-    await axios.post(route('deletarFinanceiro', [id]), id)
-    .then(response => console.log(response))
-    .catch(error => {
-      this.errorMessage = error.message;
-      console.error("There was an error!", error);
-    });
-}
+
 </script>
 
 <template>
