@@ -18,7 +18,7 @@ class FinanceiroFactory extends Factory
     {
         return [
             'dia' => fake()->dateTimeThisYear('-1 week'),
-            'hora' => fake()->time(),
+            'hora' => fake()->time('H:i'),
             'descricao' => fake()->word(),
             'detalhe' => fake()->sentence(),
             'tipo' => random_int(1,2),

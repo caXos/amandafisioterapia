@@ -16,16 +16,14 @@ class FinanceiroController extends Controller
      */
     public function index()
     {
-        // $lancamentos = Financeiro::all()->toArray();
-        // $lancamentos = Financeiro::orderBy('date')->get()->toArray();
         $lancamentos = Financeiro::orderBy('dia')->get();
         $resultado = 0;
-        for ($contador = 0; $contador < sizeof($lancamentos); $contador++) {
-            number_format($lancamentos[$contador]['valor'], 2, ',', '.');
-            if ($lancamentos[$contador]['tipo'] == 1) $resultado += $lancamentos[$contador]['valor'];
-            else if ($lancamentos[$contador]['tipo'] == 2) $resultado -= $lancamentos[$contador]['valor'];
+        foreach($lancamentos as $lancamento) {
+            if ($lancamento->tipo == 1) $resultado += $lancamento->valor;
+            else $resultado -= $lancamento->valor;
+            $lancamento->hora = substr($lancamento->hora,0,5);
+            $lancamento->valor = number_format($lancamento->valor,2,',', '.');
         }
-        // $lancamentos->resultado = $resultado;
         return Inertia::render('Financeiro/Financeiro',['lancamentos' => $lancamentos, 'resultado'=>$resultado]);
     }
 
@@ -37,11 +35,10 @@ class FinanceiroController extends Controller
     public function create()
     {
         //
-        // $dateToday = date('d/m/Y');
-        // $timeNow = gmdate('h:i');
-        // $timeNow = localtime();
-        // return Inertia::render('Financeiro/FinanceiroForm', ['date' => $dateToday, 'time' => $timeNow]);
-        return Inertia::render('Financeiro/FinanceiroForm');
+        $dataAtual = date('d/m/Y');
+        $horaAgora = date('h:i');
+        return Inertia::render('Financeiro/FinanceiroForm', ['financeiro' => null, 'dataAtual' => $dataAtual, 'horaAgora' => $horaAgora]);
+        // return Inertia::render('Financeiro/FinanceiroForm');
     }
 
     /**
@@ -88,6 +85,7 @@ class FinanceiroController extends Controller
     public function edit(UpdateFinanceiroRequest $request)
     {
         $financeiro = Financeiro::find($request->id);
+        $financeiro->hora = substr($financeiro->hora, 0, 5);
         // dd($financeiro);
         return Inertia::render('Financeiro/FinanceiroForm',['financeiro'=>$financeiro]);
     }

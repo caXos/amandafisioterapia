@@ -1,9 +1,11 @@
 <script setup>
 import { Link } from '@inertiajs/inertia-vue3';
+import { ref, onMounted } from 'vue';
 
 const props = defineProps({
     lancamento: Object,
 });
+
 </script>
 
 <script>
@@ -28,9 +30,7 @@ function deletarLancamento(id) {
         'bg-green-100 hover:bg-green-100 hover:text-green-900': lancamento.tipo === 1
         ,'bg-red-100 hover:bg-red-100 hover:text-red-900': lancamento.tipo === 2
         }">
-        <!-- <td>{{ new Date(dia).toLocaleDateString() }}</td> -->
-        <td>{{ new Date(lancamento.dia).toLocaleDateString() }}</td>
-        <!-- <td>{{ date.toLocaleDateString() }}</td> -->
+        <td>{{ lancamento.dia }}</td>
         <td>{{ lancamento.hora }}</td>
         <td>{{ lancamento.descricao }}</td>
         <td>{{ lancamento.detalhe }}</td>
@@ -40,7 +40,7 @@ function deletarLancamento(id) {
             <span v-if="parseInt(lancamento.tipo) === 1"></span>
             <span v-else-if="parseInt(lancamento.tipo) === 2">-</span>
             <span>R$</span>
-            <span>{{ formatBrazilianReal.format(parseFloat(lancamento.valor)) }}</span>
+            <span>{{ lancamento.valor }}</span>
             </td>
         <td>
             <Link :href="route('editarFinanceiro', [lancamento.id])">

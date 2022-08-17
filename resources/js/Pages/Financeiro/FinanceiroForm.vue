@@ -10,6 +10,8 @@ import FinanceiroTipoSelect from '@/Components/FinanceiroTipoSelect.vue';
 
 const props = defineProps({
     financeiro: Object,
+    dataAtual: String,
+    horaAgora: String
 });
 
 const form = useForm({
@@ -22,9 +24,18 @@ const form = useForm({
 });
 
 const finan = ref(props.financeiro);
+const da = ref(props.dataAtual);
 
-onMounted(() => {
-    if (finan._rawValue !== null && finan._rawValue !== undefined && finan._rawValue !== '') {
+onMounted(function () {
+    // if (finan._rawValue !== null && finan._rawValue !== undefined && finan._rawValue !== '') {
+    //     $('#dia').val(finan._rawValue.dia)
+    //     $('#hora').val(finan._rawValue.hora)
+    //     $('#descricao').val(finan._rawValue.descricao)
+    //     $('#detalhe').val(finan._rawValue.detalhe)
+    //     $('#tipo').val(finan._rawValue.tipo)
+    //     $('#valor').val(finan._rawValue.valor)
+    // }
+    if (props.financeiro !== null && props.financeiro !== undefined && props.financeiro !== '') {
         $('#dia').val(finan._rawValue.dia)
         $('#hora').val(finan._rawValue.hora)
         $('#descricao').val(finan._rawValue.descricao)
@@ -32,6 +43,7 @@ onMounted(() => {
         $('#tipo').val(finan._rawValue.tipo)
         $('#valor').val(finan._rawValue.valor)
     }
+    console.log(da);
 });
 const submit = () => {
     // console.log(form);
