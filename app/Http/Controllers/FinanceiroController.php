@@ -52,7 +52,6 @@ class FinanceiroController extends Controller
         //
         // $request->user()->id <= 2 ? $this->authorize('create', Financeiro::class) : Response::deny('Permissão negada para criar lançamentos!');
         $this->authorize('create', Financeiro::class);
-        // dd($request);
         $financeiro = new Financeiro([
             'dia' => $request->dia,
             'hora' => $request->hora,
@@ -101,12 +100,21 @@ class FinanceiroController extends Controller
     {
         //
         $this->authorize('update', Financeiro::class);
-        dd($request);
+        // dd($request);
+        $financeiro = Financeiro::find($request->id);
+        $financeiro->dia = $request->dia;
+        $financeiro->hora = $request->hora;
+        $financeiro->descricao = $request->descricao;
+        $financeiro->detalhe = $request->detalhe;
+        $financeiro->tipo = $request->tipo;
+        $financeiro->valor = $request->valor;
+        $financeiro->save();
+        return redirect()->route("financeiro",)->with('status','Lançamento editado');
     }
 
     public function deletarFinanceiro(UpdateFinanceiroRequest $request)
     {
-        dd($request);
+        // dd($request);
         $this->authorize('delete', Financeiro::class);
         $financeiro = Financeiro::find($request->id);
         $financeiro->delete();

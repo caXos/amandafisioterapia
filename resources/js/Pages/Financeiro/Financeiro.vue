@@ -7,7 +7,8 @@ import FAB from '@/Components/FloatingActionButton.vue';
 
 const props = defineProps({
     lancamentos: Object,
-    resultado: Number
+    resultado: Number,
+    status: String
 });
 
 onMounted(() => {

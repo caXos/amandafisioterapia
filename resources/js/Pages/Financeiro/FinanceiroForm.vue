@@ -4,9 +4,10 @@ import BreezeButton from '@/Components/Button.vue';
 import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
-import { Head, useForm } from '@inertiajs/inertia-vue3';
+import { Head, useForm, Link } from '@inertiajs/inertia-vue3';
 import { onMounted, computed, ref } from 'vue';
 import FinanceiroTipoSelect from '@/Components/FinanceiroTipoSelect.vue';
+import axios from 'axios';
 
 const props = defineProps({
     financeiro: Object,
@@ -36,12 +37,12 @@ onMounted(function () {
     //     $('#valor').val(finan._rawValue.valor)
     // }
     if (props.financeiro !== null && props.financeiro !== undefined && props.financeiro !== '') {
-        $('#dia').val(finan._rawValue.dia)
-        $('#hora').val(finan._rawValue.hora)
-        $('#descricao').val(finan._rawValue.descricao)
-        $('#detalhe').val(finan._rawValue.detalhe)
-        $('#tipo').val(finan._rawValue.tipo)
-        $('#valor').val(finan._rawValue.valor)
+        $('#dia').val(finan._rawValue.dia).trigger('input')
+        $('#hora').val(finan._rawValue.hora).trigger('input')
+        $('#descricao').val(finan._rawValue.descricao).trigger('input')
+        $('#detalhe').val(finan._rawValue.detalhe).trigger('input')
+        $('#tipo').val(finan._rawValue.tipo).trigger('input')
+        $('#valor').val(finan._rawValue.valor).trigger('input')
     }
     console.log(da);
 });
@@ -69,7 +70,14 @@ const submit = () => {
 </script>
 
 <script>
-
+async function deletarFinanceiro(id) {
+    await axios.post(route('deletarFinanceiro', [id]), id)
+    .then(response => console.log(response))
+    .catch(error => {
+      this.errorMessage = error.message;
+      console.error("There was an error!", error);
+    });
+}
 </script>
 
 <template>
@@ -128,6 +136,12 @@ const submit = () => {
                             </div>
 
                             <div class="flex items-center justify-end mt-4">
+                                <Link class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:shadow-outline-slate transition ease-in-out duration-150" :href="route('financeiro')">
+                                    Voltar
+                                </Link>
+                                <Link class="inline-flex items-center ml-4 px-4 py-2 bg-rose-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-rose-700 active:bg-rose-900 focus:outline-none focus:border-rose-900 focus:shadow-outline-rose transition ease-in-out duration-150" :href="route('deletarFinanceiro',[financeiro.id])">
+                                    Remover
+                                </Link>
                                 <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }"
                                     :disabled="form.processing">
                                     Salvar

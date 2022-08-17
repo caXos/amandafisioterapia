@@ -13,16 +13,6 @@ let formatBrazilianReal = Intl.NumberFormat('pt-BR');
 function editarLancamento(id) {
     alert('Editar lançamento '+ id);
 }
-function deletarLancamento(id) {
-    // console.log(id);
-    // axios.delete(route('deletarFinanceiro', [id])).then(resp => {
-    //     console.log(resp);
-    //     if (resp.status === 200) alert('Lançamento deletado');
-    // }, erro => {
-    //     console.log("erro", erro);
-    // });
-    alert('deletar lançamento ' + id);
-}
 </script>
 
 <template>
@@ -44,10 +34,9 @@ function deletarLancamento(id) {
             </td>
         <td>
             <Link :href="route('editarFinanceiro', [lancamento.id])">
-            <span class="material-symbols-outlined text-color-inherit mx-1 cursor-pointer"
+                <span class="material-symbols-outlined text-color-inherit mx-1 cursor-pointer"
                 :title="'Editar lançamento'">edit</span>
             </Link>
-            <span class="material-symbols-outlined mx-2" style="cursor:pointer;" title="Remover" v-on:click="deletarLancamento(lancamento.id)">delete</span>
         </td>
     </tr>
 </template>
