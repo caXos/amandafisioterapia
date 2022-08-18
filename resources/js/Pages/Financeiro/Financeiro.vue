@@ -90,11 +90,7 @@ let formatBrazilianReal = Intl.NumberFormat('pt-BR');
                                     }">
                                         <span>R$</span><span> {{ formatBrazilianReal.format(resultado) }}</span>
                                     </td>
-                                    <td class="dt-center">
-                                        <!-- <span class="material-symbols-outlined">edit</span> -->
-                                        <span class="material-symbols-outlined" style="cursor:pointer;"
-                                            title="Deletar todos">delete</span>
-                                    </td>
+                                    <td><span display="none"></span></td>
                                 </tr>
                             </tfoot>
                         </table>

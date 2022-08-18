@@ -64,6 +64,8 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('editarFinanceiro/{id}',[FinanceiroController::class, 'edit'])->name('editarFinanceiro');
     Route::post('editarFinanceiro/{id}',[FinanceiroController::class, 'update'])->name('editarFinanceiro');
     Route::get('deletarFinanceiro/{id}',[FinanceiroController::class, 'deletarFinanceiro'])->name('deletarFinanceiro');
+
+    Route::get('adicionarPaciente',[PacienteController::class, 'create'])->name('adicionarPaciente');
 });
 
 require __DIR__.'/auth.php';

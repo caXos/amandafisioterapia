@@ -1,7 +1,8 @@
 <script setup>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
-import { Head } from '@inertiajs/inertia-vue3';
+import { Head, Link } from '@inertiajs/inertia-vue3';
 import { onMounted } from 'vue';
+import FAB from '@/Components/FloatingActionButton.vue';
 
 const props = defineProps({
     pacientes: Object,
@@ -53,6 +54,7 @@ onMounted(() => {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
+                        <FAB model="Paciente" rota="adicionarPaciente"></FAB>
                         <table id="tabela-pacientes">
                             <thead>
                                 <tr>
@@ -73,12 +75,18 @@ onMounted(() => {
                                     <td>{{paciente.plano_nome}}</td>
                                     <td>{{paciente.plano_inicio}}</td>
                                     <td>{{paciente.plano_fim}}</td>
-                                    <!-- <th>{{paciente.fisio_id}}</th> -->
                                     <td>{{paciente.fisio_nome}}</td>
                                     <td>{{paciente.observacao}}</td>
                                     <td>{{paciente.telefone}}</td>
                                     <td>{{paciente.nascimento}}</td>
-                                    <td>Ações</td>
+                                    <td>
+                                        <!-- <Link :href="#"> -->
+                                            <span class="material-symbols-outlined text-color-inherit cursor-pointer mx-2 hover:ring-2 hover:ring-offset-2 hover:rounded-full" title="Editar">edit</span>
+                                        <!-- </Link> -->
+                                        <!-- <Link :href="#"> -->
+                                            <span class="material-symbols-outlined text-color-inherit cursor-pointer mx-2 hover:ring-2 hover:ring-offset-2 hover:rounded-full" title="Prontuários">assignment</span>
+                                        <!-- </Link> -->
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('detalhe')->nullable();
             $table->integer('tipo');
             $table->decimal('valor',100,2);
+            $table->boolean('ativo')->default('true');
             $table->timestamps();
         });
     }

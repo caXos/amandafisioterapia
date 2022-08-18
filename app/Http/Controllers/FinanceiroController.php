@@ -16,7 +16,7 @@ class FinanceiroController extends Controller
      */
     public function index()
     {
-        $lancamentos = Financeiro::orderBy('dia')->get();
+        $lancamentos = Financeiro::orderBy('dia')->where('ativo',true)->get();
         $resultado = 0;
         foreach($lancamentos as $lancamento) {
             if ($lancamento->tipo == 1) $resultado += $lancamento->valor;
@@ -117,7 +117,9 @@ class FinanceiroController extends Controller
         // dd($request);
         $this->authorize('delete', Financeiro::class);
         $financeiro = Financeiro::find($request->id);
-        $financeiro->delete();
+        $financeiro->ativo = false;
+        $financeiro->save();
+        // $financeiro->delete();
  
         return redirect('financeiro')->with('success', 'Financeiro removido.'); 
     }
