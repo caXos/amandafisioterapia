@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
+            $table->boolean('ativo')->default('true');
             $table->timestamps();
         });
     }

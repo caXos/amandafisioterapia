@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('plano_id');
             $table->date('inicio');
             $table->date('fim');
+            $table->boolean('ativo')->default('true');
             $table->timestamps();
         });
     }

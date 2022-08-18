@@ -91,7 +91,7 @@ const submit = () => {
                     <div class="p-6 bg-white border-b border-gray-200">
                         <form @submit.prevent="submit">
                             <div>
-                                <BreezeLabel for="dia" value="dia" />
+                                <BreezeLabel for="dia" value="Dia" />
                                 <BreezeInput id="dia" type="date" class="mt-1 block w-full" v-model="form.dia" required
                                     autofocus />
                             </div>
@@ -130,7 +130,7 @@ const submit = () => {
                                 <Link class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:shadow-outline-slate transition ease-in-out duration-150" :href="route('financeiro')">
                                     Voltar
                                 </Link>
-                                <Link class="inline-flex items-center ml-4 px-4 py-2 bg-rose-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-rose-700 active:bg-rose-900 focus:outline-none focus:border-rose-900 focus:shadow-outline-rose transition ease-in-out duration-150" :href="route('deletarFinanceiro',[financeiro.id])">
+                                <Link v-if='financeiro != null' class="inline-flex items-center ml-4 px-4 py-2 bg-rose-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-rose-700 active:bg-rose-900 focus:outline-none focus:border-rose-900 focus:shadow-outline-rose transition ease-in-out duration-150" :href="route('deletarFinanceiro',[financeiro.id])">
                                     Remover
                                 </Link>
                                 <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }"

@@ -46,7 +46,8 @@ class PacienteController extends Controller
      */
     public function create()
     {
-        dd('create paciente');
+        // dd('create paciente');
+        return Inertia::render('Pacientes/PacientesForm');
     }
 
     /**

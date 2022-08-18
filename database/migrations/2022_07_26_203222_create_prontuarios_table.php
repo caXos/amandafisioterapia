@@ -19,6 +19,7 @@ return new class extends Migration
             $table->time('time')->nullable();
             $table->text('description');
             $table->foreignId('paciente_id')->constrained('pacientes');
+            $table->boolean('ativo')->default('true');
             $table->timestamps();
         });
     }

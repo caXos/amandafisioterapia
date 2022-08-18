@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('frequencia');
             $table->string('ferias')->nullable();
             $table->float('valorTotal');
+            $table->boolean('ativo')->default('true');
             $table->timestamps();
         });
     }

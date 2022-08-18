@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->boolean('usesAparatus');
+            $table->boolean('ativo')->default('true');
             $table->timestamps();
         });
     }
