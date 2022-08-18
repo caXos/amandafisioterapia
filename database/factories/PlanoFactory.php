@@ -19,9 +19,11 @@ class PlanoFactory extends Factory
         return [
             'nome' => fake()->word(),
             'tempo' => fake()->sentence(),
+            'tempoPHP' => '0',
             'frequencia' => fake()->sentence(),
             'ferias' => fake()->numberBetween(1,30),
             'valorTotal' => fake()->randomFloat(2,0,9999),
+            'atendimentos' => fake()->numberBetween(1,30),
         ];
     }
 }

@@ -17,9 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('nome');
             $table->string('tempo');
+            $table->string('tempoPHP');
             $table->string('frequencia');
             $table->string('ferias')->nullable();
             $table->float('valorTotal');
+            $table->integer('atendimentos');
             $table->boolean('ativo')->default('true');
             $table->timestamps();
         });

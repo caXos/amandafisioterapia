@@ -15,9 +15,11 @@ class Plano extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'time',
-        'frequency',
-        'totalValue',
+        'nome',
+        'tempo',
+        'frequencia',
+        'ferias',
+        'valorTotal',
+        'atendimentos',
     ];
 }

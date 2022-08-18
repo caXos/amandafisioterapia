@@ -6,12 +6,15 @@ import BreezeLabel from '@/Components/Label.vue';
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
 import { Head, useForm, Link } from '@inertiajs/inertia-vue3';
 import { onMounted, computed, ref } from 'vue';
-import FisioSelectVue from '@/Components/FisioSelect.vue';
 import axios from 'axios';
 import FisioSelect from '@/Components/FisioSelect.vue';
+import PlanoSelect from '@/Components/PlanoSelect.vue';
 
 const props = defineProps({
     status: String,
+    planos: Object,
+    fisios: Object, 
+    paciente: Object
 });
 
 const form = useForm({
@@ -27,9 +30,12 @@ const submit = () => {
 </script>
 
 <script>
-function mascaraTelefone() {
-    console.log('mascaraTelefone');
+function mascaraTelefone(evt) {
+    console.log('mascaraTelefone', evt);
     // $('#telefone').mask('(99) 999-999-999');
+}
+function calculaFim(evt) {
+    console.log("calculaFim", evt);
 }
 </script>
 
@@ -52,26 +58,20 @@ function mascaraTelefone() {
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <form @submit.prevent="submit">
-
-                            <!--
-                                    
-                                    <th>Telefone</th>
-                                    <th>Nascimento</th>
-                                    -->
-                            <div>
+                            <div> 
                                 <BreezeLabel for="nome" value="Nome" />
                                 <BreezeInput id="nome" type="text" class="mt-1 block w-full" v-model="form.nome"
                                     placeholder="Nome completo do paciente" required autofocus />
                             </div>
                             <div>
                                 <BreezeLabel for="plano" value="Plano" />
-                                <BreezeInput id="plano" type="text" class="mt-1 block w-full" v-model="form.plano"
-                                    placeholder="Aqui vai o PlanoSelect" required />
+                                <PlanoSelect id="plano" class="mt-1 block w-full" v-model="form.plano" :planos="planos"
+                                    :selectedIndex="planos.id" required />
                             </div>
                             <div class="mt-4">
                                 <BreezeLabel for="inicio" value="Data Início" />
                                 <BreezeInput id="inicio" type="date" class="mt-1 block w-full" v-model="form.inicio"
-                                    required />
+                                    @change="calculaFim($event)" required />
                             </div>
                             <div class="mt-4">
                                 <BreezeLabel for="fim" value="Data Fim" />
@@ -106,9 +106,9 @@ function mascaraTelefone() {
                                 <Link class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:shadow-outline-slate transition ease-in-out duration-150" :href="route('pacientes')">
                                     Voltar
                                 </Link>
-                                <!-- <Link v-if="paciente !== null" class="inline-flex items-center ml-4 px-4 py-2 bg-rose-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-rose-700 active:bg-rose-900 focus:outline-none focus:border-rose-900 focus:shadow-outline-rose transition ease-in-out duration-150" :href="#">
+                                <Link v-if="paciente !== null" class="inline-flex items-center ml-4 px-4 py-2 bg-rose-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-rose-700 active:bg-rose-900 focus:outline-none focus:border-rose-900 focus:shadow-outline-rose transition ease-in-out duration-150" :href="route('pacientes')">
                                     Remover
-                                </Link> -->
+                                </Link>
                                 <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }"
                                     :disabled="form.processing">
                                     Salvar

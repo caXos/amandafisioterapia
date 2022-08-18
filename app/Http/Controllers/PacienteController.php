@@ -47,7 +47,9 @@ class PacienteController extends Controller
     public function create()
     {
         // dd('create paciente');
-        return Inertia::render('Pacientes/PacientesForm');
+        $planos = Plano::orderBy('id')->where('ativo', true)->get();
+        $fisios = User::orderBy('name')->where('ativo', true)->get();//TODO traduzir para nome
+        return Inertia::render('Pacientes/PacientesForm',['planos'=>$planos, 'fisios'=>$fisios]);
     }
 
     /**
@@ -58,7 +60,26 @@ class PacienteController extends Controller
      */
     public function store(StorePacienteRequest $request)
     {
-        //
+        $this->authorize('create', Paciente::class);
+        $paciente = new Paciente([
+            'nome' => $request->nome,
+            'plano_id' => $request->plano,
+            'fisio_id' => $request->fisio,
+            'observacao' => $request->observacao,
+            'nascimento' => $request->nascimento,
+            'telefone' => $request->telefone,
+            'ativo' => true
+        ]);
+        $paciente->save();
+        $planoPaciente = new PlanoPaciente([
+            'paciente_id' => $paciente->id,
+            'plano_id' => $request->plano,
+            'inicio' => $request->inicio,
+            'fim' => $request->fim,
+            'ativo' => true
+        ]);
+        $planoPaciente->save();
+        return redirect()->route("pacientes",)->with('status','Paciente criado');
     }
 
     /**
