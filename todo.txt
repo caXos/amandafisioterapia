@@ -16,3 +16,20 @@ perfis
 adm - 1
 profissional - 2
 visitante - 3
+
+
+
+<?php
+ 
+ $date = new DateTime();
+
+ $formatter = new IntlDateFormatter(
+   'pt_BR',
+    IntlDateFormatter::FULL,
+    IntlDateFormatter::NONE,
+    'America/Sao_Paulo',          
+    IntlDateFormatter::GREGORIAN
+  );
+
+  echo $formatter->format($date);
+  >

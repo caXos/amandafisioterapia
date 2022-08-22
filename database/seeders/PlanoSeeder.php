@@ -27,7 +27,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 1x/semana',
             'tempo' => '1 mês',
-            'tempoPHP' => '+1M',
+            'tempoPHP' => '+1 Month',
             'frequencia' => '1 vez por semana',
             'ferias' => '0',
             'valorTotal' => '182.00',
@@ -36,7 +36,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 1x/semana - Família',
             'tempo' => '1 mês',
-            'tempoPHP' => '+1M',
+            'tempoPHP' => '+1 Month',
             'frequencia' => '1 vez por semana',
             'ferias' => '0',
             'valorTotal' => '162.00',
@@ -45,7 +45,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 1x/semana',
             'tempo' => '4 meses',
-            'tempoPHP' => '+4M',
+            'tempoPHP' => '+4 Months',
             'frequencia' => '1 vez por semana',
             'ferias' => '0',
             'valorTotal' => '620.00',
@@ -54,7 +54,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 1x/semana - renovação',
             'tempo' => '4 meses',
-            'tempoPHP' => '+4M',
+            'tempoPHP' => '+4 Months',
             'frequencia' => '1 vez por semana',
             'ferias' => '0',
             'valorTotal' => '580.00',
@@ -63,7 +63,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 1x/semana',
             'tempo' => '6 meses',
-            'tempoPHP' => '+6M 15D',
+            'tempoPHP' => '+6 Months +15 Days',
             'frequencia' => '1 vez por semana',
             'ferias' => '15',
             'valorTotal' => '874.00',
@@ -72,7 +72,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 1x/semana - renovação',
             'tempo' => '6 meses',
-            'tempoPHP' => '+6M 15D',
+            'tempoPHP' => '+6 Months +15 Days',
             'frequencia' => '1 vez por semana',
             'ferias' => '15',
             'valorTotal' => '816.00',
@@ -81,7 +81,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 1x/semana - Individual',
             'tempo' => '1 mês',
-            'tempoPHP' => '+1M',
+            'tempoPHP' => '+1 Month',
             'frequencia' => '1 vez por semana',
             'ferias' => '0',
             'valorTotal' => '300.00',
@@ -90,7 +90,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 1x/semana - Dupla fixa',
             'tempo' => '1 mês',
-            'tempoPHP' => '+1M',
+            'tempoPHP' => '+1 Month',
             'frequencia' => '1 vez por semana',
             'ferias' => '0',
             'valorTotal' => '220.00',
@@ -100,7 +100,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 2x/semana',
             'tempo' => '1 mês',
-            'tempoPHP' => '+1M',
+            'tempoPHP' => '+1 Month',
             'frequencia' => '2 vezes por semana',
             'ferias' => '0',
             'valorTotal' => '300.00',
@@ -109,7 +109,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 2x/semana - Família',
             'tempo' => '1 mês',
-            'tempoPHP' => '+1M',
+            'tempoPHP' => '+1 Month',
             'frequencia' => '2 vezes por semana',
             'ferias' => '0',
             'valorTotal' => '280.00',
@@ -118,7 +118,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 2x/semana',
             'tempo' => '4 meses',
-            'tempoPHP' => '+4M',
+            'tempoPHP' => '+4 Months',
             'frequencia' => '2 vezes por semana',
             'ferias' => '0',
             'valorTotal' => '1070.00',
@@ -127,7 +127,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 2x/semana - renovação',
             'tempo' => '4 meses',
-            'tempoPHP' => '+4M',
+            'tempoPHP' => '+4 Months',
             'frequencia' => '2 vezes por semana',
             'ferias' => '0',
             'valorTotal' => '1000.00',
@@ -136,7 +136,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 2x/semana',
             'tempo' => '6 meses',
-            'tempoPHP' => '+6M 15D',
+            'tempoPHP' => '+6 Months +15 Days',
             'frequencia' => '2 vezes por semana',
             'ferias' => '15',
             'valorTotal' => '1500.00',
@@ -145,7 +145,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 2x/semana - renovação',
             'tempo' => '6 meses',
-            'tempoPHP' => '+6M 15D',
+            'tempoPHP' => '+6 Months +15 Days',
             'frequencia' => '2 vezes por semana',
             'ferias' => '15',
             'valorTotal' => '1404.00',
@@ -154,7 +154,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 2x/semana - Individual',
             'tempo' => '1 mês',
-            'tempoPHP' => '+1M',
+            'tempoPHP' => '+1 Month',
             'frequencia' => '2 vezes por semana',
             'ferias' => '0',
             'valorTotal' => '570.00',
@@ -163,7 +163,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 2x/semana - Dupla fixa',
             'tempo' => '1 mês',
-            'tempoPHP' => '+1M',
+            'tempoPHP' => '+1 Month',
             'frequencia' => '2 vezes por semana',
             'ferias' => '0',
             'valorTotal' => '375.00',
@@ -173,7 +173,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 3x/semana',
             'tempo' => '1 mês',
-            'tempoPHP' => '+1M',
+            'tempoPHP' => '+1 Month',
             'frequencia' => '3 vezes por semana',
             'ferias' => '0',
             'valorTotal' => '438.00',
@@ -182,7 +182,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 3x/semana - Família',
             'tempo' => '1 mês',
-            'tempoPHP' => '+1M',
+            'tempoPHP' => '+1 Month',
             'frequencia' => '3 vezes por semana',
             'ferias' => '0',
             'valorTotal' => '418.00',
@@ -191,7 +191,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 3x/semana',
             'tempo' => '4 meses',
-            'tempoPHP' => '+4M',
+            'tempoPHP' => '+4 Months',
             'frequencia' => '3 vezes por semana',
             'ferias' => '0',
             'valorTotal' => '1596.00',
@@ -200,7 +200,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 3x/semana - renovação',
             'tempo' => '4 meses',
-            'tempoPHP' => '+4M',
+            'tempoPHP' => '+4 Months',
             'frequencia' => '3 vezes por semana',
             'ferias' => '0',
             'valorTotal' => '1492.00',
@@ -209,7 +209,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 3x/semana',
             'tempo' => '6 meses',
-            'tempoPHP' => '+6M 15D',
+            'tempoPHP' => '+6 Months +15 Days',
             'frequencia' => '3 vezes por semana',
             'ferias' => '15',
             'valorTotal' => '2216.00',
@@ -218,7 +218,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 3x/semana - renovação',
             'tempo' => '6 meses',
-            'tempoPHP' => '+6M 15D',
+            'tempoPHP' => '+6 Months +15 Days',
             'frequencia' => '3 vezes por semana',
             'ferias' => '15',
             'valorTotal' => '2070.00',
@@ -227,7 +227,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 3x/semana - Individual',
             'tempo' => '1 mês',
-            'tempoPHP' => '+1M',
+            'tempoPHP' => '+1 Month',
             'frequencia' => '3 vezes por semana',
             'ferias' => '0',
             'valorTotal' => '840.00',
@@ -236,7 +236,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'Pilates 3x/semana - Dupla fixa',
             'tempo' => '1 mês',
-            'tempoPHP' => '+1M',
+            'tempoPHP' => '+1 Month',
             'frequencia' => '3 vezes por semana',
             'ferias' => '0',
             'valorTotal' => '554.00',
@@ -273,7 +273,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'RPG 4 sessões',
             'tempo' => '4 sessões',
-            'tempoPHP' => '+1M',
+            'tempoPHP' => '+1 Month',
             'frequencia' => '1 vez por semana',
             'ferias' => '0',
             'valorTotal' => '580.00',
@@ -282,7 +282,7 @@ class PlanoSeeder extends Seeder
         \App\Models\Plano::factory()->create([
             'nome' => 'RPG 8 sessões',
             'tempo' => '8 sessões',
-            'tempoPHP' => '+2M',
+            'tempoPHP' => '+2 Months',
             'frequencia' => '1 vez por semana',
             'ferias' => '0',
             'valorTotal' => '1120.00',
