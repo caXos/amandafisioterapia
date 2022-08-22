@@ -30,12 +30,23 @@ const submit = () => {
 </script>
 
 <script>
-function mascaraTelefone(evt) {
-    console.log('mascaraTelefone', evt);
-    // $('#telefone').mask('(99) 999-999-999');
+function habilitaDataInicio() {
+    console.log('habilita data de inicio')
+    $('#inicio').removeAttr('disabled');
 }
 function calculaFim(evt) {
-    console.log("calculaFim", evt);
+    var tempoPhp = $('#plano>option:selected').attr('tempoPHP');
+    var dataInicio = $('#inicio').val();
+    var dataFim = null;
+    if (tempoPhp === '+1 Month') {
+        dataFim = new Date(dataInicio).setMonth(new Date(dataInicio).getMonth()+1);
+        dataFim = new Date(dataFim).toISOString();
+        $('#fim').val(dataFim.substring(0,10));
+    }
+}
+function mascaraTelefone(evt) {
+    // console.log('mascaraTelefone', evt);
+    // $('#telefone').mask('(99) 999-999-999');
 }
 </script>
 
@@ -66,12 +77,12 @@ function calculaFim(evt) {
                             <div>
                                 <BreezeLabel for="plano" value="Plano" />
                                 <PlanoSelect id="plano" class="mt-1 block w-full" v-model="form.plano" :planos="planos"
-                                    :selectedIndex="planos.id" required />
+                                    :selectedIndex="planos.id" required @change="habilitaDataInicio()" />
                             </div>
                             <div class="mt-4">
                                 <BreezeLabel for="inicio" value="Data Início" />
                                 <BreezeInput id="inicio" type="date" class="mt-1 block w-full" v-model="form.inicio"
-                                    @change="calculaFim($event)" required />
+                                    @change="calculaFim($event)" required disabled />
                             </div>
                             <div class="mt-4">
                                 <BreezeLabel for="fim" value="Data Fim" />
