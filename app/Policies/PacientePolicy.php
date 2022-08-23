@@ -52,9 +52,13 @@ class PacientePolicy
      * @param  \App\Models\Paciente  $paciente
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Paciente $paciente)
+    // public function update(User $user, Paciente $paciente)
+    // {
+    //     return $user->perfil <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
+    // }
+    public function update(User $user)
     {
-        //
+        return $user->perfil <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
     }
 
     /**

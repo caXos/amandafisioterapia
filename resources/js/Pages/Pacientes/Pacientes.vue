@@ -21,7 +21,7 @@ onMounted(() => {
                 infoPostFix: "",
                 loadingRecords: "Carregando...",
                 zeroRecords: "Nada para mostrar",
-                emptyTable: "Não há nenhuma sugestão nesta tabela!",
+                emptyTable: "Não há nenhum paciente cadastrado!",
                 paginate: {
                     first: "Primeira",
                     previous: "Anterior",
@@ -83,12 +83,18 @@ onMounted(() => {
                                     <td>{{paciente.telefone}}</td>
                                     <td>{{paciente.nascimento}}</td>
                                     <td>
-                                        <!-- <Link :href="#"> -->
-                                            <span class="material-symbols-outlined text-color-inherit cursor-pointer mx-2 hover:ring-2 hover:ring-offset-2 hover:rounded-full" title="Editar">edit</span>
-                                        <!-- </Link> -->
-                                        <!-- <Link :href="#"> -->
-                                            <span class="material-symbols-outlined text-color-inherit cursor-pointer mx-2 hover:ring-2 hover:ring-offset-2 hover:rounded-full" title="Prontuários">assignment</span>
-                                        <!-- </Link> -->
+                                        <div class="grid grid-cols-2">
+                                            <div>
+                                            <Link :href="route('editarPaciente',[paciente.id])">
+                                                <span class="material-symbols-outlined text-color-inherit cursor-pointer mx-2 hover:ring-2 hover:ring-offset-2 hover:rounded-full" title="Editar">edit</span>
+                                            </Link>
+                                            </div>
+                                            <div>
+                                            <!-- <Link :href="#"> -->
+                                                <span class="material-symbols-outlined text-color-inherit cursor-pointer mx-2 hover:ring-2 hover:ring-offset-2 hover:rounded-full" title="Prontuários">assignment</span>
+                                            <!-- </Link> -->
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>

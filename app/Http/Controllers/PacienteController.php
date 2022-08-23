@@ -31,7 +31,9 @@ class PacienteController extends Controller
             $fisio = User::select('name')->where('id',$paciente->fisio_id)->value('name');
             $paciente->fisio_nome = $fisio;
             $planoPaciente = PlanoPaciente::find($paciente->plano_id);
+            // dd($planoPaciente);
             $plano = Plano::find($planoPaciente->plano_id);
+            // dd($plano);
             $paciente->plano_nome = $plano->nome;
             $paciente->plano_inicio = $planoPaciente->inicio;
             $paciente->plano_fim = $planoPaciente->fim;
@@ -100,11 +102,20 @@ class PacienteController extends Controller
      * @param  \App\Models\Paciente  $paciente
      * @return \Illuminate\Http\Response
      */
-    public function edit(Paciente $paciente)
+    // public function edit(Paciente $paciente)
+    // {
+    //     //
+    // }
+    public function edit(UpdatePacienteRequest $request)
     {
-        //
+        $paciente = Paciente::find($request->id);
+        // dd($paciente);
+        $planos = Plano::orderBy('id')->where('ativo', true)->get();
+        $fisios = User::orderBy('name')->where('ativo', true)->get();//TODO traduzir para nome
+        $planoPaciente = PlanoPaciente::where('paciente_id',  $paciente->id)->where('plano_id',$paciente->plano_id)->where('ativo', true)->limit(1)->get();
+        // dd($planoPaciente);
+        return Inertia::render('Pacientes/PacientesForm',['paciente'=>$paciente, 'planos'=>$planos, 'fisios'=>$fisios, 'plano'=>$planoPaciente[0]]);
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -112,9 +123,34 @@ class PacienteController extends Controller
      * @param  \App\Models\Paciente  $paciente
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePacienteRequest $request, Paciente $paciente)
+    // public function update(UpdatePacienteRequest $request, Paciente $paciente)
+    // {
+    //     //
+    // }
+    public function update(UpdatePacienteRequest $request)
     {
-        //
+        $this->authorize('update',Paciente::class);
+        // dump($request);
+        $paciente = Paciente::find($request->id);
+        $paciente->nome = $request->nome;
+        $paciente->plano_id = $request->plano;
+        $paciente->fisio_id = $request->fisio;
+        $paciente->observacao = $request->observacao;
+        $paciente->nascimento = $request->nascimento;
+        $paciente->telefone = $request->telefone;
+        $paciente->ativo = true;
+        $paciente->save();
+        // dump($paciente);
+        $planoPaciente = PlanoPaciente::where('plano_id', $paciente->plano_id)->where('ativo', true)->where('paciente_id',$paciente->id)->get();
+        // dump($planoPaciente);
+        $planoPaciente[0]->paciente_id = $paciente->id;
+        $planoPaciente[0]->plano_id = $paciente->plano_id;
+        $planoPaciente[0]->inicio = $request->inicio;
+        $planoPaciente[0]->fim = $request->fim;
+        $planoPaciente[0]->ativo = true;
+        // dd($planoPaciente);
+        $planoPaciente[0]->save();
+        return redirect()->route("pacientes",)->with('status','Paciente alterado');
     }
 
     /**

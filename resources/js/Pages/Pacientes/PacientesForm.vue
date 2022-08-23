@@ -14,7 +14,8 @@ const props = defineProps({
     status: String,
     planos: Object,
     fisios: Object, 
-    paciente: Object
+    paciente: Object,
+    plano: Object
 });
 
 const form = useForm({
@@ -29,17 +30,28 @@ const form = useForm({
 });
 
 onMounted(function () {
-    $('#nome').val('');
-    $('#plano').val(0);
-    $('#inicio').val('');
-    $('#fim').val('');
-    $('#fisio').val(0);
-    $('#observacao').val('');
-    $('#telefone').val('');
-    $('#nascimento').val('');
+    if (props.paciente == null || props.paciente == undefined || props.paciente == '' || props.paciente.length == 0) {
+        $('#nome').val('');
+        $('#plano').val(0);
+        $('#inicio').val('');
+        $('#fim').val('');
+        $('#fisio').val(0);
+        $('#observacao').val('');
+        $('#telefone').val('');
+        $('#nascimento').val('');
+    } else {
+        $('#nome').val(props.paciente.nome);
+        $('#plano').val(props.paciente.plano_id);
+        $('#inicio').val(props.plano.inicio);
+        $('#fim').val(props.plano.fim);
+        $('#fisio').val(props.paciente.fisio_id);
+        $('#observacao').val(props.paciente.observacao);
+        $('#telefone').val(props.paciente.telefone);
+        $('#nascimento').val(props.paciente.nascimento);
+    }
 });
 const submit = () => {
-    if (props.paciente == null) {
+    if (props.paciente == null || props.paciente == undefined || props.paciente == '' || props.paciente.length == 0) {
         form.fim = $('#fim').val();
         form.post(route('gravarPaciente'), {
             onFinish: () => {
@@ -48,15 +60,21 @@ const submit = () => {
                 form.reset()
             }
         });
+    } else {
+        form.nome = $('#nome').val();
+        form.plano = parseInt($('#plano').val());
+        form.inicio = $('#inicio').val();
+        form.fim = $('#fim').val();
+        form.fisio = $('#fisio').val();
+        form.observacao = $('#observacao').val();
+        form.telefone = $('#telefone').val();
+        form.nascimento = $('#nascimento').val();
+        form.post(route('editarPaciente', [props.paciente.id]), {
+            onFinish: () => {
+                form.reset()
+            }
+        });
     }
-    // else {
-    //     form.post(route('editarFinanceiro', [props.financeiro.id]), {
-    //         onFinish: () => {
-    //             $('#tipo').val('0')
-    //             form.reset()
-    //         }
-    //     });
-    // }
 };
 
 </script>
@@ -67,6 +85,7 @@ function habilitaDataInicio() {
     $('#inicio').removeAttr('disabled');
 }
 function calculaFim(evt) {
+    $('#fim').removeAttr('disabled');
     var tempoPhp = $('#plano>option:selected').attr('tempoPHP');
     var dataInicio = $('#inicio').val();
     var dataFim = null;

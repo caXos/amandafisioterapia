@@ -20,7 +20,7 @@ onMounted(() => {
                 infoPostFix: "",
                 loadingRecords: "Carregando...",
                 zeroRecords: "Nada para mostrar",
-                emptyTable: "Não há nenhuma sugestão nesta tabela!",
+                emptyTable: "Não há nenhum aparelho cadastrado!",
                 paginate: {
                     first: "Primeira",
                     previous: "Anterior",
