@@ -18,13 +18,45 @@ const props = defineProps({
 });
 
 const form = useForm({
+    nome: String,
+    plano: Number,
+    inicio: Date,
+    fim: Date,
+    fisio: Number,
+    observacao: String,
+    telefone: String,
+    nascimento: Date
 });
 
 onMounted(function () {
-
+    $('#nome').val('');
+    $('#plano').val(0);
+    $('#inicio').val('');
+    $('#fim').val('');
+    $('#fisio').val(0);
+    $('#observacao').val('');
+    $('#telefone').val('');
+    $('#nascimento').val('');
 });
 const submit = () => {
-
+    if (props.paciente == null) {
+        form.fim = $('#fim').val();
+        form.post(route('gravarPaciente'), {
+            onFinish: () => {
+                $('#plano').val('0')
+                $('#fisio').val('0')
+                form.reset()
+            }
+        });
+    }
+    // else {
+    //     form.post(route('editarFinanceiro', [props.financeiro.id]), {
+    //         onFinish: () => {
+    //             $('#tipo').val('0')
+    //             form.reset()
+    //         }
+    //     });
+    // }
 };
 
 </script>
@@ -43,6 +75,17 @@ function calculaFim(evt) {
         dataFim = new Date(dataFim).toISOString();
         $('#fim').val(dataFim.substring(0,10));
     }
+    else if (tempoPhp === '+4 Months') {
+        dataFim = new Date(dataInicio).setMonth(new Date(dataInicio).getMonth()+4);
+        dataFim = new Date(dataFim).toISOString();
+        $('#fim').val(dataFim.substring(0,10));
+    }
+    // else if (tempoPhp === '+6 Months 15 Days') {
+    //     dataFim = new Date(dataInicio).setMonth(new Date(dataInicio).getMonth()+6);
+    //     dataFim = new Date(dataFim).setDate(new Date(dataInicio).getDate()+15);
+    //     dataFim = new Date(dataFim).toISOString();
+    //     $('#fim').val(dataFim.substring(0,10));
+    // }
 }
 function mascaraTelefone(evt) {
     // console.log('mascaraTelefone', evt);
@@ -97,14 +140,16 @@ function mascaraTelefone(evt) {
                             <div>
                                 <BreezeLabel for="observacao" value="Observação" />
                                 <BreezeInput id="observacao" type="text" class="mt-1 block w-full"
-                                    v-model="form.observacao" placeholder="Alguma informação relevante" required />
+                                    v-model="form.observacao" placeholder="Alguma informação relevante" />
                             </div>
 
                             <div class="mt-4">
                                 <BreezeLabel for="telefone" value="Telefone" />
-                                <BreezeInput id="telefone" class="mt-1 block w-full" type="text" v-model="form.telefone"
-                                    pattern="\(99\) 999-999-999" data-mask="(99) 999-999-999" placeholder='(99) 999-999-999' 
-                                    @change="mascaraTelefone($event)" required />
+                                <!-- <BreezeInput id="telefone" class="mt-1 block w-full" type="text" v-model="form.telefone"
+                                    pattern="(99) 999-999-999" data-mask="(99) 999-999-999" placeholder='(99) 999-999-999' 
+                                    @change="mascaraTelefone($event)" required /> -->
+                                    <BreezeInput id="telefone" class="mt-1 block w-full" type="text" v-model="form.telefone"
+                                    placeholder='(99) 999-999-999' @change="mascaraTelefone($event)" required />
                             </div>
 
                             <div class="mt-4">

@@ -66,6 +66,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('deletarFinanceiro/{id}',[FinanceiroController::class, 'deletarFinanceiro'])->name('deletarFinanceiro');
 
     Route::get('adicionarPaciente',[PacienteController::class, 'create'])->name('adicionarPaciente');
+    Route::post('adicionarPaciente',[PacienteController::class, 'store'])->name('gravarPaciente');
 });
 
 require __DIR__.'/auth.php';

@@ -17,7 +17,7 @@ onMounted(() => {
 <template>
     <!-- <select class="border-cyan-300 focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-opacity-50 rounded-md shadow-sm" @input="$emit('update:modelValue', $event.target.value)" ref="input"> -->
     <select class="border-cyan-300 focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-opacity-50 rounded-md shadow-sm" @change="$emit('update:modelValue', $event.target.value)" ref="input">
-        <option selected disabled>Selecione um(a) fisioterapeuta</option>
+        <option value="0" selected disabled>Selecione um(a) fisioterapeuta</option>
         <option v-for="fisio in fisios" :value="`${fisio.id}`">{{fisio.name}}</option>
     </select>
 </template>

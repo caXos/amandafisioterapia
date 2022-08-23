@@ -19,5 +19,6 @@ class PlanoPaciente extends Model
         'plano_id',
         'inicio',
         'fim',
+        'ativo',
     ];
 }

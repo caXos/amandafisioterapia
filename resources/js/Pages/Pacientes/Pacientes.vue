@@ -48,6 +48,9 @@ onMounted(() => {
             <p class="font-semibold text-sky-800 leading-tight">
                 Pacientes
             </p>
+            <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+                {{ status }}
+            </div>
         </template>
 
         <div class="py-2">
@@ -75,7 +78,7 @@ onMounted(() => {
                                     <td>{{paciente.plano_nome}}</td>
                                     <td>{{paciente.plano_inicio}}</td>
                                     <td>{{paciente.plano_fim}}</td>
-                                    <td>{{paciente.fisio_nome}}</td>
+                                    <td>{{paciente.fisio_nome.split(" ")[0]}}</td>
                                     <td>{{paciente.observacao}}</td>
                                     <td>{{paciente.telefone}}</td>
                                     <td>{{paciente.nascimento}}</td>
