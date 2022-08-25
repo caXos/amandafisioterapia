@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Prontuario;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class ProntuarioPolicy
 {
@@ -41,7 +42,7 @@ class ProntuarioPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->perfil <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
     }
 
     /**

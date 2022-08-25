@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Prontuario;
+use App\Models\Paciente;
 use App\Http\Requests\StoreProntuarioRequest;
 use App\Http\Requests\UpdateProntuarioRequest;
 use Inertia\Inertia;
@@ -14,10 +15,13 @@ class ProntuarioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(int $id)
     {
-        $prontuarios = Prontuarios::all()->toArray();
-        return null;//Inertia::render('Agenda/Agenda',['agenda' => $agenda]);
+        $prontuarios = Prontuario::where('paciente_id', $id)->get();
+        $paciente = Paciente::find($id);
+        // dump($prontuarios);
+        // dd($paciente);
+        return Inertia::render('Pacientes/Prontuarios/Prontuarios',['prontuarios' => $prontuarios, 'paciente'=>$paciente]);
     }
 
     /**
@@ -25,9 +29,10 @@ class ProntuarioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(int $id)
     {
-        //
+        $paciente = Paciente::find($id);
+        return Inertia::render('Pacientes/Prontuarios/ProntuariosForm',['paciente'=>$paciente]);
     }
 
     /**
@@ -38,7 +43,18 @@ class ProntuarioController extends Controller
      */
     public function store(StoreProntuarioRequest $request)
     {
-        //
+        // dump($request);
+        $this->authorize('create', Prontuario::class);
+        $prontuario = new Prontuario([
+            'dia' => $request->dia,
+            'hora' => $request->hora,
+            'descricao' => $request->descricao,
+            'paciente_id' => $request->paciente_id,
+            'ativo' => true,
+        ]);
+        // dd($prontuario);
+        $prontuario->save();
+        return redirect()->route("prontuariosPaciente",[$request->paciente_id])->with('status','Prontuário criado');
     }
 
     /**

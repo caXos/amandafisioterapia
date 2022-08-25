@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('prontuarios', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-            $table->time('time')->nullable();
-            $table->text('description');
+            $table->date('dia');
+            $table->time('hora')->nullable();
+            $table->text('descricao');
             $table->foreignId('paciente_id')->constrained('pacientes');
             $table->boolean('ativo')->default('true');
             $table->timestamps();

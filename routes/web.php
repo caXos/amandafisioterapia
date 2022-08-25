@@ -70,6 +70,10 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('editarPaciente/{id}',[PacienteController::class, 'edit'])->name('editarPaciente');
     Route::post('editarPaciente/{id}',[PacienteController::class, 'update'])->name('editarPaciente');
     Route::get('deletarPaciente/{id}',[PacienteController::class, 'deletarPaciente'])->name('deletarPaciente');
+    
+    Route::get('prontuariosPaciente/{id}',[ProntuarioController::class, 'index'])->name('prontuariosPaciente');
+    Route::get('adicionarProntuario/{paciente_id}',[ProntuarioController::class, 'create'])->name('adicionarProntuario');
+    Route::post('adicionarProntuario/{paciente_id}',[ProntuarioController::class, 'store'])->name('gravarProntuario');
 });
 
 require __DIR__.'/auth.php';

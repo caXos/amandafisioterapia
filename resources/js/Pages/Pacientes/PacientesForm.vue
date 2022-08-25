@@ -136,7 +136,7 @@ function mascaraTelefone(evt) {
                                 <BreezeInput id="nome" type="text" class="mt-1 block w-full" v-model="form.nome"
                                     placeholder="Nome completo do paciente" required autofocus />
                             </div>
-                            <div>
+                            <div class="mt-4">
                                 <BreezeLabel for="plano" value="Plano" />
                                 <PlanoSelect id="plano" class="mt-1 block w-full" v-model="form.plano" :planos="planos"
                                     :selectedIndex="planos.id" required @change="habilitaDataInicio()" />

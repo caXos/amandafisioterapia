@@ -39,9 +39,9 @@ class DatabaseSeeder extends Seeder
             'perfil' => 3,
         ]);
         $this->call([
-            PacienteSeeder::class,
+            // PacienteSeeder::class,
             AtividadeSeeder::class,
-            AgendaSeeder::class,
+            // AgendaSeeder::class,
             AparelhoSeeder::class,
             // AtividadeSeeder::class,
             DocumentoSeeder::class,

@@ -15,10 +15,10 @@ class Prontuario extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'date',
-        'time',
-        'description',
+        'dia',
+        'hora',
+        'descricao',
         'paciente_id',
+        'ativo'
     ];
 }
