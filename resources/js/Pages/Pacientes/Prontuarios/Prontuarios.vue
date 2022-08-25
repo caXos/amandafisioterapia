@@ -76,7 +76,7 @@ onMounted(() => {
                                     <td>
                                         <div class="grid grid-cols-2">
                                             <div>
-                                                <Link :href="route('pacientes')">
+                                                <Link :href="route('editarProntuario', [paciente.id, prontuario.id])">
                                                     <span class="material-symbols-outlined text-color-inherit cursor-pointer mx-2 hover:ring-2 hover:ring-offset-2 hover:rounded-full" title="Editar">edit</span>
                                                 </Link>
                                             </div>

@@ -74,6 +74,9 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('prontuariosPaciente/{id}',[ProntuarioController::class, 'index'])->name('prontuariosPaciente');
     Route::get('adicionarProntuario/{paciente_id}',[ProntuarioController::class, 'create'])->name('adicionarProntuario');
     Route::post('adicionarProntuario/{paciente_id}',[ProntuarioController::class, 'store'])->name('gravarProntuario');
+    Route::get('editarProntuario/{paciente_id}/{id}',[ProntuarioController::class, 'edit'])->name('editarProntuario');
+    Route::post('editarProntuario/{paciente_id}/{id}',[ProntuarioController::class, 'update'])->name('editarProntuario');
+    Route::get('deletarProntuario/{paciente_id}/{id}',[ProntuarioController::class, 'deletarProntuario'])->name('deletarProntuario');
 });
 
 require __DIR__.'/auth.php';

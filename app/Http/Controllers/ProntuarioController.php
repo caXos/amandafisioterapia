@@ -17,7 +17,7 @@ class ProntuarioController extends Controller
      */
     public function index(int $id)
     {
-        $prontuarios = Prontuario::where('paciente_id', $id)->get();
+        $prontuarios = Prontuario::where('paciente_id', $id)->where('ativo',true)->get();
         $paciente = Paciente::find($id);
         // dump($prontuarios);
         // dd($paciente);
@@ -74,9 +74,11 @@ class ProntuarioController extends Controller
      * @param  \App\Models\Prontuario  $prontuario
      * @return \Illuminate\Http\Response
      */
-    public function edit(Prontuario $prontuario)
+    public function edit(UpdateProntuarioRequest $request/*,Prontuario $prontuario*/)
     {
-        //
+        $paciente = Paciente::find($request->paciente_id);
+        $prontuario = Prontuario::find($request->id);
+        return Inertia::render('Pacientes/Prontuarios/ProntuariosForm',['paciente'=>$paciente, 'prontuario' => $prontuario]);
     }
 
     /**
@@ -86,9 +88,27 @@ class ProntuarioController extends Controller
      * @param  \App\Models\Prontuario  $prontuario
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProntuarioRequest $request, Prontuario $prontuario)
+    public function update(UpdateProntuarioRequest $request/*, Prontuario $prontuario*/)
     {
-        //
+        // dd($request);
+        $this->authorize('update', Prontuario::class);
+        $prontuario = Prontuario::find($request->id);
+        $prontuario->dia = $request->dia;
+        $prontuario->hora = $request->hora;
+        $prontuario->descricao = $request->descricao;
+        $prontuario->paciente_id = $request->paciente_id;
+        $prontuario->save();
+        return redirect()->route("prontuariosPaciente",[$request->paciente_id])->with('status','Prontuário editado');
+    }
+
+    public function deletarProntuario(UpdateProntuarioRequest $request/*, Prontuario $prontuario*/)
+    {
+        // dd($request);
+        $this->authorize('deletarProntuario', Prontuario::class);
+        $prontuario = Prontuario::find($request->id);
+        $prontuario->ativo = false;
+        $prontuario->save();
+        return redirect()->route("prontuariosPaciente",[$request->paciente_id])->with('status','Prontuário deletado');
     }
 
     /**

@@ -28,6 +28,7 @@ onMounted(function () {
         $('#hora').val('');
         $('#descricao').val('');
     } else {
+        console.log(props.prontuario);
         $('#dia').val(props.prontuario.dia);
         $('#hora').val(props.prontuario.hora);
         $('#descricao').val(props.prontuario.descricao);
@@ -45,19 +46,15 @@ const submit = () => {
             }
         });
     } else {
-        //     form.nome = $('#nome').val();
-        //     form.plano = parseInt($('#plano').val());
-        //     form.inicio = $('#inicio').val();
-        //     form.fim = $('#fim').val();
-        //     form.fisio = $('#fisio').val();
-        //     form.observacao = $('#observacao').val();
-        //     form.telefone = $('#telefone').val();
-        //     form.nascimento = $('#nascimento').val();
-        //     form.post(route('editarPaciente', [props.paciente.id]), {
-        //         onFinish: () => {
-        //             form.reset()
-        //         }
-        //     });
+        form.paciente_id = props.paciente.id;
+        form.dia = $('#dia').val();
+        form.hora = $('#hora').val();
+        form.descricao = $('#descricao').val();
+        form.post(route('editarProntuario', [props.paciente.id, props.prontuario.id]), {
+            onFinish: () => {
+                form.reset()
+            }
+        });
     }
 };
 
@@ -111,7 +108,7 @@ const submit = () => {
                                 </Link>
                                 <Link v-if="prontuario !== undefined"
                                     class="inline-flex items-center ml-4 px-4 py-2 bg-rose-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-rose-700 active:bg-rose-900 focus:outline-none focus:border-rose-900 focus:shadow-outline-rose transition ease-in-out duration-150"
-                                    :href="route('pacientes')">
+                                    :href="route('deletarProntuario',[paciente.id, prontuario.id])">
                                 Remover
                                 </Link>
                                 <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }"

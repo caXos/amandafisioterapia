@@ -52,9 +52,14 @@ class ProntuarioPolicy
      * @param  \App\Models\Prontuario  $prontuario
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Prontuario $prontuario)
+    public function update(User $user/*, Prontuario $prontuario*/)
     {
-        //
+        return $user->perfil <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
+    }
+
+    public function deletarProntuario(User $user/*, Prontuario $prontuario*/)
+    {
+        return $user->perfil <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
     }
 
     /**
