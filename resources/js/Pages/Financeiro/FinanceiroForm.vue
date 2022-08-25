@@ -28,6 +28,23 @@ const finan = ref(props.financeiro);
 const da = ref(props.dataAtual);
 
 onMounted(function () {
+    if (props.financeiro == null || props.financeiro == undefined || props.financeiro == '' || props.financeiro.length == 0) {
+        //Nao ha nenhum lancamento, ou seja, e para adicionar novo lancamento
+        $('#dia').val('');
+        $('#hora').val('');
+        $('#descricao').val('');
+        $('#detalhe').val('');
+        $('#tipo').val('');
+        $('#valor').val('');
+    } else if (props.financeiro !== null && props.financeiro !== undefined && props.financeiro !== '') {
+        //Recebeu um lancamento para edicao
+        $('#dia').val(props.financeiro.dia);
+        $('#hora').val(props.financeiro.hora);
+        $('#descricao').val(props.financeiro.descricao);
+        $('#detalhe').val(props.financeiro.detalhe);
+        $('#tipo').val(props.financeiro.tipo);
+        $('#valor').val(props.financeiro.valor);
+    }
     // if (finan._rawValue !== null && finan._rawValue !== undefined && finan._rawValue !== '') {
     //     $('#dia').val(finan._rawValue.dia)
     //     $('#hora').val(finan._rawValue.hora)
@@ -36,15 +53,14 @@ onMounted(function () {
     //     $('#tipo').val(finan._rawValue.tipo)
     //     $('#valor').val(finan._rawValue.valor)
     // }
-    if (props.financeiro !== null && props.financeiro !== undefined && props.financeiro !== '') {
-        $('#dia').val(finan._rawValue.dia).trigger('input')
-        $('#hora').val(finan._rawValue.hora).trigger('input')
-        $('#descricao').val(finan._rawValue.descricao).trigger('input')
-        $('#detalhe').val(finan._rawValue.detalhe).trigger('input')
-        $('#tipo').val(finan._rawValue.tipo).trigger('input')
-        $('#valor').val(finan._rawValue.valor).trigger('input')
-    }
-    // console.log(da);
+    // if (props.financeiro !== null && props.financeiro !== undefined && props.financeiro !== '') {
+    //     $('#dia').val(finan._rawValue.dia).trigger('input')
+    //     $('#hora').val(finan._rawValue.hora).trigger('input')
+    //     $('#descricao').val(finan._rawValue.descricao).trigger('input')
+    //     $('#detalhe').val(finan._rawValue.detalhe).trigger('input')
+    //     $('#tipo').val(finan._rawValue.tipo).trigger('input')
+    //     $('#valor').val(finan._rawValue.valor).trigger('input')
+    // }
 });
 const submit = () => {
     if (props.financeiro == null) {
@@ -55,6 +71,12 @@ const submit = () => {
             }
         });
     } else {
+        form.dia = $('#dia').val();
+        form.hora = $('#hora').val();
+        form.descricao = $('#descricao').val();
+        form.detalhe = $('#detalhe').val();
+        form.tipo = $('#tipo').val();
+        form.valor = $('#valor').val();
         form.post(route('editarFinanceiro', [props.financeiro.id]), {
             onFinish: () => {
                 $('#tipo').val('0')

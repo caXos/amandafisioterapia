@@ -68,9 +68,13 @@ class PacientePolicy
      * @param  \App\Models\Paciente  $paciente
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Paciente $paciente)
+    // public function delete(User $user, Paciente $paciente)
+    // {
+    //     //
+    // }
+    public function delete(User $user/*, Paciente $paciente*/)
     {
-        //
+        return $user->perfil <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
     }
 
     /**

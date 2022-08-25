@@ -45,11 +45,11 @@ class DatabaseSeeder extends Seeder
             AparelhoSeeder::class,
             // AtividadeSeeder::class,
             DocumentoSeeder::class,
-            FinanceiroSeeder::class,
-            // PacienteSeeder::class,
+            // FinanceiroSeeder::class,
+            //// PacienteSeeder::class,
             PlanoSeeder::class,
-            ProntuarioSeeder::class,
-            PlanoPacienteSeeder::class,
+            // ProntuarioSeeder::class,
+            // PlanoPacienteSeeder::class,
         ]);
     }
 }

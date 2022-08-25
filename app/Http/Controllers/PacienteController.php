@@ -22,21 +22,23 @@ class PacienteController extends Controller
         // $usuarioLogado = Auth::user();
         $usuarioLogado = auth()->user();
         if ($usuarioLogado->perfil == 1) {
-            $pacientes = Paciente::all();
+            $pacientes = Paciente::where('ativo', true)->get();
         } else {
-            $pacientes = Paciente::all()->where('fisio_id', $usuarioLogado->id);
+            $pacientes = Paciente::where('fisio_id', $usuarioLogado->id)->where('ativo', true)->get();
         }
         foreach($pacientes as $paciente) {
             // error_log($paciente);
             $fisio = User::select('name')->where('id',$paciente->fisio_id)->value('name');
             $paciente->fisio_nome = $fisio;
-            $planoPaciente = PlanoPaciente::find($paciente->plano_id);
+            // dd($paciente);
+            // $planoPaciente = PlanoPaciente::find('plano_id',$paciente->plano_id);
+            $planoPaciente = PlanoPaciente::where('plano_id', $paciente->plano_id)->limit(1)->get();
             // dd($planoPaciente);
-            $plano = Plano::find($planoPaciente->plano_id);
+            $plano = Plano::find($planoPaciente[0]->plano_id);
             // dd($plano);
             $paciente->plano_nome = $plano->nome;
-            $paciente->plano_inicio = $planoPaciente->inicio;
-            $paciente->plano_fim = $planoPaciente->fim;
+            $paciente->plano_inicio = $planoPaciente[0]->inicio;
+            $paciente->plano_fim = $planoPaciente[0]->fim;
         }
         return Inertia::render('Pacientes/Pacientes',['pacientes' => $pacientes]);
     }
@@ -148,6 +150,22 @@ class PacienteController extends Controller
         $planoPaciente[0]->inicio = $request->inicio;
         $planoPaciente[0]->fim = $request->fim;
         $planoPaciente[0]->ativo = true;
+        // dd($planoPaciente);
+        $planoPaciente[0]->save();
+        return redirect()->route("pacientes",)->with('status','Paciente alterado');
+    }
+
+    public function deletarPaciente(UpdatePacienteRequest $request)
+    {
+        $this->authorize('delete',Paciente::class);
+        // dump($request);
+        $paciente = Paciente::find($request->id);
+        $paciente->ativo = false;
+        $paciente->save();
+        // dump($paciente);
+        $planoPaciente = PlanoPaciente::where('plano_id', $paciente->plano_id)->where('ativo', true)->where('paciente_id',$paciente->id)->get();
+        // dump($planoPaciente);
+        $planoPaciente[0]->ativo = false;
         // dd($planoPaciente);
         $planoPaciente[0]->save();
         return redirect()->route("pacientes",)->with('status','Paciente alterado');
