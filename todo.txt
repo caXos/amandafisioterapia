@@ -33,3 +33,11 @@ visitante - 3
 
   echo $formatter->format($date);
   >
+
+
+
+  sugestoes:
+  1. tirar o saldo do financeiro do footer e colocar ele acima da tabela (provavelmente em uma div fora da tabela), para deixar a visualizacao mais pratica
+  2. organizar o financeiro, inicialmente, decrescente, sendo o mais recente por cima, tambem para deixar a visualizacao mais pratica
+  3. deixar a visualizacao da agenda tambem em formato datatable
+  

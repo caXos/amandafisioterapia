@@ -22,7 +22,8 @@ return new class extends Migration
             $table->integer('aparelho_id')->constrained('aparelhos')->nullable();
             $table->date('date');
             $table->time('time');
-            $table->boolean('done');//$table->boolean('ativo')->default('true');
+            $table->boolean('done');
+            $table->boolean('ativo')->default('true');
             $table->timestamps();
         });
     }
