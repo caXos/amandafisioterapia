@@ -6,6 +6,7 @@ use App\Models\Agenda;
 use App\Models\Paciente;
 use App\Models\Atividade;
 use App\Models\Aparelho;
+use App\Models\Atendimento;
 use App\Models\User;
 use App\Http\Requests\StoreAgendaRequest;
 use App\Http\Requests\UpdateAgendaRequest;
@@ -22,19 +23,34 @@ class AgendaController extends Controller
     {
         // $agendas = Agenda::all()->toArray();
         // $agendas = Agenda::all()->where('done',false);
-        $agendas = Agenda::orderBy('date')->where('done',false)->get();
+        $agendas = Agenda::orderBy('dia')->where('ativo',true)->get();
         foreach($agendas as $agenda) {
-            $agenda->time = substr($agenda->time,0,5);
-            $fisio = User::select('name')->where('id',$agenda->user_id)->value('name');
-            $paciente = Paciente::select('nome')->where('id',$agenda->paciente_id)->value('nome');
-            $atividade = Atividade::select('name')->where('id',$agenda->atividade_id)->value('name');
-            $aparelho = Aparelho::select('name')->where('id',$agenda->aparelho_id)->value('name');
-            $agenda->user_id = $fisio;
-            $agenda->paciente_id = $paciente;
-            $agenda->atividade_id = $atividade;
-            $agenda->aparelho_id = $aparelho;
+            $atendimentos = Atendimento::where('agenda_id',$agenda->id)->get();
+            $agenda->atendimentos = $atendimentos;
+            $agenda->vagas = 3 - sizeof($atendimentos);
+            foreach($agenda->atendimentos as $atendimento) {
+                $paciente = Paciente::find($atendimento->paciente_id);
+                $atividade = Atividade::find($atendimento->atividade_id);
+                $aparelho = Aparelho::find($atendimento->aparelho_id);
+                $fisio = User::find($atendimento->fisio_id);
+                $atendimento->paciente_nome = $paciente->nome;
+                $atendimento->atividade_nome = $atividade->name;//TODO: alterar para nome
+                $atendimento->aparelho_nome = $aparelho->name;//TODO: alterar para nome
+                $atendimento->fisio_nome = $fisio->name;//TODO: alterar para nome
+            }
+        //     $agenda->time = substr($agenda->time,0,5);
+        //     $fisio = User::select('name')->where('id',$agenda->user_id)->value('name');
+        //     $paciente = Paciente::select('nome')->where('id',$agenda->paciente_id)->value('nome');
+        //     $atividade = Atividade::select('name')->where('id',$agenda->atividade_id)->value('name');
+        //     $aparelho = Aparelho::select('name')->where('id',$agenda->aparelho_id)->value('name');
+        //     $agenda->user_id = $fisio;
+        //     $agenda->paciente_id = $paciente;
+        //     $agenda->atividade_id = $atividade;
+        //     $agenda->aparelho_id = $aparelho;
         }
-        return Inertia::render('Agenda/Agenda',['agendas' => $agendas]);
+        // dd($agendas);
+        // return Inertia::render('Agenda/Agenda',['agendas' => $agendas]);
+        return Inertia::render('Agenda/Agenda2',['agendas' => $agendas]);
     }
 
     /**

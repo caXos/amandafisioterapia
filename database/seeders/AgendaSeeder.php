@@ -14,6 +14,11 @@ class AgendaSeeder extends Seeder
      */
     public function run()
     {
+        // $i = 0;
+        // for ($i = 0; $i < 60; $i++) {
+        //     $diasString = "+".$i." days";
+        //     $i < 1 ? \App\Models\Agenda::create() : \App\Models\Agenda::create(['dia' => fake()->dateTimeThisYear($diasString)]);
+        // }
         \App\Models\Agenda::factory(10)->create();
     }
 }

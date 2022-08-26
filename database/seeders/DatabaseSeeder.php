@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // PacienteSeeder::class,
             AtividadeSeeder::class,
-            // AgendaSeeder::class,
+            AgendaSeeder::class,
             AparelhoSeeder::class,
             // AtividadeSeeder::class,
             DocumentoSeeder::class,
@@ -50,6 +50,7 @@ class DatabaseSeeder extends Seeder
             PlanoSeeder::class,
             // ProntuarioSeeder::class,
             // PlanoPacienteSeeder::class,
+            // AtendimentoSeeder::class,
         ]);
     }
 }
