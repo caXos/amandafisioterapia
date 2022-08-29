@@ -21,8 +21,6 @@ class AgendaController extends Controller
      */
     public function index()
     {
-        // $agendas = Agenda::all()->toArray();
-        // $agendas = Agenda::all()->where('done',false);
         $agendas = Agenda::orderBy('dia')->where('ativo',true)->get();
         foreach($agendas as $agenda) {
             $atendimentos = Atendimento::where('agenda_id',$agenda->id)->get();
@@ -38,19 +36,30 @@ class AgendaController extends Controller
                 $atendimento->aparelho_nome = $aparelho->name;//TODO: alterar para nome
                 $atendimento->fisio_nome = $fisio->name;//TODO: alterar para nome
             }
-        //     $agenda->time = substr($agenda->time,0,5);
-        //     $fisio = User::select('name')->where('id',$agenda->user_id)->value('name');
-        //     $paciente = Paciente::select('nome')->where('id',$agenda->paciente_id)->value('nome');
-        //     $atividade = Atividade::select('name')->where('id',$agenda->atividade_id)->value('name');
-        //     $aparelho = Aparelho::select('name')->where('id',$agenda->aparelho_id)->value('name');
-        //     $agenda->user_id = $fisio;
-        //     $agenda->paciente_id = $paciente;
-        //     $agenda->atividade_id = $atividade;
-        //     $agenda->aparelho_id = $aparelho;
         }
         // dd($agendas);
-        // return Inertia::render('Agenda/Agenda',['agendas' => $agendas]);
-        return Inertia::render('Agenda/Agenda2',['agendas' => $agendas]);
+        return Inertia::render('Agenda/Agenda',['agendas' => $agendas]);
+    }
+
+    public function historico()
+    {
+        $agendas = Agenda::orderBy('dia')->where('ativo',true)->get(); //TODO: mudar para ativo==false
+        foreach($agendas as $agenda) {
+            $atendimentos = Atendimento::where('agenda_id',$agenda->id)->get();
+            $agenda->atendimentos = $atendimentos;
+            $agenda->vagas = 3 - sizeof($atendimentos);
+            foreach($agenda->atendimentos as $atendimento) {
+                $paciente = Paciente::find($atendimento->paciente_id);
+                $atividade = Atividade::find($atendimento->atividade_id);
+                $aparelho = Aparelho::find($atendimento->aparelho_id);
+                $fisio = User::find($atendimento->fisio_id);
+                $atendimento->paciente_nome = $paciente->nome;
+                $atendimento->atividade_nome = $atividade->name;//TODO: alterar para nome
+                $atendimento->aparelho_nome = $aparelho->name;//TODO: alterar para nome
+                $atendimento->fisio_nome = $fisio->name;//TODO: alterar para nome
+            }
+        }
+        return Inertia::render('Agenda/Historico',['agendas' => $agendas]);
     }
 
     /**

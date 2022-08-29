@@ -65,7 +65,7 @@ onMounted(() => {
                         <FAB model="Compromisso" rota="adicionarAgenda"></FAB>
                         <p v-if="agendas.length == 0" class="text-sky-800 text-center">Não há compromissos. Use o botão
                             abaixo para incluir compromissos na agenda.</p>
-                        <table v-else id="tabela-agenda" class="text-sky-800 text-center border border-1 border-sky-300 rounded-md">
+                        <table v-else id="tabela-agenda" class="row-border text-sky-800 text-center border border-1 border-sky-300 rounded-md">
                             <thead>
                                 <tr>
                                     <th>Dia</th>
@@ -76,9 +76,7 @@ onMounted(() => {
                             </thead>
                             <tbody>
                                 <tr v-for="(agenda, index) in agendas" :key="index" class="border border-sky-300 rounded-md hover:bg-sky-200">
-                                    <td><span style="display: none;">{{ agenda.dia }}</span>{{ new
-                                            Date(agenda.dia).toLocaleDateString()
-                                    }}</td>
+                                    <td><span style="display: none;">{{ agenda.dia }}</span>{{ new Date(agenda.dia).toLocaleDateString() }}</td>
                                     <td>{{ agenda.hora.substring(0, 5) }}</td>
                                     <td class="flex text-center">
                                         <div v-if="agenda.atendimentos.length === 0"></div>

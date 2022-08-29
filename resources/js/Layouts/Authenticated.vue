@@ -36,6 +36,11 @@ const props = defineProps({
                                 </BreezeNavLink>
                             </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <BreezeNavLink :href="route('historico')" :active="route().current('historico')">
+                                    Histórico
+                                </BreezeNavLink>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <BreezeNavLink :href="route('pacientes')" :active="route().current('pacientes')">
                                     Pacientes
                                 </BreezeNavLink>
@@ -109,6 +114,11 @@ const props = defineProps({
                     <div class="pt-2 pb-3 space-y-1">
                         <BreezeResponsiveNavLink :href="route('agenda')" :active="route().current('agenda')">
                             Agenda
+                        </BreezeResponsiveNavLink>
+                    </div>
+                    <div class="pt-2 pb-3 space-y-1">
+                        <BreezeResponsiveNavLink :href="route('historico')" :active="route().current('historico')">
+                            Histórico
                         </BreezeResponsiveNavLink>
                     </div>
                     <div class="pt-2 pb-3 space-y-1">

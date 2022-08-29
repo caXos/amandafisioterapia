@@ -31,16 +31,7 @@ const props = defineProps({
                     <div class="p-6 bg-white border-b border-gray-200">
                         <FAB model="Compromisso" rota="adicionarAgenda"></FAB>
                         <p v-if="agendas.length == 0" class="text-sky-800 text-center">Não há compromissos. Use o botão abaixo para incluir compromissos na agenda.</p>
-                        <AgendaCard v-else v-for="(agenda, index) in agendas" 
-                                :key="index" 
-                                :date="agenda.date"
-                                :time="agenda.time"
-                                :id="agenda.id"
-                                :paciente="agenda.paciente_id" 
-                                :atividade="agenda.atividade_id"
-                                :fisio="agenda.user_id"
-                                :aparelho="agenda.aparelho_id"
-                                :completado=false />
+                        <AgendaCard v-else v-for="(agenda, index) in agendas" :key="index" :agenda="agenda" />
                     </div>
                 </div>
             </div>
