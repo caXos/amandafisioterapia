@@ -9,26 +9,29 @@ import AgendaCardModal from '@/Components/AgendaCardModal.vue';
 const props = defineProps({
     agendas: Object,
     status: String,
-    modal: Boolean
 });
 
-const modalAberta = ref(false);
+const modal = ref(false);
+
 const modalConteudo = ref({
     'titulo': null,
     'conteudo': null,
-    'botoes': null
+    'botoes': null,
 });
+
+function abrirModal(valor) {
+    console.log(valor)
+    modalConteudo.value.titulo = valor.id
+    modalConteudo.value.conteudo = 'blah'
+    modal.value = true
+}
+function fecharModal() {
+    modal.value = false
+}
 </script>
 
 <script>
-function abrirModal() {
-    this.modalConteudo.titulo = 'Título Teste';
-    this.modalConteudo.conteudo = 'Conteúdo Teste';
-    this.modalAberta = true;
-}
-function fecharModal() {
-    this.modalAberta = false;
-}
+
 </script>
 
 <template>
@@ -53,13 +56,9 @@ function fecharModal() {
                         <p v-if="agendas.length == 0" class="text-sky-800 text-center">Não há compromissos. Use o botão
                             abaixo para incluir compromissos na agenda.</p>
                         <AgendaCard v-else v-for="(agenda, index) in agendas" :key="index" :agenda="agenda"
-                            v-on:editarAgendaToda="abrirModal()" />
-                        <!-- <AgendaCardModal :class="{
-                            'hidden': localModalAberta === false
-                            , 'block': localModalAberta === true
-                        }" v-on:fecharModal="fecharModal" /> -->
-                        <!-- <AgendaCardModal v-if="modalAberta == true" v-on:fecharModal="fecharModal" /> -->
-                        <AgendaCardModal v-if="modalAberta == true" v-on:fecharModal="fecharModal()" 
+                            @editarAgendaToda="abrirModal" />
+
+                        <AgendaCardModal v-if="modal == true" v-on:fecharModal="fecharModal" 
                             :titulo="modalConteudo.titulo"
                             :conteudo="modalConteudo.conteudo"
                             :botoes="modalConteudo.botoes"

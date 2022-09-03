@@ -3,67 +3,15 @@ import { Link } from '@inertiajs/inertia-vue3';
 import { ref } from 'vue'
 
 const props = defineProps({
-    // date: String,
-    // time: String,
-    // id: Number,
-    // paciente: String,
-    // atividade: String,
-    // aparelho: String,
-    // fisio: String,
-    // completado: Boolean,
-    agenda: Object
+    agenda: Object,
+    onEditarAgendaToda: Function
 });
 
 defineEmits(['editarAgendaToda, notificarAgendaToda, completarAgendaToda, faltarAgendaToda, deletarAgendaToda, retornarAgendaToda']);
 
-// const localCompletado = ref(props.completado);
-
 </script>
 
 <script>
-function editarCompromisso(id) {
-
-}
-function notificarCompromissoTodo(id) {
-
-}
-function completarCompromissoTodo(id) {
-    alert('Completar compromisso todo: ' + id);
-}
-function faltarCompromissoTodo(id) {
-
-}
-function deletarCompromissoTodo(id) {
-
-}
-function retornarCompromissoTodo(id) {
-
-}
-
-function completarCompromisso(id) {
-    // axios.post(route('completarCompromisso', [id])).then(resp => {
-    //     // console.log(resp.status);
-    //     if (resp.status === 200) this.localCompletado = true;
-    // }, erro => {
-    //     console.log("erro", erro);
-    // });
-    // this.localCompletado = true;
-}
-function deletarCompromisso(id) {
-    // axios.post(route('like',[id]))
-    alert('deletar compromisso ' + id);
-}
-
-function agendarRetorno(paciente) {
-    // axios.post(route('like',[id]))
-    alert('agendar retorno para o paciente ' + paciente);
-}
-
-function notificarPaciente(time) {
-    // axios.post(route('like',[id]))
-    alert('Notificar paciente sobre compromisso às ' + time);
-}
-
 </script>
 
 <template>
@@ -89,22 +37,10 @@ function notificarPaciente(time) {
             </div>
         </div>
         <div v-if="agenda.atendimentos.length > 0">
-            <!-- <Link :href="route('editarAgenda', [id])">
-            <span class="material-symbols-outlined text-color-inherit mx-1 cursor-pointer"
-                :title="'Editar compromisso'">edit</span>
-            </Link>
-            <span class="material-symbols-outlined text-color-inherit mx-1 cursor-pointer"
-                :title="`Notificar ${paciente}`" v-on:click="notificarPaciente(this.time)">notifications</span>
-            <span class="material-symbols-outlined text-color-inherit mx-1 cursor-pointer"
-                title="Marcar como completado" v-on:click="completarCompromisso(this.id)">done</span>
-            <span class="material-symbols-outlined text-color-inherit mx-1 cursor-pointer"
-                :title="'Deletar sem completar'" v-on:click="deletarCompromisso(this.id)">delete</span>
-            <span class="material-symbols-outlined text-color-inherit mx-1 cursor-pointer" :title="'Agendar Retorno'"
-                v-on:click="agendarRetorno(this.paciente)">forward</span> -->
             <div class="mt-2 mb-1">
                 <!-- <Link :href="route('editarAgenda', [id])"> -->
                 <span class="mx-4 material-symbols-outlined text-color-inherit mx-1 cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                    :title="`Editar compromisso`" @click="$emit('editarAgendaToda', agenda.hora)">edit</span>
+                    :title="`Editar compromisso`" @click="$emit('editarAgendaToda', agenda)">edit</span>
                 <!-- </Link> -->
                 <span class="mx-4 material-symbols-outlined text-color-inherit mx-1 cursor-pointer rounded-full ring-offset-2 hover:ring-2"
                     :title="`Notificar todos`" @click="$emit('notificarAgendaToda', agenda.id)">notifications</span>
