@@ -4,7 +4,12 @@ import { ref } from 'vue'
 
 const props = defineProps({
     agenda: Object,
-    onEditarAgendaToda: Function
+    onEditarAgendaToda: Function,
+    onNotificarAgendaToda: Function,
+    onCompletarAgendaToda: Function,
+    onFaltarAgendaToda: Function,
+    onDeletarAgendaToda: Function,
+    onRetornarAgendaToda: Function
 });
 
 defineEmits(['editarAgendaToda, notificarAgendaToda, completarAgendaToda, faltarAgendaToda, deletarAgendaToda, retornarAgendaToda']);
@@ -38,21 +43,21 @@ defineEmits(['editarAgendaToda, notificarAgendaToda, completarAgendaToda, faltar
         </div>
         <div v-if="agenda.atendimentos.length > 0">
             <div class="mt-2 mb-1">
-                <!-- <Link :href="route('editarAgenda', [id])"> -->
+                <Link :href="route('editarAgenda', [agenda.id])">
                 <span class="mx-4 material-symbols-outlined text-color-inherit mx-1 cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                    :title="`Editar compromisso`" @click="$emit('editarAgendaToda', agenda)">edit</span>
-                <!-- </Link> -->
+                    :title="`Editar compromisso`" >edit</span>
+                </Link>
                 <span class="mx-4 material-symbols-outlined text-color-inherit mx-1 cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                    :title="`Notificar todos`" @click="$emit('notificarAgendaToda', agenda.id)">notifications</span>
+                    :title="`Notificar todos`" @click="$emit('notificarAgendaToda', agenda)">notifications</span>
                 <span class="mx-4 material-symbols-outlined text-color-inherit mx-1 cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                    title="Marcar como completado" @click="completarCompromissoTodo(agenda.id)">done_all</span>
+                    title="Marcar como completado" @click="$emit('completarAgendaToda',agenda)">done_all</span>
                 <span class="mx-4 material-symbols-outlined text-color-inherit mx-1 cursor-pointer rounded-full ring-offset-2 hover:ring-2"
                     :title="'Marcar todos com falta'"
-                    @click="$emit('faltarAgendaToda', agenda.id)">event_busy</span>
+                    @click="$emit('faltarAgendaToda', agenda)">event_busy</span>
                 <span class="mx-4 material-symbols-outlined text-color-inherit mx-1 cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                    :title="'Deletar sem completar'" @click="$emit('deletarAgendaToda', agenda.id)">delete</span>
+                    :title="'Deletar sem completar'" @click="$emit('deletarAgendaToda', agenda)">delete</span>
                 <span class="mx-4 material-symbols-outlined text-color-inherit mx-1 cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                    :title="'Agendar Retorno'" @click="$emit('retornarAgendaToda', agenda.id)">forward</span>
+                    :title="'Agendar Retorno'" @click="$emit('retornarAgendaToda', agenda)">forward</span>
             </div>
         </div>
     </div>
