@@ -9,10 +9,11 @@ const props = defineProps({
     onCompletarAgendaToda: Function,
     onFaltarAgendaToda: Function,
     onDeletarAgendaToda: Function,
-    onRetornarAgendaToda: Function
+    onRetornarAgendaToda: Function,
+    onAbrirModalAtendimento: Function
 });
 
-defineEmits(['editarAgendaToda, notificarAgendaToda, completarAgendaToda, faltarAgendaToda, deletarAgendaToda, retornarAgendaToda']);
+defineEmits(['editarAgendaToda, notificarAgendaToda, completarAgendaToda, faltarAgendaToda, deletarAgendaToda, retornarAgendaToda', 'abrirModalAtendimento']);
 
 </script>
 
@@ -34,7 +35,9 @@ defineEmits(['editarAgendaToda, notificarAgendaToda, completarAgendaToda, faltar
             , 'flex-1 grid grid-cols-3': agenda.atendimentos.length === 3
         }">
             <div class="grid grid-rows-4 border border-0 rounded-full cursor-pointer hover:bg-sky-200"
-                v-for="(atendimento, index) in agenda.atendimentos" :key="index">
+                v-for="(atendimento, index) in agenda.atendimentos" :key="index"
+                @click="$emit('abrirModalAtendimento', [atendimento, agenda.dia, agenda.hora])"
+                >
                 <div>{{ atendimento.paciente_nome }}</div>
                 <div>{{ atendimento.atividade_nome }}</div>
                 <div>{{ atendimento.aparelho_nome }}</div>
@@ -45,19 +48,19 @@ defineEmits(['editarAgendaToda, notificarAgendaToda, completarAgendaToda, faltar
             <div class="mt-2 mb-1">
                 <Link :href="route('editarAgenda', [agenda.id])">
                 <span class="mx-4 material-symbols-outlined text-color-inherit mx-1 cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                    :title="`Editar compromisso`" >edit</span>
+                    :title="`Editar compromisso todo`" >edit</span>
                 </Link>
                 <span class="mx-4 material-symbols-outlined text-color-inherit mx-1 cursor-pointer rounded-full ring-offset-2 hover:ring-2"
                     :title="`Notificar todos`" @click="$emit('notificarAgendaToda', agenda)">notifications</span>
                 <span class="mx-4 material-symbols-outlined text-color-inherit mx-1 cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                    title="Marcar como completado" @click="$emit('completarAgendaToda',agenda)">done_all</span>
+                    title="Marcar todos como completado" @click="$emit('completarAgendaToda',agenda)">done_all</span>
                 <span class="mx-4 material-symbols-outlined text-color-inherit mx-1 cursor-pointer rounded-full ring-offset-2 hover:ring-2"
                     :title="'Marcar todos com falta'"
                     @click="$emit('faltarAgendaToda', agenda)">event_busy</span>
                 <span class="mx-4 material-symbols-outlined text-color-inherit mx-1 cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                    :title="'Deletar sem completar'" @click="$emit('deletarAgendaToda', agenda)">delete</span>
+                    :title="'Deletar todos sem completar'" @click="$emit('deletarAgendaToda', agenda)">delete</span>
                 <span class="mx-4 material-symbols-outlined text-color-inherit mx-1 cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                    :title="'Agendar Retorno'" @click="$emit('retornarAgendaToda', agenda)">forward</span>
+                    :title="'Agendar retorno para todos'" @click="$emit('retornarAgendaToda', agenda)">forward</span>
             </div>
         </div>
     </div>

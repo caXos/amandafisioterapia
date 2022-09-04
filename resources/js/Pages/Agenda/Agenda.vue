@@ -5,6 +5,7 @@ import FAB from '@/Components/FloatingActionButton.vue';
 import { Head, Link } from '@inertiajs/inertia-vue3';
 import { computed, ref } from 'vue';
 import AgendaCardModal from '@/Components/AgendaCardModal.vue';
+import AtendimentoModal from '@/Components/AtendimentoModal.vue';
 
 const props = defineProps({
     agendas: Object,
@@ -12,6 +13,7 @@ const props = defineProps({
 });
 
 const modal = ref(false);
+const modalAtendimento = ref(false);
 
 const modalConteudo = ref({
     'titulo': null,
@@ -19,50 +21,96 @@ const modalConteudo = ref({
     'segundaLinha': null,
     'compromisso': null
 });
+
+const modalAtendimentoConteudo = ref({
+    'atendimento': null,
+    'dia': null,
+    'hora': null
+});
+
 function abrirNotificarAgendaToda(compromisso) {
     if (compromisso.atendimentos.length === 1) {
-        modalConteudo.value.titulo = 'Notificar um(a) paciente'
+        modalConteudo.value.titulo = 'Notificar paciente'
         modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja notificar o(a) paciente do seguinte compromisso?'
         modalConteudo.value.segundaLinha = 'Um paciente será notificado.'
     } else {
-        modalConteudo.value.titulo = 'Notificar todos(as) os(as) pacientes'
+        modalConteudo.value.titulo = 'Notificar pacientes'
         modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja notificar os(as) pacientes do seguinte compromisso?'
         modalConteudo.value.segundaLinha = 'Serão notificados(as) ' + compromisso.atendimentos.length + ' pacientes.'
     }
     modalConteudo.value.compromisso = compromisso
     modal.value = true
 }
+
 function abrirCompletarAgendaToda(compromisso) {
-    // compromisso.atendimentos.length === 1 ? modalConteudo.value.titulo = 'Notificar um(a) paciente' : modalConteudo.value.titulo = 'Notificar todos(as) os(as) pacientes'
-    modalConteudo.value.titulo = 'Completar compromisso'
-    modalConteudo.value.acao = 'completar'
+    if (compromisso.atendimentos.length === 1) {
+        modalConteudo.value.titulo = 'Registrar atendimento completado'
+        modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja registrar o seguinte compromisso como completado?'
+        modalConteudo.value.segundaLinha = 'Um atendimento será marcado como completado.'
+    } else {
+        modalConteudo.value.titulo = 'Registrar atendimentos completados'
+        modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja registrar o seguinte compromisso como completado?'
+        modalConteudo.value.segundaLinha = 'Serão registrados como completado ' + compromisso.atendimentos.length + ' atendimentos.'
+    }
     modalConteudo.value.compromisso = compromisso
-    console.log(modalConteudo.value.compromisso)
     modal.value = true
-
 }
+
 function abrirFaltarAgendaToda(compromisso) {
-    compromisso.atendimentos.length === 1 ? modalConteudo.value.titulo = 'Marcar uma falta' : modalConteudo.value.titulo = 'Marcar falta para todos'
-    modalConteudo.value.acao = 'faltar'
+    if (compromisso.atendimentos.length === 1) {
+        modalConteudo.value.titulo = 'Registrar falta'
+        modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja registrar o seguinte compromisso como falta?'
+        modalConteudo.value.segundaLinha = 'Um atendimento será marcado como falta.'
+    } else {
+        modalConteudo.value.titulo = 'Registrar faltas'
+        modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja registrar o seguinte compromisso como falta?'
+        modalConteudo.value.segundaLinha = 'Serão registrados como falta ' + compromisso.atendimentos.length + ' atendimentos.'
+    }
     modalConteudo.value.compromisso = compromisso
-    console.log(modalConteudo.value.compromisso)
-    modal.value = true
-
-}
-/*
-@faltarAgendaToda="abrirFaltarAgendaToda"
-@deletarAgendaToda="abrirDeletarAgendaToda"
-@retornarAgendaToda="abrirRetornarAgendaToda"
-*/
-
-function abrirModal(valor) {
-    console.log(valor)
-    modalConteudo.value.titulo = valor.id
-    modalConteudo.value.conteudo = 'blah'
     modal.value = true
 }
+
+function abrirDeletarAgendaToda(compromisso) {
+    if (compromisso.atendimentos.length === 1) {
+        modalConteudo.value.titulo = 'Desmarcar atendimento'
+        modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja desmarcar o seguinte compromisso?'
+        modalConteudo.value.segundaLinha = 'Um atendimento será desmarcado.'
+    } else {
+        modalConteudo.value.titulo = 'Desmarcar atendimentos'
+        modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja desmarcar o seguinte compromisso?'
+        modalConteudo.value.segundaLinha = 'Serão desmarcados ' + compromisso.atendimentos.length + ' atendimentos.'
+    }
+    modalConteudo.value.compromisso = compromisso
+    modal.value = true
+}
+
+function abrirRetornarAgendaToda(compromisso) {
+    if (compromisso.atendimentos.length === 1) {
+        modalConteudo.value.titulo = 'Agendar retorno'
+        modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja agendar retorno do seguinte compromisso?'
+        modalConteudo.value.segundaLinha = 'Será agendado retorno para um atendimento.'
+    } else {
+        modalConteudo.value.titulo = 'Agendar retornos'
+        modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja agendar retorno do seguinte compromisso?'
+        modalConteudo.value.segundaLinha = 'Serão agendados retornos para ' + compromisso.atendimentos.length + ' atendimentos.'
+    }
+    modalConteudo.value.compromisso = compromisso
+    modal.value = true
+}
+
+function abrirModalAtendimento(atendimento) {
+    modalAtendimentoConteudo.value.atendimento = atendimento[0]
+    modalAtendimentoConteudo.value.dia = atendimento[1]
+    modalAtendimentoConteudo.value.hora = atendimento[2]
+    modalAtendimento.value = true;
+}
+
 function fecharModal() {
     modal.value = false
+}
+
+function fecharModalAtendimento() {
+    modalAtendimento.value = false
 }
 </script>
 
@@ -97,15 +145,21 @@ function fecharModal() {
                             @faltarAgendaToda="abrirFaltarAgendaToda"
                             @deletarAgendaToda="abrirDeletarAgendaToda"
                             @retornarAgendaToda="abrirRetornarAgendaToda"
-                            
-                            />
 
+                            @abrirModalAtendimento="abrirModalAtendimento"
+                            />
                         <AgendaCardModal v-if="modal == true" v-on:fecharModal="fecharModal" 
                             :titulo="modalConteudo.titulo"
                             :compromisso="modalConteudo.compromisso"
                             :primeiraLinha="modalConteudo.primeiraLinha"
                             :segundaLinha="modalConteudo.segundaLinha"
-                        />
+                            />
+                        <AtendimentoModal v-if="modalAtendimento == true"
+                            :atendimento="modalAtendimentoConteudo.atendimento"
+                            :dia="modalAtendimentoConteudo.dia"
+                            :hora="modalAtendimentoConteudo.hora"
+                            @fecharModalAtendimento="fecharModalAtendimento"
+                            />
                     </div>
                 </div>
             </div>
