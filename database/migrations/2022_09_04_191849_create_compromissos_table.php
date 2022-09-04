@@ -13,15 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('atendimentos', function (Blueprint $table) {
+        Schema::create('compromissos', function (Blueprint $table) {
             $table->id();
-            $table->integer('compromisso_id');
-            $table->integer('paciente_id');
-            $table->integer('atividade_id');
-            $table->integer('aparelho_id');
-            $table->integer('fisio_id');
-            $table->boolean('cumprido')->default(false);
-            $table->boolean('ativo')->default(true);
+            $table->date('dia');
+            $table->time('hora');
+            $table->integer('vagas')->default(3);
+            $table->boolean('ativo')->default('true');
             $table->timestamps();
         });
     }
@@ -33,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('atendimentos');
+        Schema::dropIfExists('compromissos');
     }
 };

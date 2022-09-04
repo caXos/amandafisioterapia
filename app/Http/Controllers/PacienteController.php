@@ -30,7 +30,7 @@ class PacienteController extends Controller
             // error_log($paciente);
             $fisio = User::select('name')->where('id',$paciente->fisio_id)->value('name');
             $paciente->fisio_nome = $fisio;
-            // dd($paciente);
+            // dump($paciente);
             // $planoPaciente = PlanoPaciente::find('plano_id',$paciente->plano_id);
             $planoPaciente = PlanoPaciente::where('plano_id', $paciente->plano_id)->limit(1)->get();
             // dd($planoPaciente);

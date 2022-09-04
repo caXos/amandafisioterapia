@@ -134,7 +134,8 @@ class AgendaController extends Controller
         $paciente = Paciente::select('id')->where('id',$agenda->paciente_id)->value('id');
         $atividade = Atividade::select('id')->where('id',$agenda->atividade_id)->value('id');
         $aparelho = Aparelho::select('id')->where('id',$agenda->aparelho_id)->value('id');
-        $pacientes = Paciente::all('id','name');
+        // $pacientes = Paciente::all('id','name');
+        $pacientes = Paciente::all('id','nome');
         $atividades = Atividade::all('id','name','usesAparatus');
         $aparelhos = Aparelho::all('id','name');
         $fisios = User::all('id','name');

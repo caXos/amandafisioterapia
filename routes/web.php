@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 use App\Http\Controllers\AgendaController;
+use App\Http\Controllers\CompromissoController;
 use App\Http\Controllers\AparelhoController;
 use App\Http\Controllers\AtividadeController;
 use App\Http\Controllers\DocumentoController;
@@ -42,7 +43,8 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/agenda', [AgendaController::class, 'index'])->middleware(['auth', 'verified'])->name('agenda');
+// Route::get('/agenda', [AgendaController::class, 'index'])->middleware(['auth', 'verified'])->name('agenda');
+Route::get('/agenda', [CompromissoController::class, 'index'])->middleware(['auth', 'verified'])->name('agenda');
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('aparelhos',[AparelhoController::class, 'index'])->name('aparelhos');
@@ -54,12 +56,19 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
 
     Route::get('historico',[AgendaController::class, 'historico'])->name('historico');
 
-    Route::get('adicionarAgenda',[AgendaController::class, 'create'])->name('adicionarAgenda');
-    Route::post('adicionarAgenda',[AgendaController::class, 'store'])->name('gravarAgenda');
-    Route::get('editarAgenda/{id}',[AgendaController::class, 'edit'])->name('editarAgenda');
-    Route::post('atualizarAgenda',[AgendaController::class, 'edit'])->name('atualizarAgenda');
-    Route::post('completarCompromisso/{id}',[AgendaController::class, 'completarCompromisso'])->name('completarCompromisso');
-    Route::post('deletarCompromisso/{id}',[AgendaController::class, 'deletarCompromisso'])->name('deletarCompromisso');
+    // Route::get('adicionarAgenda',[AgendaController::class, 'create'])->name('adicionarAgenda');
+    // Route::post('adicionarAgenda',[AgendaController::class, 'store'])->name('gravarAgenda');
+    // Route::get('editarAgenda/{id}',[AgendaController::class, 'edit'])->name('editarAgenda');
+    // Route::post('atualizarAgenda',[AgendaController::class, 'edit'])->name('atualizarAgenda');
+    // Route::post('completarCompromisso/{id}',[AgendaController::class, 'completarCompromisso'])->name('completarCompromisso');
+    // Route::post('deletarCompromisso/{id}',[AgendaController::class, 'deletarCompromisso'])->name('deletarCompromisso');
+
+    Route::get('adicionarCompromisso',[CompromissoController::class, 'create'])->name('adicionarCompromisso');
+    Route::post('adicionarCompromisso',[CompromissoController::class, 'store'])->name('gravarCompromisso');
+    Route::get('editarCompromisso/{id}',[CompromissoController::class, 'edit'])->name('editarCompromisso');
+    Route::post('atualizarCompromisso',[CompromissoController::class, 'edit'])->name('atualizarCompromisso');
+    Route::post('completarCompromisso/{id}',[CompromissoController::class, 'completarCompromisso'])->name('completarCompromisso');
+    Route::post('deletarCompromisso/{id}',[CompromissoController::class, 'deletarCompromisso'])->name('deletarCompromisso');
 
     Route::get('adicionarFinanceiro',[FinanceiroController::class, 'create'])->name('adicionarFinanceiro');
     Route::post('adicionarFinanceiro',[FinanceiroController::class, 'store'])->name('gravarFinanceiro');

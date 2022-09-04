@@ -41,7 +41,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // PacienteSeeder::class,
             AtividadeSeeder::class,
-            AgendaSeeder::class,
+            // AgendaSeeder::class,
+            // CompromissoSeeder::class,
             AparelhoSeeder::class,
             // AtividadeSeeder::class,
             DocumentoSeeder::class,

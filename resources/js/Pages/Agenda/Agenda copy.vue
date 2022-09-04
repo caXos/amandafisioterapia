@@ -1,14 +1,14 @@
 <script setup>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
-import CompromissoCard from '@/Components/CompromissoCard.vue';
+import AgendaCard from '@/Components/AgendaCard.vue';
 import FAB from '@/Components/FloatingActionButton.vue';
 import { Head, Link } from '@inertiajs/inertia-vue3';
 import { computed, ref } from 'vue';
-import CompromissoModal from '@/Components/CompromissoModal.vue';
+import AgendaCardModal from '@/Components/AgendaCardModal.vue';
 import AtendimentoModal from '@/Components/AtendimentoModal.vue';
 
 const props = defineProps({
-    compromissos: Object,
+    agendas: Object,
     status: String,
 });
 
@@ -136,10 +136,10 @@ function fecharModalAtendimento() {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
-                        <FAB model="Compromisso" rota="adicionarCompromisso"></FAB>
-                        <p v-if="compromissos.length == 0" class="text-sky-800 text-center">Não há compromissos. Use o botão
+                        <FAB model="Compromisso" rota="adicionarAgenda"></FAB>
+                        <p v-if="agendas.length == 0" class="text-sky-800 text-center">Não há compromissos. Use o botão
                             abaixo para incluir compromissos na agenda.</p>
-                        <CompromissoCard v-else v-for="(compromisso, index) in compromissos" :key="index" :compromisso="compromisso"
+                        <AgendaCard v-else v-for="(agenda, index) in agendas" :key="index" :agenda="agenda"
                             @notificarAgendaToda="abrirNotificarAgendaToda"
                             @completarAgendaToda="abrirCompletarAgendaToda"
                             @faltarAgendaToda="abrirFaltarAgendaToda"
@@ -148,7 +148,7 @@ function fecharModalAtendimento() {
 
                             @abrirModalAtendimento="abrirModalAtendimento"
                             />
-                        <CompromissoModal v-if="modal == true" v-on:fecharModal="fecharModal" 
+                        <AgendaCardModal v-if="modal == true" v-on:fecharModal="fecharModal" 
                             :titulo="modalConteudo.titulo"
                             :compromisso="modalConteudo.compromisso"
                             :primeiraLinha="modalConteudo.primeiraLinha"

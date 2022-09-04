@@ -62,7 +62,7 @@ onMounted(() => {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
-                        <FAB model="Compromisso" rota="adicionarAgenda"></FAB>
+                        <FAB model="Compromisso" rota="adicionarCompromisso"></FAB>
                         <p v-if="agendas.length == 0" class="text-sky-800 text-center">Não há compromissos. Use o botão
                             abaixo para incluir compromissos na agenda.</p>
                         <table v-else id="tabela-agenda" class="row-border text-sky-800 text-center border border-1 border-sky-300 rounded-md">
