@@ -23,7 +23,7 @@ defineEmits(['editarCompromissoTodo, notificarCompromissoTodo, completarCompromi
 <template>
     <div
         class="container shadow-lg shadow-sky-200 text-center text-sky-600 hover:bg-sky-100 transition-all border-2 rounded border-sky-600 mb-5">
-        <div class="bg-sky-100">{{ new Date( new Date(compromisso.dia).setDate( new Date(compromisso.dia).getDate()+ 1 ) ).toLocaleDateString() }}, {{ new Date(compromisso.dia).toLocaleString('pt-BR', {weekday: 'long'}) }} - {{ compromisso.hora.substring(0, 5) }}
+        <div class="bg-sky-100">{{ new Date( new Date(compromisso.dia).setDate( new Date(compromisso.dia).getDate()+ 1 ) ).toLocaleDateString() }}, {{ new Date( new Date(compromisso.dia).setDate( new Date(compromisso.dia).getDate()+ 1 ) ).toLocaleDateString('pt-BR', {weekday: 'long'}) }} - {{ compromisso.hora.substring(0, 5) }}
         </div>
         <div v-if="compromisso.atendimentos.length === 0">
             <span class="material-symbols-outlined text-color-inherit m-1 cursor-pointer"
