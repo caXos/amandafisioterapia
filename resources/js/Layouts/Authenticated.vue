@@ -17,7 +17,7 @@ const props = defineProps({
 <template>
     <div>
         <div class="min-h-screen bg-gray-100">
-            <nav class="bg-white border-b border-gray-100">
+            <nav class="bg-white border-b border-gray-100 sticky top-0 z-20">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
@@ -169,7 +169,7 @@ const props = defineProps({
             </nav>
 
             <!-- Page Heading -->
-            <header class="bg-white shadow" v-if="$slots.header">
+            <header class="bg-white shadow sticky top-[6.5%] z-20" v-if="$slots.header">
                 <div class="max-w-7xl mx-auto py-1 px-4 sm:px-6 lg:px-8">
                     <slot name="header" />
                 </div>

@@ -36,30 +36,36 @@ const form = useForm({
     aparelho1: Number,
     fisio1: Number,
 
-    paciente2: Number,
-    atividade2: Number,
-    aparelho2: Number,
-    fisio2: Number,
+    pacientes: Array,
+    // paciente2: Number,
+    // atividade2: Number,
+    // aparelho2: Number,
+    // fisio2: Number,
 
-    paciente3: Number,
-    atividade3: Number,
-    aparelho3: Number,
-    fisio3: Number,
+    // paciente3: Number,
+    // atividade3: Number,
+    // aparelho3: Number,
+    // fisio3: Number,
 });
+
+const localStatus = ref(props.status)
+const atividadeTeste = null
+const habilitaAparelhos = ref([false, false, false])
 
 const submit = () => {
     console.log(form);
-    // if (props.compromisso == null) {
-    //     form.post(route('gravarCompromisso'), {
-    //         onFinish: () => form.reset(),
-    //     });
-    // } else {
-    //     // form.post(route('editarAgenda'), {
-    //     //     onFinish: () => form.reset(),
-    //     // });
-    //     alert('Editar Agenda!');
-    // }
-
+    // localStatus.value = 'erro'
+    // form.setError('atendimento2', 'Ha erros no formulario do atendimento 2')
+    /*if (props.compromisso == null) {
+        form.post(route('gravarCompromisso'), {
+            onFinish: () => form.reset(),
+        });
+    } else {
+        // form.post(route('editarAgenda'), {
+        //     onFinish: () => form.reset(),
+        // });
+        alert('Editar Agenda!');
+    }*/
 };
 
 onMounted(function () {
@@ -68,22 +74,40 @@ onMounted(function () {
         $('#hora').val('');
     } else {
         $('#dia').val(props.compromisso.dia);
-        $('#hora').val(props.compromisso.hora);
+        $('#hora').val(props.compromisso.hora.substring(0,5));
         for (let i=0; i<props.compromisso.atendimentos.length; i++) {
             $('#paciente'+(i+1)).val(props.compromisso.atendimentos[i].paciente_id)
             $('#atividade'+(i+1)).val(props.compromisso.atendimentos[i].atividade_id)
             $('#aparelho'+(i+1)).val(props.compromisso.atendimentos[i].aparelho_id)
+            habilitaAparelhos[i] = props.compromisso.atendimentos[i].aparelho_id
             $('#fisio'+(i+1)).val(props.compromisso.atendimentos[i].fisio_id)
         }
         
     }
 });
-const atividadeTeste = null;
+
 </script>
 
 <script>
 function trocaAtividade(evt) {
-    this.atividadeTeste = this.props.atividades[evt.target.selectedIndex - 1].usesAparatus;
+    switch(evt.srcElement.id) {
+        case 'atividade1':
+            this.habilitaAparelhos[0] = this.props.atividades[evt.target.selectedIndex - 1].usesAparatus;
+            if (this.habilitaAparelhos[0] === true){
+                $('#aparelho1').prop('required','required').prop('disabled', '')
+            } else {
+                $('#aparelho1').prop('disabled','disabled').removeProp('required')
+            }
+            break;
+        // case 'atividade2':
+        //     this.habilitaAparelhos[1] = this.props.atividades[evt.target.selectedIndex - 1].usesAparatus;
+        //     break;
+        // case 'atividade3':
+        //     this.habilitaAparelhos[2] = this.props.atividades[evt.target.selectedIndex - 1].usesAparatus;
+        //     break;
+        default:
+            break;
+    }
 }
 
 function trocaAtividade_bckp(evt) {
@@ -100,9 +124,10 @@ function trocaAtividade_bckp(evt) {
             <p class="font-semibold text-sky-800 leading-tight">
                 Agenda - Criar/editar compromisso
             </p>
-            <!-- <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-                {{ status }}
-            </div> -->
+            <div v-if="localStatus != undefined" class="mb-4 font-medium text-sm text-green-600">
+                {{ localStatus }}
+                <div v-if="form.errors != ''" class="text-red-600">{{ form.errors.atendimento2 }}</div>
+            </div>
         </template>
 
         <div class="py-2">
@@ -117,11 +142,11 @@ function trocaAtividade_bckp(evt) {
 
                             <div class="mt-4">
                                 <BreezeLabel for="hora" value="Hora" />
-                                <BreezeInput v-if="compromisso == null" id="hora" type="time" class="mt-1 block w-full"
+                                <BreezeInput id="hora" type="time" class="mt-1 block w-full"
                                     v-model="form.hora" required />
-                                <BreezeInputEdit v-else id="hora" type="time" class="mt-1 block w-full"
+                                <!-- <BreezeInputEdit v-else id="hora" type="time" class="mt-1 block w-full"
                                     v-model="form.hora" :valorParaEditar="compromisso.hora" :container="'hora'" required
-                                    autofocus />
+                                    autofocus /> -->
                             </div>
                             
                             <Fieldset>
@@ -141,20 +166,24 @@ function trocaAtividade_bckp(evt) {
                                         <div class="mt-4">
                                             <BreezeLabel for="atividade1" value="Atividade" />
                                             <AtividadeSelect id="atividade1" class="mt-1 block w-full" v-model="form.atividade1"
-                                                :atividades="atividades" required @change="trocaAtividade($event)"
+                                                :atividades="atividades" @change="trocaAtividade($event)"
                                                 :selectedIndex="{
                                                     '': compromisso !== undefined && compromisso.atendimentos.length === 0
                                                     , 'compromisso.atendimentos[0].atividade_id': compromisso != undefined && compromisso.atendimentos.length === 1
                                                 }" />
                                         </div>
 
-                                        <div v-if="atividadeTeste" class="mt-4">
+                                        <div :class="{
+                                            'mt-4': habilitaAparelhos[0] === true
+                                            , 'mt-4 text-gray-400': habilitaAparelhos[0] === false
+                                            }">
                                             <BreezeLabel for="aparelho1" value="Aparelho" />
                                             <AparelhoSelect id="aparelho1" class="mt-1 block w-full" v-model="form.aparelho1"
                                                 :aparelhos="aparelhos" :selectedIndex="{
                                                     '': compromisso !== undefined && compromisso.atendimentos.length === 0
                                                     , 'compromisso.atendimentos[0].aparelho_id': compromisso != undefined && compromisso.atendimentos.length === 1
-                                                }" required />
+                                                }" disabled
+                                                />
                                         </div>
 
                                         <div class="mt-4">
@@ -168,7 +197,7 @@ function trocaAtividade_bckp(evt) {
                                     </template>
                             </Fieldset>
 
-                            <Fieldset>
+                            <!-- <Fieldset>
                                     <template #rotulo>
                                         Atendimento 02
                                     </template>
@@ -179,13 +208,13 @@ function trocaAtividade_bckp(evt) {
                                                 :pacientes="pacientes" :selectedIndex="{
                                                     '': compromisso !== undefined && compromisso.atendimentos.length < 2
                                                     , 'compromisso.atendimentos[1].paciente_id': compromisso != undefined && compromisso.atendimentos.length >= 2
-                                                }" required />
+                                                }" />
                                         </div>
 
                                         <div class="mt-4">
                                             <BreezeLabel for="atividade2" value="Atividade" />
                                             <AtividadeSelect id="atividade2" class="mt-1 block w-full" v-model="form.atividade2"
-                                                :atividades="atividades" required @change="trocaAtividade($event)"
+                                                :atividades="atividades" @change="trocaAtividade($event)"
                                                 :selectedIndex="{
                                                     '': compromisso !== undefined && compromisso.atendimentos.length < 2
                                                     , 'compromisso.atendimentos[1].atividade_id': compromisso != undefined && compromisso.atendimentos.length >= 2
@@ -198,7 +227,7 @@ function trocaAtividade_bckp(evt) {
                                                 :aparelhos="aparelhos" :selectedIndex="{
                                                     '': compromisso !== undefined && compromisso.atendimentos.length < 2
                                                     , 'compromisso.atendimentos[1].aparelho_id': compromisso != undefined && compromisso.atendimentos.length >= 2
-                                                }" required />
+                                                }"  />
                                         </div>
 
                                         <div class="mt-4">
@@ -207,7 +236,7 @@ function trocaAtividade_bckp(evt) {
                                             :selectedIndex="{
                                                     '': compromisso !== undefined && compromisso.atendimentos.length < 2
                                                     , 'compromisso.atendimentos[1].fisio_id': compromisso != undefined && compromisso.atendimentos.length >= 2
-                                                }" required />
+                                                }" />
                                         </div>
                                     </template>
                             </Fieldset>
@@ -223,13 +252,13 @@ function trocaAtividade_bckp(evt) {
                                                 :pacientes="pacientes" :selectedIndex="{
                                                     '': compromisso !== undefined && compromisso.atendimentos.length < 3
                                                     , 'compromisso.atendimentos[2].paciente_id': compromisso != undefined && compromisso.atendimentos.length >= 3
-                                                }" required />
+                                                }" />
                                         </div>
 
                                         <div class="mt-4">
                                             <BreezeLabel for="atividade3" value="Atividade" />
                                             <AtividadeSelect id="atividade3" class="mt-1 block w-full" v-model="form.atividade3"
-                                                :atividades="atividades" required @change="trocaAtividade($event)"
+                                                :atividades="atividades" @change="trocaAtividade($event)"
                                                 :selectedIndex="{
                                                     '': compromisso !== undefined && compromisso.atendimentos.length < 3
                                                     , 'compromisso.atendimentos[2].atividade_id': compromisso != undefined && compromisso.atendimentos.length >= 3
@@ -242,7 +271,7 @@ function trocaAtividade_bckp(evt) {
                                                 :aparelhos="aparelhos" :selectedIndex="{
                                                     '': compromisso !== undefined && compromisso.atendimentos.length < 2
                                                     , 'compromisso.atendimentos[2].aparelho_id': compromisso != undefined && compromisso.atendimentos.length >= 3
-                                                }" required />
+                                                }" />
                                         </div>
 
                                         <div class="mt-4">
@@ -251,10 +280,10 @@ function trocaAtividade_bckp(evt) {
                                             :selectedIndex="{
                                                     '': compromisso !== undefined && compromisso.atendimentos.length < 3
                                                     , 'compromisso.atendimentos[2].fisio_id': compromisso != undefined && compromisso.atendimentos.length >= 3
-                                                }" required />
+                                                }" />
                                         </div>
                                     </template>
-                            </Fieldset>
+                            </Fieldset> -->
 
                             <div class="flex items-center justify-end mt-4">
                                 <Link class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:shadow-outline-slate transition ease-in-out duration-150" :href="route('agenda')">
