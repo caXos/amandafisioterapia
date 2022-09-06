@@ -39,6 +39,7 @@ const form = useForm({
 
 const localStatus = ref(props.status)
 const habilitaAparelhos = ref([false, false, false])
+const fieldsets = ref(3)
 
 const submit = () => {
     console.log(form);
@@ -79,6 +80,7 @@ onMounted(function () {
             $('#fisio'+(i+1)).val('')
         }
     } else {
+        console.log(props.compromisso.atendimentos[0])
         let diaDeHoje = new Date().toISOString().substring(0,10)
         $('#dia').val(props.compromisso.dia).prop('min',diaDeHoje)
         $('#hora').val(props.compromisso.hora.substring(0,5))
@@ -90,8 +92,11 @@ onMounted(function () {
             form.fisios[i] = props.compromisso.atendimentos[i].fisio_id
             $('#paciente'+(i+1)).val(props.compromisso.atendimentos[i].paciente_id)
             $('#atividade'+(i+1)).val(props.compromisso.atendimentos[i].atividade_id)
-            $('#aparelho'+(i+1)).val(props.compromisso.atendimentos[i].aparelho_id)
-            habilitaAparelhos[i] = props.compromisso.atendimentos[i].aparelho_id
+            if (props.compromisso.atendimentos[i].aparelho_id !== null && props.compromisso.atendimentos[i].aparelho_id !== undefined && props.compromisso.atendimentos[i].aparelho_id !== '' && props.compromisso.atendimentos[i].aparelho_id >= 0) {
+                $('#aparelho'+(i+1)).val(props.compromisso.atendimentos[i].aparelho_id)
+                habilitaAparelhos._rawValue[i] = true
+                $('#aparelho'+(i+1)).prop('disabled', '').prop('required', 'required').removeClass('text-gray-400')
+            }
             $('#fisio'+(i+1)).val(props.compromisso.atendimentos[i].fisio_id)
         }
         
@@ -135,6 +140,9 @@ function validaFormulario() {
     }
 }
 
+function alteraQtdeFieldsets(evt) {
+    fieldsets.value = evt.target.value
+}
 </script>
 
 <script>
@@ -172,6 +180,8 @@ function trocaAtividade(evt) { //TODO: melhorar esse método
 function trocaAtividade_bckp(evt) {
     this.atividadeTeste = evt.target.selectedIndex;
 }
+
+
 </script>
 
 <template>
@@ -210,10 +220,44 @@ function trocaAtividade_bckp(evt) {
                             <div class="mt-4">
                                 <BreezeLabel for="vagas" value="Vagas" />
                                 <BreezeInput id="vagas" type="number" step="1" min="0" max="15" class="mt-1 block w-full"
-                                    v-model="form.vagas" required />
+                                    v-model="form.vagas" @change="alteraQtdeFieldsets" required />
                             </div>
 
-                            <Fieldset>
+                            <Fieldset v-if="fieldsets > 0">
+                                    <template #rotulo>
+                                        Atendimento 01
+                                    </template>
+                                    <template #conteudo>
+                                        <div class="-mt-4">
+                                            <BreezeLabel for="paciente1" value="Paciente" />
+                                            <PacienteSelect id="paciente1" class="mt-1 block w-full" v-model="form.pacientes[0]"
+                                                :pacientes="pacientes" />
+                                        </div>
+
+                                        <div class="mt-4">
+                                            <BreezeLabel for="atividade1" value="Atividade" />
+                                            <AtividadeSelect id="atividade1" class="mt-1 block w-full" v-model="form.atividades[0]"
+                                                :atividades="atividades" @change="trocaAtividade($event)"
+                                            />
+                                        </div>
+
+                                        <div :class="{
+                                            'mt-4': habilitaAparelhos[0] === true
+                                            , 'mt-4 text-gray-400': habilitaAparelhos[0] === false
+                                            }">
+                                            <BreezeLabel for="aparelho1" value="Aparelho" />
+                                            <AparelhoSelect id="aparelho1" class="mt-1 block w-full" v-model="form.aparelhos[0]"
+                                                :aparelhos="aparelhos" disabled />
+                                        </div>
+
+                                        <div class="mt-4">
+                                            <BreezeLabel for="fisio1" value="Fisioterapeuta" />
+                                            <FisioSelect id="fisio1" class="mt-1 block w-full" v-model="form.fisios[0]" :fisios="fisios" />
+                                        </div>
+                                    </template>
+                            </Fieldset>
+
+                            <!-- <Fieldset>
                                     <template #rotulo>
                                         Atendimento 01
                                     </template>
@@ -311,7 +355,7 @@ function trocaAtividade_bckp(evt) {
                                             <FisioSelect id="fisio3" class="mt-1 block w-full" v-model="form.fisios[2]" :fisios="fisios" />
                                         </div>
                                     </template>
-                            </Fieldset>
+                            </Fieldset> -->
 
                             <div class="flex items-center justify-end mt-4">
                                 <Link class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:shadow-outline-slate transition ease-in-out duration-150" :href="route('agenda')">
