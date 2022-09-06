@@ -33,8 +33,7 @@ const form = useForm({
     pacientes: Array,
     atividades: Array,
     aparelhos: Array,
-    fisios: Array,
-    vagas: Number
+    fisios: Array
 });
 
 const localStatus = ref(props.status)
@@ -42,9 +41,6 @@ const habilitaAparelhos = ref([false, false, false])
 
 const submit = () => {
     console.log(form);
-    if(validaFormulario()) {
-        //formulário ok, segue com o gravar compromisso ou editar compromisso
-    }
     // localStatus.value = 'erro'
     // form.setError('atendimento2', 'Ha erros no formulario do atendimento 2')
     /*if (props.compromisso == null) {
@@ -61,12 +57,8 @@ const submit = () => {
 
 onMounted(function () {
     if (props.compromisso == null || props.compromisso == undefined || props.compromisso == '' || props.compromisso.length == 0) {
-        // $('#dia').val('').prop('min', new Date()); //Verificar se new Date é suficiente
-        // $('#hora').val('').prop('min', new Date()); //Verificar se new Date é suficiente
-        let diaDeHoje = new Date().toISOString().substring(0,10)
-        $('#dia').val('').prop('min', diaDeHoje)
-        $('#hora').val('')
-        $('#vagas').val(3)
+        $('#dia').val('');
+        $('#hora').val('');
         for (let i=0; i<3; i++) {
             form.pacientes[i] = null
             form.atividades[i] = null
@@ -79,10 +71,8 @@ onMounted(function () {
             $('#fisio'+(i+1)).val('')
         }
     } else {
-        let diaDeHoje = new Date().toISOString().substring(0,10)
-        $('#dia').val(props.compromisso.dia).prop('min',diaDeHoje)
-        $('#hora').val(props.compromisso.hora.substring(0,5))
-        $('#vagas').val(props.compromisso.vagas)
+        $('#dia').val(props.compromisso.dia);
+        $('#hora').val(props.compromisso.hora.substring(0,5));
         for (let i=0; i<props.compromisso.atendimentos.length; i++) {
             form.pacientes[i] = props.compromisso.atendimentos[i].paciente_id
             form.atividades[i] = props.compromisso.atendimentos[i].atividade_id
@@ -97,43 +87,6 @@ onMounted(function () {
         
     }
 });
-
-function validaFormulario() {
-    //Os inputs dia e hora já são validados pelo atributo required, mas é necessário validar seus valores
-    let diaDeHoje = new Date().getDate()
-    let diaPreenchido = new Date(form.dia)
-    if (diaPreenchido < diaDeHoje) {
-        //Erro: não é permitido marcar compromissos passados
-        localStatus.value = 'erro'
-        form.setError('Erro01', 'Não é permitido marcar compromissos em dias passados')
-        return false
-    } else {
-        let horaAgora = new Date().getTime()
-        let horaPreenchida = new Date(form.hora)
-        if (horaPreenchida < horaAgora) {
-            //Erro: é permitido marcar compromissos no mesmo dia, mas não em hora anterior
-            localStatus.value = 'erro'
-            form.setError('Erro02', 'Não é permitido marcar compromissos no dia atual com hora passada')
-        } else {
-            //Tudo ok com dia e hora, agora é a vez de consultar o atendimento 01
-            if( (form.pacientes[0] === null || form.pacientes[0] === undefined || form.pacientes[0] === '' || form.pacientes[0] === 0)
-                && (form.atividades[0] === null || form.atividades[0] === undefined || form.atividades[0] === '' || form.atividades[0] === 0)
-                && (form.aparelhos[0] === null || form.aparelhos[0] === undefined || form.aparelhos[0] === '' || form.aparelhos[0] === 0)
-                && (form.fisios[0] === null || form.fisios[0] === undefined || form.fisios[0] === '' || form.fisios[0] === 0)
-            ) {
-                //Todos os campos do atendimento 01 estão 'em branco', então, em princípio, tudo certo...
-            } else {
-                //Um dos campos do atendimento 01 foi preenchido, mas pelo menos um ficou em branco, então é erro
-                localStatus.value = 'erro'
-                if( (form.pacientes[0] === null || form.pacientes[0] === undefined || form.pacientes[0] === '' || form.pacientes[0] === 0) ) form.setError('Erro03','É necessário preencher o nome do paciente do atendimento 01')
-                if( (form.atividades[0] === null || form.atividades[0] === undefined || form.atividades[0] === '' || form.atividades[0] === 0) ) form.setError('Erro04','É necessário preencher a atividade do atendimento 01')
-                if( this.habilitaAparelhos[0] === true && (form.aparelhos[0] === null || form.aparelhos[0] === undefined || form.aparelhos[0] === '' || form.aparelhos[0] === 0) ) form.setError('Erro05','É necessário indicar o aparelho da atividade do atendimento 01')
-                if( (form.fisios[0] === null || form.fisios[0] === undefined || form.fisios[0] === '' || form.fisios[0] === 0) ) form.setError('Erro06','É necessário preencher o(a) fisioterapeuta do atendimento 01')
-                return false
-            }
-        }
-    }
-}
 
 </script>
 
@@ -185,9 +138,7 @@ function trocaAtividade_bckp(evt) {
             </p>
             <div v-if="localStatus != undefined" class="mb-4 font-medium text-sm text-green-600">
                 {{ localStatus }}
-            </div>
-            <div v-if="localStatus === 'erro'" class="mb-4 font-medium text-sm text-red-600">
-                <div v-if="form.errors != ''" >{{ form.errors.atendimento2 }}</div>
+                <div v-if="form.errors != ''" class="text-red-600">{{ form.errors.atendimento2 }}</div>
             </div>
         </template>
 
@@ -206,13 +157,7 @@ function trocaAtividade_bckp(evt) {
                                 <BreezeInput id="hora" type="time" class="mt-1 block w-full"
                                     v-model="form.hora" required />
                             </div>
-
-                            <div class="mt-4">
-                                <BreezeLabel for="vagas" value="Vagas" />
-                                <BreezeInput id="vagas" type="number" step="1" min="0" max="15" class="mt-1 block w-full"
-                                    v-model="form.vagas" required />
-                            </div>
-
+                            
                             <Fieldset>
                                     <template #rotulo>
                                         Atendimento 01
@@ -221,7 +166,7 @@ function trocaAtividade_bckp(evt) {
                                         <div class="-mt-4">
                                             <BreezeLabel for="paciente1" value="Paciente" />
                                             <PacienteSelect id="paciente1" class="mt-1 block w-full" v-model="form.pacientes[0]"
-                                                :pacientes="pacientes" />
+                                                :pacientes="pacientes" required />
                                         </div>
 
                                         <div class="mt-4">
@@ -242,7 +187,8 @@ function trocaAtividade_bckp(evt) {
 
                                         <div class="mt-4">
                                             <BreezeLabel for="fisio1" value="Fisioterapeuta" />
-                                            <FisioSelect id="fisio1" class="mt-1 block w-full" v-model="form.fisios[0]" :fisios="fisios" />
+                                            <FisioSelect id="fisio1" class="mt-1 block w-full" v-model="form.fisios[0]" :fisios="fisios"
+                                                required />
                                         </div>
                                     </template>
                             </Fieldset>
