@@ -1,6 +1,6 @@
 <script setup>
 import { Link } from '@inertiajs/inertia-vue3';
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const props = defineProps({
     compromisso: Object,
@@ -14,7 +14,19 @@ const props = defineProps({
 });
 
 defineEmits(['editarCompromissoTodo, notificarCompromissoTodo, completarCompromissoTodo, faltarCompromissoTodo, deletarCompromissoTodo, retornarCompromissoTodo', 'abrirModalAtendimento']);
+const qtdLinhas = ref(1)
+const qtdColunas = ref(1)
 
+onMounted (function () {
+    if (props.compromisso.atendimentos.length <= 3) {
+        qtdLinhas.value = 1
+        qtdColunas.value = props.compromisso.atendimentos.length
+    } else {
+        props.compromisso.atendimentos.length%3 === 0 ? qtdLinhas.value = props.compromisso.atendimentos.length/3 : qtdLinhas.value = (props.compromisso.atendimentos.length / 3) + 1
+        qtdColunas.value = 3
+    }
+    
+})
 </script>
 
 <script>
@@ -29,11 +41,12 @@ defineEmits(['editarCompromissoTodo, notificarCompromissoTodo, completarCompromi
             <span class="material-symbols-outlined text-color-inherit m-1 cursor-pointer"
                 :title="'Adicionar compromisso e atendimentos'">add</span>
         </div>
-        <div v-else :class="{
+        <!-- <div v-else :class="{
             'flex-1 grid grid-cols-1': compromisso.atendimentos.length === 1
             , 'flex-1 grid grid-cols-2': compromisso.atendimentos.length === 2
             , 'flex-1 grid grid-cols-3': compromisso.atendimentos.length === 3
-        }">
+        }"> -->
+        <div v-else :class="`flex-1 grid grid-cols-${qtdColunas} grid-rows-${qtdLinhas}`">
             <div class="grid grid-rows-4 border border-0 rounded-2xl cursor-pointer hover:bg-sky-200 max-w-fit py-1 px-2 mx-auto"
                 v-for="(atendimento, index) in compromisso.atendimentos" :key="index"
                 @click="$emit('abrirModalAtendimento', [atendimento, compromisso.dia, compromisso.hora])"

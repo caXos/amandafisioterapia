@@ -12,6 +12,8 @@ const props = defineProps({
     status: String,
 });
 
+const localStatus = ref(props.status)
+
 const modal = ref(false);
 const modalAtendimento = ref(false);
 
@@ -127,8 +129,8 @@ function fecharModalAtendimento() {
             <p class="font-semibold text-sky-800 leading-tight">
                 Agenda
             </p>
-            <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-                {{ status }}
+            <div v-if="localStatus != undefined" class="mb-4 font-medium text-sm text-green-600">
+                {{ localStatus }}
             </div>
         </template>
 

@@ -88,30 +88,28 @@ class CompromissoController extends Controller
      */
     public function store(StoreCompromissoRequest $request)
     {
-        //TODO: alterar nomes dos campos para portugues
-        // dd($request);
+        $ultimoCompromisso = Compromisso::latest()->first();
         $this->authorize('create',Compromisso::class);
         $compromisso = new Compromisso([
             'user_id' => $request->fisio,
             'dia' => $request->dia,
             'hora' => $request->hora,
-            'vagas' => 3,
+            'vagas' => $request->vagas,
             'ativo' => true,
         ]);
         $compromisso->save();
-        // dd($compromisso);
-        $atendimento = new Atendimento([
-            'compromisso_id' => $compromisso->id,
-            'paciente_id' => $request->paciente,
-            'atividade_id' => $request->atividade,
-            'aparelho_id' => $request->aparelho,
-            'fisio_id' => $request->fisio,
-            'cumprido' => false,
-            'ativo' => true
-        ]);
-        $atendimento->compromisso_id = $compromisso->id;
-        // dd($atendimento);
-        $atendimento->save();
+        for ($i = 0; $i < $request->vagas; $i++) {
+            $novoAtendimento = new Atendimento([
+                'compromisso_id' => $ultimoCompromisso->id + 1,
+                'paciente_id' => $request->pacientes[$i],
+                'atividade_id' => $request->pacientes[$i],
+                'aparelho_id' => $request->pacientes[$i],
+                'fisio_id' => $request->pacientes[$i],
+                'cumprido' => false,
+                'ativo' => true
+            ]);
+            $novoAtendimento->save();
+        }
         return redirect()->route("agenda",)->with('status','Compromisso criado');
     }
 

@@ -2,11 +2,11 @@
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import BreezeButton from '@/Components/Button.vue';
 import BreezeInput from '@/Components/Input.vue';
-import BreezeInputEdit from '@/Components/InputEdit.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
 import { Head, useForm, Link } from '@inertiajs/inertia-vue3';
 import { onMounted, computed, ref } from 'vue';
+
 import FisioSelect from '@/Components/FisioSelect.vue';
 import PacienteSelect from '@/Components/PacienteSelect.vue';
 import AtividadeSelect from '@/Components/AtividadeSelect.vue';
@@ -30,8 +30,8 @@ const props = defineProps({
 const form = useForm({
     dia: Date,
     hora: Date,
-    pacientes: Array,
-    atividades: Array,
+    pacientes: Number,
+    atividades: String,
     aparelhos: Array,
     fisios: Array,
     vagas: Number
@@ -39,20 +39,34 @@ const form = useForm({
 
 const localStatus = ref(props.status)
 const habilitaAparelhos = ref([false, false, false])
-const vagas = ref(3)
+const vagas = ref(0)
 
 const submit = () => {
-    console.log(form);
-    if(validaFormulario()) {
-        //formulário ok, segue com o gravar compromisso ou editar compromisso
+    form.vagas = vagas
+    let pacientesArray = []
+    let atividadesArray = []
+    let aparelhosArray = []
+    let fisiosArray = []
+    for (let i=0; i < form.vagas; i++) {
+        pacientesArray.push($('#paciente-'+i).val())
+        atividadesArray.push($('#atividade-'+i).val())
+        aparelhosArray.push($('#aparelho-'+i).val())
+        fisiosArray.push($('#fisio-'+i).val())
     }
+    form.pacientes = pacientesArray
+    form.atividades = atividadesArray
+    form.aparelhos = aparelhosArray
+    form.fisios = fisiosArray
+    // if(validaFormulario()) {
+    //     //formulário ok, segue com o gravar compromisso ou editar compromisso
+    // }
     // localStatus.value = 'erro'
     // form.setError('atendimento2', 'Ha erros no formulario do atendimento 2')
-    /*if (props.compromisso == null) {
+    if (props.compromisso == null) {
         form.post(route('gravarCompromisso'), {
             onFinish: () => form.reset(),
         });
-    } else {
+    }/* else {
         // form.post(route('editarAgenda'), {
         //     onFinish: () => form.reset(),
         // });
@@ -62,6 +76,7 @@ const submit = () => {
 
 onMounted(function () {
     if (props.compromisso == null || props.compromisso == undefined || props.compromisso == '' || props.compromisso.length == 0) {
+        vagas.value = 3
         // $('#dia').val('').prop('min', new Date()); //Verificar se new Date é suficiente
         // $('#hora').val('').prop('min', new Date()); //Verificar se new Date é suficiente
         let diaDeHoje = new Date().toISOString().substring(0,10)
@@ -148,10 +163,9 @@ function alteraQtdevagas(evt) {
 
 <script>
 function trocaAtividade(evt) { //TODO: melhorar esse método
-    console.log(evt)
     let indice = evt.target.id.substring(10)
     this.habilitaAparelhos[indice] = this.props.atividades[evt.target.selectedIndex - 1].usesAparatus;
-    this.habilitaAparelhos[indice] === true ? $('#aparelho-'+indice).prop('required','required').prop('disabled', '') : $('#aparelho-'+indice).prop('disabled','disabled').removeProp('required')
+    this.habilitaAparelhos[indice] === true ? $('#aparelho-'+indice).prop('required','required').prop('disabled', '') : $('#aparelho-'+indice).prop('disabled','disabled').removeProp('required').val('0')
 }
 
 function trocaAtividade_bckp(evt) {
