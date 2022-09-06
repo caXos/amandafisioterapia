@@ -39,7 +39,7 @@ const form = useForm({
 
 const localStatus = ref(props.status)
 const habilitaAparelhos = ref([false, false, false])
-const fieldsets = ref(3)
+const vagas = ref(3)
 
 const submit = () => {
     console.log(form);
@@ -67,8 +67,8 @@ onMounted(function () {
         let diaDeHoje = new Date().toISOString().substring(0,10)
         $('#dia').val('').prop('min', diaDeHoje)
         $('#hora').val('')
-        $('#vagas').val(3)
-        for (let i=0; i<3; i++) {
+        $('#vagas').val(vagas.value)
+        for (let i=0; i<vagas.value; i++) {
             form.pacientes[i] = null
             form.atividades[i] = null
             form.aparelhos[i] = null
@@ -80,6 +80,7 @@ onMounted(function () {
             $('#fisio'+(i+1)).val('')
         }
     } else {
+        vagas.value = props.compromisso.vagas
         console.log(props.compromisso.atendimentos[0])
         let diaDeHoje = new Date().toISOString().substring(0,10)
         $('#dia').val(props.compromisso.dia).prop('min',diaDeHoje)
@@ -90,14 +91,14 @@ onMounted(function () {
             form.atividades[i] = props.compromisso.atendimentos[i].atividade_id
             form.aparelhos[i] = props.compromisso.atendimentos[i].aparelho_id
             form.fisios[i] = props.compromisso.atendimentos[i].fisio_id
-            $('#paciente'+(i+1)).val(props.compromisso.atendimentos[i].paciente_id)
-            $('#atividade'+(i+1)).val(props.compromisso.atendimentos[i].atividade_id)
+            $('#paciente-'+(i+1)).val(props.compromisso.atendimentos[i].paciente_id)
+            $('#atividade-'+(i+1)).val(props.compromisso.atendimentos[i].atividade_id)
             if (props.compromisso.atendimentos[i].aparelho_id !== null && props.compromisso.atendimentos[i].aparelho_id !== undefined && props.compromisso.atendimentos[i].aparelho_id !== '' && props.compromisso.atendimentos[i].aparelho_id >= 0) {
-                $('#aparelho'+(i+1)).val(props.compromisso.atendimentos[i].aparelho_id)
+                $('#aparelho-'+(i+1)).val(props.compromisso.atendimentos[i].aparelho_id)
                 habilitaAparelhos._rawValue[i] = true
-                $('#aparelho'+(i+1)).prop('disabled', '').prop('required', 'required').removeClass('text-gray-400')
+                $('#aparelho-'+(i+1)).prop('disabled', '').prop('required', 'required').removeClass('text-gray-400')
             }
-            $('#fisio'+(i+1)).val(props.compromisso.atendimentos[i].fisio_id)
+            $('#fisio-'+(i+1)).val(props.compromisso.atendimentos[i].fisio_id)
         }
         
     }
@@ -140,41 +141,17 @@ function validaFormulario() {
     }
 }
 
-function alteraQtdeFieldsets(evt) {
-    fieldsets.value = evt.target.value
+function alteraQtdevagas(evt) {
+    vagas.value = parseInt(evt.target.value)
 }
 </script>
 
 <script>
 function trocaAtividade(evt) { //TODO: melhorar esse método
-    switch(evt.srcElement.id) {
-        case 'atividade1':
-            this.habilitaAparelhos[0] = this.props.atividades[evt.target.selectedIndex - 1].usesAparatus;
-            if (this.habilitaAparelhos[0] === true){
-                $('#aparelho1').prop('required','required').prop('disabled', '')
-            } else {
-                $('#aparelho1').prop('disabled','disabled').removeProp('required')
-            }
-            break;
-        case 'atividade2':
-            this.habilitaAparelhos[1] = this.props.atividades[evt.target.selectedIndex - 1].usesAparatus;
-            if (this.habilitaAparelhos[1] === true){
-                $('#aparelho2').prop('required','required').prop('disabled', '')
-            } else {
-                $('#aparelho2').prop('disabled','disabled').removeProp('required')
-            }
-            break;
-        case 'atividade3':
-            this.habilitaAparelhos[2] = this.props.atividades[evt.target.selectedIndex - 1].usesAparatus;
-            if (this.habilitaAparelhos[2] === true){
-                $('#aparelho3').prop('required','required').prop('disabled', '')
-            } else {
-                $('#aparelho3').prop('disabled','disabled').removeProp('required')
-            }
-            break;
-        default:
-            break;
-    }
+    console.log(evt)
+    let indice = evt.target.id.substring(10)
+    this.habilitaAparelhos[indice] = this.props.atividades[evt.target.selectedIndex - 1].usesAparatus;
+    this.habilitaAparelhos[indice] === true ? $('#aparelho-'+indice).prop('required','required').prop('disabled', '') : $('#aparelho-'+indice).prop('disabled','disabled').removeProp('required')
 }
 
 function trocaAtividade_bckp(evt) {
@@ -220,39 +197,38 @@ function trocaAtividade_bckp(evt) {
                             <div class="mt-4">
                                 <BreezeLabel for="vagas" value="Vagas" />
                                 <BreezeInput id="vagas" type="number" step="1" min="0" max="15" class="mt-1 block w-full"
-                                    v-model="form.vagas" @change="alteraQtdeFieldsets" required />
+                                    v-model="form.vagas" @change="alteraQtdevagas" required />
                             </div>
 
-                            <Fieldset v-if="fieldsets > 0">
+                            <Fieldset v-for="(vaga,index) in vagas" :key="index">
                                     <template #rotulo>
-                                        Atendimento 01
+                                        Atendimento {{index+1}}
                                     </template>
                                     <template #conteudo>
                                         <div class="-mt-4">
-                                            <BreezeLabel for="paciente1" value="Paciente" />
-                                            <PacienteSelect id="paciente1" class="mt-1 block w-full" v-model="form.pacientes[0]"
-                                                :pacientes="pacientes" />
+                                            <BreezeLabel :for="`paciente-${index}`" value="Paciente" />
+                                            <PacienteSelect :id="`paciente-${index}`" class="mt-1 block w-full" v-model="form.pacientes[index]"
+                                                :pacientes="pacientes" required />
                                         </div>
 
                                         <div class="mt-4">
-                                            <BreezeLabel for="atividade1" value="Atividade" />
-                                            <AtividadeSelect id="atividade1" class="mt-1 block w-full" v-model="form.atividades[0]"
-                                                :atividades="atividades" @change="trocaAtividade($event)"
-                                            />
+                                            <BreezeLabel :for="`atividade-${index}`" value="Atividade" />
+                                            <AtividadeSelect :id="`atividade-${index}`" class="mt-1 block w-full" v-model="form.atividades[index]"
+                                                :atividades="atividades" @change="trocaAtividade($event)" required />
                                         </div>
 
                                         <div :class="{
-                                            'mt-4': habilitaAparelhos[0] === true
-                                            , 'mt-4 text-gray-400': habilitaAparelhos[0] === false
+                                            'mt-4': habilitaAparelhos[index] === true
+                                            , 'mt-4 text-gray-400': habilitaAparelhos[index] === false
                                             }">
-                                            <BreezeLabel for="aparelho1" value="Aparelho" />
-                                            <AparelhoSelect id="aparelho1" class="mt-1 block w-full" v-model="form.aparelhos[0]"
-                                                :aparelhos="aparelhos" disabled />
+                                            <BreezeLabel :for="`aparelho-${index}`" value="Aparelho" />
+                                            <AparelhoSelect :id="`aparelho-${index}`" class="mt-1 block w-full" v-model="form.aparelhos[index]"
+                                                :aparelhos="aparelhos" disabled required />
                                         </div>
 
                                         <div class="mt-4">
-                                            <BreezeLabel for="fisio1" value="Fisioterapeuta" />
-                                            <FisioSelect id="fisio1" class="mt-1 block w-full" v-model="form.fisios[0]" :fisios="fisios" />
+                                            <BreezeLabel :for="`fisio-${index}`" value="Fisioterapeuta" />
+                                            <FisioSelect :id="`fisio-${index}`" class="mt-1 block w-full" v-model="form.fisios[index]" :fisios="fisios" required />
                                         </div>
                                     </template>
                             </Fieldset>
