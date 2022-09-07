@@ -59,9 +59,13 @@ class CompromissoPolicy
 
     public function completarCompromisso(User $user)
     {
-        return $user->id <= 2 ? Response::allow() : Response::deny('teste deny completar compromisso');
+        return $user->id <= 2 ? Response::allow() : Response::deny('Visitantes não podem completar compromissos!');
     }
 
+    public function deletarCompromisso(User $user)
+    {
+        return $user->id <= 2 ? Response::allow() : Response::deny('Visitantes não podem deletar compromissos!');
+    }
     /**
      * Determine whether the user can delete the model.
      *

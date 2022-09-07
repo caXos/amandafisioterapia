@@ -1,18 +1,16 @@
 <script setup>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
-import AgendaCard from '@/Components/AgendaCard.vue';
 import FAB from '@/Components/FloatingActionButton.vue';
 import { Head, Link } from '@inertiajs/inertia-vue3';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const props = defineProps({
-    agendas: Object,
+    compromissos: Object,
     status: String
 });
 
 onMounted(() => {
-    console.log(props.agendas);
-    $('#tabela-agenda').DataTable(
+    $('#tabela-compromisso').DataTable(
         {
             language: {
                 processing: "Processando...",
@@ -39,7 +37,7 @@ onMounted(() => {
             responsive: true,
         }
     );
-    $('select[name="tabela-agenda_length"]').css('padding-right', '25px');
+    $('select[name="tabela-compromisso_length"]').css('padding-right', '25px');
 });
 
 </script>
@@ -63,9 +61,9 @@ onMounted(() => {
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <FAB model="Compromisso" rota="adicionarCompromisso"></FAB>
-                        <p v-if="agendas.length == 0" class="text-sky-800 text-center">Não há compromissos. Use o botão
+                        <p v-if="compromissos.length === 0" class="text-sky-800 text-center">Não há compromissos. Use o botão
                             abaixo para incluir compromissos na agenda.</p>
-                        <table v-else id="tabela-agenda" class="row-border text-sky-800 text-center border border-1 border-sky-300 rounded-md">
+                        <table v-else id="tabela-compromisso" class="row-border text-sky-800 text-center border border-1 border-sky-300 rounded-md">
                             <thead>
                                 <tr>
                                     <th>Dia</th>
@@ -75,18 +73,14 @@ onMounted(() => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(agenda, index) in agendas" :key="index" class="border border-sky-300 rounded-md hover:bg-sky-200">
-                                    <td><span style="display: none;">{{ agenda.dia }}</span>{{ new Date(agenda.dia).toLocaleDateString() }}</td>
-                                    <td>{{ agenda.hora.substring(0, 5) }}</td>
+                                <tr v-for="(compromisso, index) in compromissos" :key="index" class="border border-sky-300 rounded-md hover:bg-sky-200">
+                                    <td><span style="display: none;">{{ compromisso.dia }}</span>{{ new Date(compromisso.dia).toLocaleDateString() }}</td>
+                                    <td>{{ compromisso.hora.substring(0, 5) }}</td>
                                     <td class="flex text-center">
-                                        <div v-if="agenda.atendimentos.length === 0"></div>
-                                        <div v-else :class="{
-                                            'flex-1 grid grid-cols-1': agenda.atendimentos.length === 1
-                                            , 'flex-1 grid grid-cols-2': agenda.atendimentos.length === 2
-                                            , 'flex-1 grid grid-cols-3': agenda.atendimentos.length === 3
-                                        }">
+                                        <div v-if="compromisso.atendimentos.length === 0"></div>
+                                        <div v-else :class="`flex-1 grid grid-cols-${(compromisso.atendimentos.length % 3) + 1} grid-rows-${(compromisso.atendimentos.length % 3) + 1}`">
                                             <div class="grid grid-rows-4 border border-0 rounded-full cursor-pointer hover:bg-slate-100"
-                                                v-for="(atendimento, index) in agenda.atendimentos" :key="index">
+                                                v-for="(atendimento, index) in compromisso.atendimentos" :key="index">
                                                 <div>{{ atendimento.paciente_nome }}</div>
                                                 <div>{{ atendimento.atividade_nome }}</div>
                                                 <div>{{ atendimento.aparelho_nome }}</div>

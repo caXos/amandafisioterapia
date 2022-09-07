@@ -42,11 +42,10 @@ class CompromissoController extends Controller
 
     public function historico()
     {
-        $compromissos = Compromisso::orderBy('dia')->where('ativo',true)->get(); //TODO: mudar para ativo==false
+        $compromissos = Compromisso::orderBy('dia', 'desc')->where('ativo',true)->get(); //TODO: mudar para ativo==false
         foreach($compromissos as $compromisso) {
             $atendimentos = Atendimento::where('compromisso_id',$compromisso->id)->get();
             $compromisso->atendimentos = $atendimentos;
-            $compromisso->vagas = 3 - sizeof($atendimentos);
             foreach($compromisso->atendimentos as $atendimento) {
                 $paciente = Paciente::find($atendimento->paciente_id);
                 $atividade = Atividade::find($atendimento->atividade_id);
@@ -178,14 +177,45 @@ class CompromissoController extends Controller
 
     }
 
-    public function compoletarCompromisso(UpdateCompromissoRequest $request)
+    /**
+     * Completa o compromisso e seus atendimentos
+     * atendimento
+     * cumprido    | ativo | estado
+     * ------------------------------------------
+     * false       | false | falta
+     * false       | true  | agendado
+     * true        | false | cumprido com sucesso
+     * true        | true  | XXXXXXXXXXXXXXXXXXXXX
+     */
+    public function completarCompromisso(UpdateCompromissoRequest $request)
     {
         $this->authorize('completarCompromisso', Compromisso::class);
 
         $compromisso = Compromisso::find($request->id);
-        $compromisso->done = true;
+        $atendimentos = Atendimento::where('compromisso_id', $compromisso->id)->get();
+        foreach($atendimentos as $atendimento) {
+            $atendimento->cumprido = true;
+            $atendimento->ativo = false;
+            $atendimento->save();
+        }
+        $compromisso->ativo = false;
         $compromisso->save();
-        return response(['status','Compromisso completado']);
+        return response(['status','Compromisso e '.sizeof($atendimentos).' completados!']);
+    }
+
+    /**
+     * Deleta o compromisso, ou seja, inativa o compromisso, mas nao altera o estado dos atendimentos
+     * 
+     */
+    public function deletarCompromisso(UpdateCompromissoRequest $request)
+    {
+        $this->authorize('deletarCompromisso', Compromisso::class);
+        
+        $compromisso = Compromisso::find($request->id);
+        $compromisso->ativo = false;
+        $compromisso->save();
+        // return response(['status','Compromisso deletado']);
+        return redirect()->route("agenda",)->with('status','Compromisso deletado');
     }
 
     /**
@@ -199,3 +229,14 @@ class CompromissoController extends Controller
         //
     }
 }
+
+
+/*
+atendimento
+cumprido    | ativo | estado
+------------------------------------------
+false       | false | falta
+false       | true  | agendado
+true        | false | cumprido com sucesso
+true        | true  | XXXXXXXXXXXXXXXXXXXXX
+*/

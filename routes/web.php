@@ -54,7 +54,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('pacientes', [PacienteController::class, 'index'])->name('pacientes');
     Route::get('planos',[PlanoController::class, 'index'])->name('planos');
 
-    Route::get('historico',[AgendaController::class, 'historico'])->name('historico');
+    Route::get('historico',[CompromissoController::class, 'historico'])->name('historico');
 
     // Route::get('adicionarAgenda',[AgendaController::class, 'create'])->name('adicionarAgenda');
     // Route::post('adicionarAgenda',[AgendaController::class, 'store'])->name('gravarAgenda');
@@ -68,7 +68,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('editarCompromisso/{id}',[CompromissoController::class, 'edit'])->name('editarCompromisso');
     Route::post('atualizarCompromisso',[CompromissoController::class, 'edit'])->name('atualizarCompromisso');
     Route::post('completarCompromisso/{id}',[CompromissoController::class, 'completarCompromisso'])->name('completarCompromisso');
-    Route::post('deletarCompromisso/{id}',[CompromissoController::class, 'deletarCompromisso'])->name('deletarCompromisso');
+    Route::get('deletarCompromisso/{id}',[CompromissoController::class, 'deletarCompromisso'])->name('deletarCompromisso');
 
     Route::get('adicionarFinanceiro',[FinanceiroController::class, 'create'])->name('adicionarFinanceiro');
     Route::post('adicionarFinanceiro',[FinanceiroController::class, 'store'])->name('gravarFinanceiro');
