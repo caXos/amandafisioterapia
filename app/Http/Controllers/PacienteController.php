@@ -19,7 +19,6 @@ class PacienteController extends Controller
      */
     public function index()
     {
-        // $usuarioLogado = Auth::user();
         $usuarioLogado = auth()->user();
         if ($usuarioLogado->perfil == 1) {
             $pacientes = Paciente::where('ativo', true)->get();
@@ -27,7 +26,6 @@ class PacienteController extends Controller
             $pacientes = Paciente::where('fisio_id', $usuarioLogado->id)->where('ativo', true)->get();
         }
         foreach($pacientes as $paciente) {
-            // error_log($paciente);
             $fisio = User::select('name')->where('id',$paciente->fisio_id)->value('name');
             $paciente->fisio_nome = $fisio;
             // dump($paciente);
@@ -39,6 +37,7 @@ class PacienteController extends Controller
             $paciente->plano_nome = $plano->nome;
             $paciente->plano_inicio = $planoPaciente[0]->inicio;
             $paciente->plano_fim = $planoPaciente[0]->fim;
+            $paciente->atendimentos = $plano->atendimentos; //Calcular melhor isso aqui: mostrar total de atendimentos, quantos estao agendados, quantos foram cumpridos e faltados, quantos ainda faltam
         }
         return Inertia::render('Pacientes/Pacientes',['pacientes' => $pacientes]);
     }

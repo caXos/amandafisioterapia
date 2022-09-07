@@ -144,13 +144,16 @@ class CompromissoController extends Controller
         //     // $compromisso['atendimentos'] = $atendimento;
         //     $compromisso['atendimentos']->push($atendimento);
         // }
+        dump($atendimentos);
         for ($i = 0; $i < sizeof($atendimentos); $i++) {
-            $compromisso->atendimentos[$i] = $atendimentos[$i];
+            // $compromisso->atendimentos[$i] = $atendimentos[$i];
+            $compromisso['atendimentos']->push($atendimentos[$i]);
         }
         $pacientes = Paciente::all('id','nome');
         $atividades = Atividade::all('id','name','usesAparatus');
         $aparelhos = Aparelho::all('id','name');
         $fisios = User::all('id','name');
+        dd($compromisso);
         return Inertia::render('Agenda/CompromissoForm',[
             'compromisso'=>$compromisso,
             // 'fisio_id'=>$fisio,
@@ -200,7 +203,8 @@ class CompromissoController extends Controller
         }
         $compromisso->ativo = false;
         $compromisso->save();
-        return response(['status','Compromisso e '.sizeof($atendimentos).' completados!']);
+        // return response(['status','Compromisso e '.sizeof($atendimentos).' completados!']);
+        return redirect()->route("agenda",)->with('status','Compromisso e '.sizeof($atendimentos).' completados!');
     }
 
     /**

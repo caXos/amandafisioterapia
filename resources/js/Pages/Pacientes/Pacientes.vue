@@ -65,6 +65,12 @@ onMounted(() => {
                                     <th>Plano</th>
                                     <th>Início</th>
                                     <th>Fim</th>
+                                    <th>
+                                        <div class="grid grid-rows-2"> 
+                                            <div>Atendimentos</div>
+                                            <div title="Total / Agendados / Cumpridos / Faltas / Restantes">T/Ag/C/F/R</div>
+                                        </div>
+                                    </th>
                                     <th>Físio</th>
                                     <th>Observação</th>
                                     <th>Telefone</th>
@@ -78,6 +84,7 @@ onMounted(() => {
                                     <td>{{paciente.plano_nome}}</td>
                                     <td>{{paciente.plano_inicio}}</td>
                                     <td>{{paciente.plano_fim}}</td>
+                                    <td>{{paciente.atendimentos}}/{{paciente.atendimentos}}/{{paciente.atendimentos}}/{{paciente.atendimentos}}/{{paciente.atendimentos}}</td>
                                     <td>{{paciente.fisio_nome.split(" ")[0]}}</td>
                                     <td>{{paciente.observacao}}</td>
                                     <td>{{paciente.telefone}}</td>
