@@ -215,9 +215,11 @@ class CompromissoController extends Controller
         foreach($atendimentos as $atendimento) {
             $atendimento->cumprido = true;
             $atendimento->ativo = false;
+            $atendimento->updated_at = date('Y-m-d H:i:s');
             $atendimento->save();
         }
         $compromisso->ativo = false;
+        $compromisso->updated_at = date('Y-m-d H:i:s');
         $compromisso->save();
         // return response(['status','Compromisso e '.sizeof($atendimentos).' completados!']);
         return redirect()->route("agenda",)->with('status','Compromisso e '.sizeof($atendimentos).' completados!');
@@ -234,6 +236,13 @@ class CompromissoController extends Controller
         $compromisso = Compromisso::find($request->id);
         $compromisso->ativo = false;
         $compromisso->save();
+        $atendimentos = $compromisso->atendimentos;
+        foreach($atendimentos as $atendimento) {
+            $atendimento->cumprido = true;
+            $atendimento->ativo = true;
+            $atendimento->updated_at = date('Y-m-d H:i:s');
+            $atendimento->save();
+        }
         // return response(['status','Compromisso deletado']);
         return redirect()->route("agenda",)->with('status','Compromisso deletado');
     }
