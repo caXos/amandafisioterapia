@@ -71,6 +71,8 @@ const submit = () => {
         form.nascimento = $('#nascimento').val();
         form.post(route('editarPaciente', [props.paciente.id]), {
             onFinish: () => {
+                $('#plano').val('0')
+                $('#fisio').val('0')
                 form.reset()
             }
         });

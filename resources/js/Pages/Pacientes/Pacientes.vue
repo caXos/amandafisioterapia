@@ -1,12 +1,15 @@
 <script setup>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { Head, Link } from '@inertiajs/inertia-vue3';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import FAB from '@/Components/FloatingActionButton.vue';
 
 const props = defineProps({
     pacientes: Object,
+    status: String
 });
+
+const statusLocal = ref(props.status);
 
 onMounted(() => {
     $('#tabela-pacientes').DataTable(
@@ -48,8 +51,11 @@ onMounted(() => {
             <p class="font-semibold text-sky-800 leading-tight">
                 Pacientes
             </p>
-            <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-                {{ status }}
+            <div v-if="statusLocal != undefined" class="mb-4 font-medium text-sm text-green-600">
+                {{ statusLocal }}
+            </div>
+            <div v-if="statusLocal === 'erro'" class="mb-4 font-medium text-sm text-red-600">
+                {{ statusLocal }}
             </div>
         </template>
 
@@ -82,13 +88,13 @@ onMounted(() => {
                                 <tr v-for="paciente in pacientes" :key="paciente.id">
                                     <td>{{paciente.nome}}</td>
                                     <td>{{paciente.plano_nome}}</td>
-                                    <td>{{paciente.plano_inicio}}</td>
-                                    <td>{{paciente.plano_fim}}</td>
-                                    <td>{{paciente.atendimentos}}/{{paciente.atendimentos}}/{{paciente.atendimentos}}/{{paciente.atendimentos}}/{{paciente.atendimentos}}</td>
+                                    <td><span class="hidden">{{paciente.plano_inicio}}</span>{{ new Date(new Date(paciente.plano_inicio).setDate(new Date(paciente.plano_inicio).getDate()+1)).toLocaleDateString() }}</td>
+                                    <td><span class="hidden">{{paciente.plano_fim}}</span>{{ new Date(new Date(paciente.plano_fim).setDate(new Date(paciente.plano_fim).getDate()+1)).toLocaleDateString() }}</td>
+                                    <td title="Realizados: r% - Presenças: p% - Faltas: f%">{{paciente.atendimentos}}/{{paciente.atendimentos}}/{{paciente.atendimentos}}/{{paciente.atendimentos}}/{{paciente.atendimentos}}</td>
                                     <td>{{paciente.fisio_nome.split(" ")[0]}}</td>
                                     <td>{{paciente.observacao}}</td>
                                     <td>{{paciente.telefone}}</td>
-                                    <td>{{paciente.nascimento}}</td>
+                                    <td><span class="hidden">{{paciente.nascimento}}</span>{{ new Date(new Date(paciente.nascimento).setDate(new Date(paciente.nascimento).getDate()+1)).toLocaleDateString() }}</td>
                                     <td>
                                         <div class="grid grid-cols-2">
                                             <div>

@@ -136,31 +136,13 @@ class CompromissoController extends Controller
     public function edit(UpdateCompromissoRequest $request)
     {
         $compromisso = Compromisso::find($request->id);
-        // $compromisso->atendimentos = $compromisso->atendimentos();
-        // dd($compromisso);
-        $atendimentos = Atendimento::where('compromisso_id', $compromisso->id)->get();
-        // foreach($atendimentos as $atendimento) {
-        //     dump($atendimento);
-        //     // $compromisso['atendimentos'] = $atendimento;
-        //     $compromisso['atendimentos']->push($atendimento);
-        // }
-        dump($atendimentos);
-        for ($i = 0; $i < sizeof($atendimentos); $i++) {
-            // $compromisso->atendimentos[$i] = $atendimentos[$i];
-            $compromisso['atendimentos']->push($atendimentos[$i]);
-        }
+        $compromisso->atendimentos;
         $pacientes = Paciente::all('id','nome');
         $atividades = Atividade::all('id','name','usesAparatus');
         $aparelhos = Aparelho::all('id','name');
         $fisios = User::all('id','name');
-        dd($compromisso);
         return Inertia::render('Agenda/CompromissoForm',[
             'compromisso'=>$compromisso,
-            // 'fisio_id'=>$fisio,
-            // 'paciente_id'=>$paciente,
-            // 'atividade_id'=>$atividade,
-            // 'aparelho_id'=>$aparelho,
-
             'fisios'=>$fisios,
             'pacientes'=>$pacientes,
             'atividades'=>$atividades,

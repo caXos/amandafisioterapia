@@ -95,8 +95,9 @@ onMounted(function () {
             $('#fisio'+(i+1)).val('')
         }
     } else {
+        console.log(props.compromisso)
         vagas.value = props.compromisso.vagas
-        console.log(props.compromisso.atendimentos[0])
+        // console.log(props.compromisso.atendimentos[0])
         let diaDeHoje = new Date().toISOString().substring(0,10)
         $('#dia').val(props.compromisso.dia).prop('min',diaDeHoje)
         $('#hora').val(props.compromisso.hora.substring(0,5))
