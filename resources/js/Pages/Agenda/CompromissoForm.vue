@@ -30,7 +30,9 @@ const form = useForm({
     atividades: String,
     aparelhos: Array,
     fisios: Array,
-    vagas: Number
+    vagas: Number,
+
+    compromisso_id: Number
 });
 
 const localStatus = ref(props.status)
@@ -97,7 +99,7 @@ onMounted(function () {
         $('#dia').val(props.compromisso.dia).prop('min', diaDeHoje)
         $('#hora').val(props.compromisso.hora.substring(0, 5))
         $('#vagas').val(props.compromisso.vagas)
-        
+        form.compromisso_id = props.compromisso.id
         nextTick(function () {
             for (let i = 0; i < props.compromisso.atendimentos.length; i++) {
                 console.log(props.compromisso.atendimentos[i])

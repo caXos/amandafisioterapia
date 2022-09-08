@@ -23,9 +23,9 @@ class CompromissoController extends Controller
     {
         $compromissos = Compromisso::orderBy('dia')->where('ativo',true)->get();
         foreach($compromissos as $compromisso) {
-            $atendimentos = Atendimento::where('compromisso_id',$compromisso->id)->get();
+            $atendimentos = Atendimento::where('compromisso_id',$compromisso->id)->where('ativo',true)->where('cumprido',false)->get();
             $compromisso->atendimentos = $atendimentos;
-            $compromisso->vagas = 3 - sizeof($atendimentos);
+            // $compromisso->vagas = 3 - sizeof($atendimentos);
             foreach($compromisso->atendimentos as $atendimento) {
                 $paciente = Paciente::find($atendimento->paciente_id);
                 $atividade = Atividade::find($atendimento->atividade_id);
@@ -160,8 +160,35 @@ class CompromissoController extends Controller
     public function update(UpdateCompromissoRequest $request/*, Compromisso $compromisso*/)
     {
         $this->authorize('update',Compromisso::class);
-        dd($request);
+        $compromisso = Compromisso::find($request->compromisso_id);
+        /**
+         * Primeiro altera todos os atendimentos desse compromisso para cumprido=true e ativo = true, para registrar atendimento alterado, mas sem cumprir, sem faltar, sem nada, só editado do compromisso
+         */
+        $atendimentos = $compromisso->atendimentos;
+        foreach($atendimentos as $atendimento) {
+            $atendimento->cumprido = true;
+            $atendimento->ativo = true;
+            $atendimento->updated_at = date('Y-m-d H:i:s');
+            $atendimento->save();
+        }
+        /**
+         * 'Cria' novos atendimentos
+         */
+        for ($i = 0; $i < $request->vagas; $i++) {
+            $novoAtendimento = new Atendimento([
+                'compromisso_id' => $compromisso->id ,
+                'paciente_id' => $request->pacientes[$i],
+                'atividade_id' => $request->pacientes[$i],
+                'aparelho_id' => $request->pacientes[$i],
+                'fisio_id' => $request->pacientes[$i],
+                'cumprido' => false,
+                'ativo' => true
+            ]);
+            $novoAtendimento->save();
+        }
+        return redirect()->route("agenda",)->with('status','Compromisso alterado');
     }
+
     // public function update(UpdateCompromissoRequest $request, Compromisso $compromisso)
     // {
 //  verificar possibilidade de receber a chamada deste método, vindo do web.php, já com o $compromisso.
@@ -177,7 +204,7 @@ class CompromissoController extends Controller
      * false       | false | falta
      * false       | true  | agendado
      * true        | false | cumprido com sucesso
-     * true        | true  | XXXXXXXXXXXXXXXXXXXXX
+     * true        | true  | XXXXXXXXXXXXXXXXXXXXX ----> atendimento alterado, mas sem cumprir, sem faltar, sem nada, só editado do compromisso
      */
     public function completarCompromisso(UpdateCompromissoRequest $request)
     {
