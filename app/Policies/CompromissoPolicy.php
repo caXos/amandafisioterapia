@@ -52,9 +52,9 @@ class CompromissoPolicy
      * @param  \App\Models\Compromisso  $compromisso
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Compromisso $compromisso)
+    public function update(User $user/*, Compromisso $compromisso*/)
     {
-        //
+        return $user->id <= 2 ? Response::allow() : Response::deny('Usuário não tem permissão para atualizar compromissos!');
     }
 
     public function completarCompromisso(User $user)

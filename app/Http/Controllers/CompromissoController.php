@@ -157,10 +157,17 @@ class CompromissoController extends Controller
      * @param  \App\Models\Compromisso  $compromisso
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCompromissoRequest $request, Compromisso $compromisso)
+    public function update(UpdateCompromissoRequest $request/*, Compromisso $compromisso*/)
     {
-
+        $this->authorize('update',Compromisso::class);
+        dd($request);
     }
+    // public function update(UpdateCompromissoRequest $request, Compromisso $compromisso)
+    // {
+//  verificar possibilidade de receber a chamada deste método, vindo do web.php, já com o $compromisso.
+//  daí, daria para passar para o authorize o request e o método, já com o $compromisso
+//  (para o caso de um usuário poder atualizar alguns compromissos, independentemente de ser o seu)
+    // }
 
     /**
      * Completa o compromisso e seus atendimentos

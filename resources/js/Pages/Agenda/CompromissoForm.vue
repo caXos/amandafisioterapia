@@ -5,7 +5,7 @@ import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
 import { Head, useForm, Link } from '@inertiajs/inertia-vue3';
-import { onMounted, computed, ref } from 'vue';
+import { onMounted, onBeforeUpdate, computed, ref, nextTick } from 'vue';
 
 import FisioSelect from '@/Components/FisioSelect.vue';
 import PacienteSelect from '@/Components/PacienteSelect.vue';
@@ -21,10 +21,6 @@ const props = defineProps({
     status: String,
 
     compromisso: Object,
-    fisio_id: Number,
-    paciente_id: Number,
-    atividade_id: Number,
-    apareho_id: Number,
 });
 
 const form = useForm({
@@ -42,16 +38,18 @@ const habilitaAparelhos = ref([false, false, false])
 const vagas = ref(0)
 
 const submit = () => {
+    form.dia = $('#dia').val();
+    form.hora = $('#hora').val();
     form.vagas = vagas
     let pacientesArray = []
     let atividadesArray = []
     let aparelhosArray = []
     let fisiosArray = []
-    for (let i=0; i < form.vagas; i++) {
-        pacientesArray.push($('#paciente-'+i).val())
-        atividadesArray.push($('#atividade-'+i).val())
-        aparelhosArray.push($('#aparelho-'+i).val())
-        fisiosArray.push($('#fisio-'+i).val())
+    for (let i = 0; i < form.vagas; i++) {
+        pacientesArray.push($('#paciente-' + i).val())
+        atividadesArray.push($('#atividade-' + i).val())
+        aparelhosArray.push($('#aparelho-' + i).val())
+        fisiosArray.push($('#fisio-' + i).val())
     }
     form.pacientes = pacientesArray
     form.atividades = atividadesArray
@@ -66,12 +64,11 @@ const submit = () => {
         form.post(route('gravarCompromisso'), {
             onFinish: () => form.reset(),
         });
-    }/* else {
-        // form.post(route('editarAgenda'), {
-        //     onFinish: () => form.reset(),
-        // });
-        alert('Editar Agenda!');
-    }*/
+    } else {
+        form.post(route('atualizarCompromisso'), {
+            onFinish: () => form.reset(),
+        });
+    }
 };
 
 onMounted(function () {
@@ -83,40 +80,41 @@ onMounted(function () {
         $('#dia').val('')//.prop('min', diaDeHoje)
         $('#hora').val('')
         $('#vagas').val(vagas.value)
-        for (let i=0; i<vagas.value; i++) {
+        for (let i = 0; i < vagas.value; i++) {
             form.pacientes[i] = null
             form.atividades[i] = null
             form.aparelhos[i] = null
             form.fisios[i] = null
-            $('#paciente'+(i+1)).val('')
-            $('#atividade'+(i+1)).val('')
-            $('#aparelho'+(i+1)).val('')
+            $('#paciente-' + (i + 1)).val('')
+            $('#atividade-' + (i + 1)).val('')
+            $('#aparelho-' + (i + 1)).val('')
             habilitaAparelhos[i] = false
-            $('#fisio'+(i+1)).val('')
+            $('#fisio-' + (i + 1)).val('')
         }
     } else {
-        console.log(props.compromisso)
         vagas.value = props.compromisso.vagas
-        // console.log(props.compromisso.atendimentos[0])
-        let diaDeHoje = new Date().toISOString().substring(0,10)
-        $('#dia').val(props.compromisso.dia).prop('min',diaDeHoje)
-        $('#hora').val(props.compromisso.hora.substring(0,5))
+        let diaDeHoje = new Date().toISOString().substring(0, 10)
+        $('#dia').val(props.compromisso.dia).prop('min', diaDeHoje)
+        $('#hora').val(props.compromisso.hora.substring(0, 5))
         $('#vagas').val(props.compromisso.vagas)
-        for (let i=0; i<props.compromisso.atendimentos.length; i++) {
-            form.pacientes[i] = props.compromisso.atendimentos[i].paciente_id
-            form.atividades[i] = props.compromisso.atendimentos[i].atividade_id
-            form.aparelhos[i] = props.compromisso.atendimentos[i].aparelho_id
-            form.fisios[i] = props.compromisso.atendimentos[i].fisio_id
-            $('#paciente-'+(i+1)).val(props.compromisso.atendimentos[i].paciente_id)
-            $('#atividade-'+(i+1)).val(props.compromisso.atendimentos[i].atividade_id)
-            if (props.compromisso.atendimentos[i].aparelho_id !== null && props.compromisso.atendimentos[i].aparelho_id !== undefined && props.compromisso.atendimentos[i].aparelho_id !== '' && props.compromisso.atendimentos[i].aparelho_id >= 0) {
-                $('#aparelho-'+(i+1)).val(props.compromisso.atendimentos[i].aparelho_id)
-                habilitaAparelhos._rawValue[i] = true
-                $('#aparelho-'+(i+1)).prop('disabled', '').prop('required', 'required').removeClass('text-gray-400')
-            }
-            $('#fisio-'+(i+1)).val(props.compromisso.atendimentos[i].fisio_id)
-        }
         
+        nextTick(function () {
+            for (let i = 0; i < props.compromisso.atendimentos.length; i++) {
+                console.log(props.compromisso.atendimentos[i])
+                form.pacientes[i] = props.compromisso.atendimentos[i].paciente_id
+                form.atividades[i] = props.compromisso.atendimentos[i].atividade_id
+                form.aparelhos[i] = props.compromisso.atendimentos[i].aparelho_id
+                form.fisios[i] = props.compromisso.atendimentos[i].fisio_id
+                $('#paciente-' + i).val(parseInt(props.compromisso.atendimentos[i].paciente_id))
+                $('#atividade-' + i).val(props.compromisso.atendimentos[i].atividade_id)
+                if (props.compromisso.atendimentos[i].aparelho_id !== null && props.compromisso.atendimentos[i].aparelho_id !== undefined && props.compromisso.atendimentos[i].aparelho_id !== '' && props.compromisso.atendimentos[i].aparelho_id >= 0) {
+                    $('#aparelho-' + i).val(props.compromisso.atendimentos[i].aparelho_id)
+                    habilitaAparelhos._rawValue[i] = true
+                    $('#aparelho-' + i).prop('disabled', '').prop('required', 'required').removeClass('text-gray-400')
+                }
+                $('#fisio-' + i).val(props.compromisso.atendimentos[i].fisio_id)
+            }
+        })
     }
 });
 
@@ -138,7 +136,7 @@ function validaFormulario() {
             form.setError('Erro02', 'Não é permitido marcar compromissos no dia atual com hora passada')
         } else {
             //Tudo ok com dia e hora, agora é a vez de consultar o atendimento 01
-            if( (form.pacientes[0] === null || form.pacientes[0] === undefined || form.pacientes[0] === '' || form.pacientes[0] === 0)
+            if ((form.pacientes[0] === null || form.pacientes[0] === undefined || form.pacientes[0] === '' || form.pacientes[0] === 0)
                 && (form.atividades[0] === null || form.atividades[0] === undefined || form.atividades[0] === '' || form.atividades[0] === 0)
                 && (form.aparelhos[0] === null || form.aparelhos[0] === undefined || form.aparelhos[0] === '' || form.aparelhos[0] === 0)
                 && (form.fisios[0] === null || form.fisios[0] === undefined || form.fisios[0] === '' || form.fisios[0] === 0)
@@ -147,10 +145,10 @@ function validaFormulario() {
             } else {
                 //Um dos campos do atendimento 01 foi preenchido, mas pelo menos um ficou em branco, então é erro
                 localStatus.value = 'erro'
-                if( (form.pacientes[0] === null || form.pacientes[0] === undefined || form.pacientes[0] === '' || form.pacientes[0] === 0) ) form.setError('Erro03','É necessário preencher o nome do paciente do atendimento 01')
-                if( (form.atividades[0] === null || form.atividades[0] === undefined || form.atividades[0] === '' || form.atividades[0] === 0) ) form.setError('Erro04','É necessário preencher a atividade do atendimento 01')
-                if( this.habilitaAparelhos[0] === true && (form.aparelhos[0] === null || form.aparelhos[0] === undefined || form.aparelhos[0] === '' || form.aparelhos[0] === 0) ) form.setError('Erro05','É necessário indicar o aparelho da atividade do atendimento 01')
-                if( (form.fisios[0] === null || form.fisios[0] === undefined || form.fisios[0] === '' || form.fisios[0] === 0) ) form.setError('Erro06','É necessário preencher o(a) fisioterapeuta do atendimento 01')
+                if ((form.pacientes[0] === null || form.pacientes[0] === undefined || form.pacientes[0] === '' || form.pacientes[0] === 0)) form.setError('Erro03', 'É necessário preencher o nome do paciente do atendimento 01')
+                if ((form.atividades[0] === null || form.atividades[0] === undefined || form.atividades[0] === '' || form.atividades[0] === 0)) form.setError('Erro04', 'É necessário preencher a atividade do atendimento 01')
+                if (this.habilitaAparelhos[0] === true && (form.aparelhos[0] === null || form.aparelhos[0] === undefined || form.aparelhos[0] === '' || form.aparelhos[0] === 0)) form.setError('Erro05', 'É necessário indicar o aparelho da atividade do atendimento 01')
+                if ((form.fisios[0] === null || form.fisios[0] === undefined || form.fisios[0] === '' || form.fisios[0] === 0)) form.setError('Erro06', 'É necessário preencher o(a) fisioterapeuta do atendimento 01')
                 return false
             }
         }
@@ -166,7 +164,7 @@ function alteraQtdevagas(evt) {
 function trocaAtividade(evt) { //TODO: melhorar esse método
     let indice = evt.target.id.substring(10)
     this.habilitaAparelhos[indice] = this.props.atividades[evt.target.selectedIndex - 1].usesAparatus;
-    this.habilitaAparelhos[indice] === true ? $('#aparelho-'+indice).prop('required','required').prop('disabled', '') : $('#aparelho-'+indice).prop('disabled','disabled').removeProp('required').val('0')
+    this.habilitaAparelhos[indice] === true ? $('#aparelho-' + indice).prop('required', 'required').prop('disabled', '') : $('#aparelho-' + indice).prop('disabled', 'disabled').removeProp('required').val('0')
 }
 
 function trocaAtividade_bckp(evt) {
@@ -189,7 +187,7 @@ function trocaAtividade_bckp(evt) {
                 {{ localStatus }}
             </div>
             <div v-if="localStatus === 'erro'" class="mb-4 font-medium text-sm text-red-600">
-                <div v-if="form.errors != ''" >{{ form.errors.atendimento2 }}</div>
+                <div v-if="form.errors != ''">{{ form.errors.atendimento2 }}</div>
             </div>
         </template>
 
@@ -200,77 +198,93 @@ function trocaAtividade_bckp(evt) {
                         <form @submit.prevent="submit">
                             <div>
                                 <BreezeLabel for="dia" value="Data" />
-                                <BreezeInput id="dia" type="date" class="mt-1 block w-full" v-model="form.dia" required autofocus />
+                                <BreezeInput id="dia" type="date" class="mt-1 block w-full" v-model="form.dia" required
+                                    autofocus />
                             </div>
 
                             <div class="mt-4">
                                 <BreezeLabel for="hora" value="Hora" />
-                                <BreezeInput id="hora" type="time" class="mt-1 block w-full"
-                                    v-model="form.hora" required />
+                                <BreezeInput id="hora" type="time" class="mt-1 block w-full" v-model="form.hora"
+                                    required />
                             </div>
 
                             <div class="mt-4">
                                 <BreezeLabel for="vagas" value="Vagas" />
-                                <BreezeInput id="vagas" type="number" step="1" min="0" max="15" class="mt-1 block w-full"
-                                    v-model="form.vagas" @change="alteraQtdevagas" required />
+                                <BreezeInput id="vagas" type="number" step="1" min="0" max="15"
+                                    class="mt-1 block w-full" v-model="form.vagas" @change="alteraQtdevagas" required />
                             </div>
 
                             <Fieldset v-for="(vaga,index) in vagas" :key="index">
-                                    <template #rotulo>
-                                        Atendimento {{index+1}}
-                                    </template>
-                                    <template #conteudo>
-                                        <div class="-mt-4">
-                                            <BreezeLabel :for="`paciente-${index}`" value="Paciente" />
-                                            <PacienteSelect :id="`paciente-${index}`" class="mt-1 block w-full" v-model="form.pacientes[index]"
-                                                :pacientes="pacientes" required />
-                                        </div>
+                                <template #rotulo>
+                                    Atendimento {{index+1}}
+                                </template>
+                                <template #conteudo>
+                                    <div class="-mt-4">
+                                        <BreezeLabel :for="`paciente-${index}`" value="Paciente" />
+                                        <PacienteSelect :id="`paciente-${index}`" class="mt-1 block w-full"
+                                            v-model="form.pacientes[index]" :pacientes="pacientes" required />
+                                    </div>
 
-                                        <div class="mt-4">
-                                            <BreezeLabel :for="`atividade-${index}`" value="Atividade" />
-                                            <AtividadeSelect :id="`atividade-${index}`" class="mt-1 block w-full" v-model="form.atividades[index]"
-                                                :atividades="atividades" @change="trocaAtividade($event)" required />
-                                        </div>
+                                    <div class="mt-4">
+                                        <BreezeLabel :for="`atividade-${index}`" value="Atividade" />
+                                        <AtividadeSelect :id="`atividade-${index}`" class="mt-1 block w-full"
+                                            v-model="form.atividades[index]" :atividades="atividades"
+                                            @change="trocaAtividade($event)" required />
+                                    </div>
 
-                                        <div :class="{
+                                    <div :class="{
                                             'mt-4': habilitaAparelhos[index] === true
                                             , 'mt-4 text-gray-400': habilitaAparelhos[index] === false
                                             }">
-                                            <BreezeLabel :for="`aparelho-${index}`" value="Aparelho" />
-                                            <AparelhoSelect :id="`aparelho-${index}`" class="mt-1 block w-full" v-model="form.aparelhos[index]"
-                                                :aparelhos="aparelhos" disabled required />
-                                        </div>
+                                        <BreezeLabel :for="`aparelho-${index}`" value="Aparelho" />
+                                        <AparelhoSelect :id="`aparelho-${index}`" class="mt-1 block w-full"
+                                            v-model="form.aparelhos[index]" :aparelhos="aparelhos" disabled required />
+                                    </div>
 
-                                        <div class="mt-4">
-                                            <BreezeLabel :for="`fisio-${index}`" value="Fisioterapeuta" />
-                                            <FisioSelect :id="`fisio-${index}`" class="mt-1 block w-full" v-model="form.fisios[index]" :fisios="fisios" required />
-                                        </div>
+                                    <div class="mt-4">
+                                        <BreezeLabel :for="`fisio-${index}`" value="Fisioterapeuta" />
+                                        <FisioSelect :id="`fisio-${index}`" class="mt-1 block w-full"
+                                            v-model="form.fisios[index]" :fisios="fisios" required />
+                                    </div>
 
-                                        <div class="flex items-center justify-center mt-2 mb-1">
-                                            <span class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                                                :title="`Notificar todos`" @click="$emit('notificarCompromissoToda', compromisso)">notifications</span>
-                                            <span class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                                                title="Marcar todos como completado" @click="$emit('completarCompromissoToda',compromisso)">done_all</span>
-                                            <span class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                                                :title="'Marcar todos com falta'"
-                                                @click="$emit('faltarCompromissoTodo', compromisso)">event_busy</span>
-                                            <span class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                                                :title="'Deletar todos sem completar'" @click="$emit('deletarCompromissoTodo', compromisso)">delete</span>
-                                            <span class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                                                :title="'Agendar retorno para todos'" @click="$emit('retornarCompromissoTodo', compromisso)">forward</span>
-                                        </div>
-                                    </template>
+                                    <div class="flex items-center justify-center mt-2 mb-1">
+                                        <span
+                                            class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
+                                            :title="`Notificar todos`"
+                                            @click="$emit('notificarCompromissoToda', compromisso)">notifications</span>
+                                        <span
+                                            class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
+                                            title="Marcar todos como completado"
+                                            @click="$emit('completarCompromissoToda',compromisso)">done_all</span>
+                                        <span
+                                            class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
+                                            :title="'Marcar todos com falta'"
+                                            @click="$emit('faltarCompromissoTodo', compromisso)">event_busy</span>
+                                        <span
+                                            class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
+                                            :title="'Deletar todos sem completar'"
+                                            @click="$emit('deletarCompromissoTodo', compromisso)">delete</span>
+                                        <span
+                                            class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
+                                            :title="'Agendar retorno para todos'"
+                                            @click="$emit('retornarCompromissoTodo', compromisso)">forward</span>
+                                    </div>
+                                </template>
                             </Fieldset>
 
                             <div class="flex items-center justify-end mt-4">
-                                <Link class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:shadow-outline-slate transition ease-in-out duration-150" :href="route('agenda')">
-                                    Voltar
+                                <Link
+                                    class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:shadow-outline-slate transition ease-in-out duration-150"
+                                    :href="route('agenda')">
+                                Voltar
                                 </Link>
-                                
-                                <Link v-if="compromisso !== undefined" class="inline-flex items-center ml-4 px-4 py-2 bg-rose-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-rose-700 active:bg-rose-900 focus:outline-none focus:border-rose-900 focus:shadow-outline-rose transition ease-in-out duration-150" :href="route('deletarCompromisso', [props.compromisso.id])">
-                                    Remover
+
+                                <Link v-if="compromisso !== undefined"
+                                    class="inline-flex items-center ml-4 px-4 py-2 bg-rose-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-rose-700 active:bg-rose-900 focus:outline-none focus:border-rose-900 focus:shadow-outline-rose transition ease-in-out duration-150"
+                                    :href="route('deletarCompromisso', [props.compromisso.id])">
+                                Remover
                                 </Link>
-                                
+
                                 <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }"
                                     :disabled="form.processing">
                                     Salvar
