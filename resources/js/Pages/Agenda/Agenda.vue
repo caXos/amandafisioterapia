@@ -30,7 +30,8 @@ const modalAtendimentoConteudo = ref({
     'hora': null
 });
 
-function abrirNotificarAgendaToda(compromisso) {
+function abrirModalNotificarCompromissoTodo(compromisso) {
+    console.log(compromisso)
     if (compromisso.atendimentos.length === 1) {
         modalConteudo.value.titulo = 'Notificar paciente'
         modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja notificar o(a) paciente do seguinte compromisso?'
@@ -44,7 +45,7 @@ function abrirNotificarAgendaToda(compromisso) {
     modal.value = true
 }
 
-function abrirCompletarAgendaToda(compromisso) {
+function abrirModalCompletarCompromissoTodo(compromisso) {
     if (compromisso.atendimentos.length === 1) {
         modalConteudo.value.titulo = 'Registrar atendimento completado'
         modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja registrar o seguinte compromisso como completado?'
@@ -58,7 +59,7 @@ function abrirCompletarAgendaToda(compromisso) {
     modal.value = true
 }
 
-function abrirFaltarAgendaToda(compromisso) {
+function abrirModalFaltarCompromissoTodo(compromisso) {
     if (compromisso.atendimentos.length === 1) {
         modalConteudo.value.titulo = 'Registrar falta'
         modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja registrar o seguinte compromisso como falta?'
@@ -72,7 +73,7 @@ function abrirFaltarAgendaToda(compromisso) {
     modal.value = true
 }
 
-function abrirDeletarAgendaToda(compromisso) {
+function abrirModalDeletarCompromissoTodo(compromisso) {
     if (compromisso.atendimentos.length === 1) {
         modalConteudo.value.titulo = 'Desmarcar atendimento'
         modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja desmarcar o seguinte compromisso?'
@@ -86,7 +87,7 @@ function abrirDeletarAgendaToda(compromisso) {
     modal.value = true
 }
 
-function abrirRetornarAgendaToda(compromisso) {
+function abrirModalRetornarCompromissoTodo(compromisso) {
     if (compromisso.atendimentos.length === 1) {
         modalConteudo.value.titulo = 'Agendar retorno'
         modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja agendar retorno do seguinte compromisso?'
@@ -114,6 +115,7 @@ function fecharModal() {
 function fecharModalAtendimento() {
     modalAtendimento.value = false
 }
+
 </script>
 
 <script>
@@ -142,11 +144,11 @@ function fecharModalAtendimento() {
                         <p v-if="compromissos.length == 0" class="text-sky-800 text-center">Não há compromissos. Use o botão
                             abaixo para incluir compromissos na agenda.</p>
                         <CompromissoCard v-else v-for="(compromisso, index) in compromissos" :key="index" :compromisso="compromisso"
-                            @notificarAgendaToda="abrirNotificarAgendaToda"
-                            @completarAgendaToda="abrirCompletarAgendaToda"
-                            @faltarAgendaToda="abrirFaltarAgendaToda"
-                            @deletarAgendaToda="abrirDeletarAgendaToda"
-                            @retornarAgendaToda="abrirRetornarAgendaToda"
+                            @notificarCompromissoTodo="abrirModalNotificarCompromissoTodo"
+                            @completarCompromissoTodo="abrirModalCompletarCompromissoTodo"
+                            @faltarCompromissoTodo="abrirModalFaltarCompromissoTodo"
+                            @deletarCompromissoTodo="abrirModalDeletarCompromissoTodo"
+                            @retornarCompromissoTodo="abrirModalRetornarCompromissoTodo"
 
                             @abrirModalAtendimento="abrirModalAtendimento"
                             />

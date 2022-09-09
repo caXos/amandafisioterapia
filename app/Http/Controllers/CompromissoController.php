@@ -213,7 +213,7 @@ class CompromissoController extends Controller
         $this->authorize('completarCompromisso', Compromisso::class);
 
         $compromisso = Compromisso::find($request->id);
-        $atendimentos = Atendimento::where('compromisso_id', $compromisso->id)->get();
+        $atendimentos = $compromisso->atendimentosValidos;
         foreach($atendimentos as $atendimento) {
             $atendimento->cumprido = true;
             $atendimento->ativo = false;
