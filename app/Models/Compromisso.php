@@ -28,4 +28,12 @@ class Compromisso extends Model
     {
         return $this->hasMany(Atendimento::class);
     }
+
+    /**
+     * Retorna os atendimentos ativos de um compromisso (na verdade, retorna os que não foram inativados com cumprido true e ativo true)
+     */
+    public function atendimentosValidos()
+    {
+        return $this->hasMany(Atendimento::class)->where('cumprido', false)->where('ativo', true);
+    }
 }

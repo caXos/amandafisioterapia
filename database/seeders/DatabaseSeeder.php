@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
             'perfil' => 3,
         ]);
         $this->call([
-            // PacienteSeeder::class,
+            PacienteSeeder::class,
             AtividadeSeeder::class,
             // AgendaSeeder::class,
             // CompromissoSeeder::class,
@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
             //// PacienteSeeder::class,
             PlanoSeeder::class,
             // ProntuarioSeeder::class,
-            // PlanoPacienteSeeder::class,
+            PlanoPacienteSeeder::class,
             // AtendimentoSeeder::class,
         ]);
     }

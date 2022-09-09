@@ -89,7 +89,7 @@ const props = defineProps({
                                     </template>
 
                                     <template #content>
-                                        <BreezeDropdownLink :href="route('logout')" method="post" as="button">
+                                        <BreezeDropdownLink  :href="route('logout')" method="post" as="button">
                                             Log Out
                                         </BreezeDropdownLink>
                                     </template>

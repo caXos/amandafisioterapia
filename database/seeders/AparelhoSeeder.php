@@ -16,6 +16,10 @@ class AparelhoSeeder extends Seeder
     {
         // \App\Models\Aparelho::factory(10)->create();
         \App\Models\Aparelho::factory()->create([
+            'name' => 'Nenhum',
+            'description' => 'A atividade não precisa de aparelhos.',
+        ]);
+        \App\Models\Aparelho::factory()->create([
             'name' => 'Barrel',
             'description' => 'O Ladder Barrel, que em uma tradução literal significa Barril Escada, é um equipamento de aulas de pilates que tem como objetivo fornecer mais flexibilidade e força para o aluno.',
         ]);

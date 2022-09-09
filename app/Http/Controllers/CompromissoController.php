@@ -21,7 +21,7 @@ class CompromissoController extends Controller
      */
     public function index()
     {
-        $compromissos = Compromisso::orderBy('dia')->where('ativo',true)->get();
+        $compromissos = Compromisso::orderBy('dia', 'asc')->where('ativo',true)->get();
         foreach($compromissos as $compromisso) {
             $atendimentos = Atendimento::where('compromisso_id',$compromisso->id)->where('ativo',true)->where('cumprido',false)->get();
             $compromisso->atendimentos = $atendimentos;
@@ -87,7 +87,7 @@ class CompromissoController extends Controller
      */
     public function store(StoreCompromissoRequest $request)
     {
-        $ultimoCompromisso = Compromisso::latest()->first();
+        // $ultimoCompromisso = Compromisso::latest()->first();
         $this->authorize('create',Compromisso::class);
         $compromisso = new Compromisso([
             'user_id' => $request->fisio,
@@ -99,11 +99,11 @@ class CompromissoController extends Controller
         $compromisso->save();
         for ($i = 0; $i < $request->vagas; $i++) {
             $novoAtendimento = new Atendimento([
-                'compromisso_id' => $ultimoCompromisso->id + 1,
+                'compromisso_id' => $compromisso->id,
                 'paciente_id' => $request->pacientes[$i],
-                'atividade_id' => $request->pacientes[$i],
-                'aparelho_id' => $request->pacientes[$i],
-                'fisio_id' => $request->pacientes[$i],
+                'atividade_id' => $request->atividades[$i],
+                'aparelho_id' => $request->aparelhos[$i],
+                'fisio_id' => $request->fisios[$i],
                 'cumprido' => false,
                 'ativo' => true
             ]);
@@ -136,7 +136,7 @@ class CompromissoController extends Controller
     public function edit(UpdateCompromissoRequest $request)
     {
         $compromisso = Compromisso::find($request->id);
-        $compromisso->atendimentos;
+        $compromisso->atendimentos = $compromisso->atendimentosValidos;
         $pacientes = Paciente::all('id','nome');
         $atividades = Atividade::all('id','name','usesAparatus');
         $aparelhos = Aparelho::all('id','name');
@@ -164,7 +164,7 @@ class CompromissoController extends Controller
         /**
          * Primeiro altera todos os atendimentos desse compromisso para cumprido=true e ativo = true, para registrar atendimento alterado, mas sem cumprir, sem faltar, sem nada, só editado do compromisso
          */
-        $atendimentos = $compromisso->atendimentos;
+        $atendimentos = $compromisso->atendimentosValidos;
         foreach($atendimentos as $atendimento) {
             $atendimento->cumprido = true;
             $atendimento->ativo = true;
@@ -178,14 +178,16 @@ class CompromissoController extends Controller
             $novoAtendimento = new Atendimento([
                 'compromisso_id' => $compromisso->id ,
                 'paciente_id' => $request->pacientes[$i],
-                'atividade_id' => $request->pacientes[$i],
-                'aparelho_id' => $request->pacientes[$i],
-                'fisio_id' => $request->pacientes[$i],
+                'atividade_id' => $request->atividades[$i],
+                'aparelho_id' => $request->aparelhos[$i],
+                'fisio_id' => $request->fisios[$i],
                 'cumprido' => false,
                 'ativo' => true
             ]);
             $novoAtendimento->save();
         }
+        $compromisso->vagas = $request->vagas;
+        $compromisso->save();
         return redirect()->route("agenda",)->with('status','Compromisso alterado');
     }
 
@@ -236,7 +238,7 @@ class CompromissoController extends Controller
         $compromisso = Compromisso::find($request->id);
         $compromisso->ativo = false;
         $compromisso->save();
-        $atendimentos = $compromisso->atendimentos;
+        $atendimentos = $compromisso->atendimentosValidos;
         foreach($atendimentos as $atendimento) {
             $atendimento->cumprido = true;
             $atendimento->ativo = true;

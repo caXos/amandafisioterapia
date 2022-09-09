@@ -166,7 +166,7 @@ function alteraQtdevagas(evt) {
 function trocaAtividade(evt) { //TODO: melhorar esse método
     let indice = evt.target.id.substring(10)
     this.habilitaAparelhos[indice] = this.props.atividades[evt.target.selectedIndex - 1].usesAparatus;
-    this.habilitaAparelhos[indice] === true ? $('#aparelho-' + indice).prop('required', 'required').prop('disabled', '') : $('#aparelho-' + indice).prop('disabled', 'disabled').removeProp('required').val('0')
+    this.habilitaAparelhos[indice] === true ? $('#aparelho-' + indice).prop('required', 'required').prop('disabled', '') : $('#aparelho-' + indice).prop('disabled', 'disabled').removeProp('required').val(1)
 }
 
 function trocaAtividade_bckp(evt) {
@@ -198,22 +198,23 @@ function trocaAtividade_bckp(evt) {
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <form @submit.prevent="submit">
-                            <div>
-                                <BreezeLabel for="dia" value="Data" />
-                                <BreezeInput id="dia" type="date" class="mt-1 block w-full" v-model="form.dia" required
-                                    autofocus />
-                            </div>
+                            <div class="mb-1 lg:grid lg:grid-cols-3">
+                                <div class="lg:mr-1">
+                                    <BreezeLabel for="dia" value="Data" />
+                                    <BreezeInput id="dia" type="date" class="mt-1 block w-full" v-model="form.dia" required
+                                        autofocus />
+                                </div>
 
-                            <div class="mt-4">
-                                <BreezeLabel for="hora" value="Hora" />
-                                <BreezeInput id="hora" type="time" class="mt-1 block w-full" v-model="form.hora"
-                                    required />
-                            </div>
-
-                            <div class="mt-4">
-                                <BreezeLabel for="vagas" value="Vagas" />
-                                <BreezeInput id="vagas" type="number" step="1" min="0" max="15"
-                                    class="mt-1 block w-full" v-model="form.vagas" @change="alteraQtdevagas" required />
+                                <div class="mt-4 lg:mx-1 lg:mt-0">
+                                    <BreezeLabel for="hora" value="Hora" />
+                                    <BreezeInput id="hora" type="time" class="mt-1 block w-full" v-model="form.hora"
+                                        required />
+                                </div>
+                                <div class="mt-4 lg:ml-1 lg:mt-0">
+                                    <BreezeLabel for="vagas" value="Vagas" />
+                                    <BreezeInput id="vagas" type="number" step="1" min="0" max="15"
+                                        class="mt-1 block w-full" v-model="form.vagas" @change="alteraQtdevagas" required />
+                                </div>
                             </div>
 
                             <Fieldset v-for="(vaga,index) in vagas" :key="index">
