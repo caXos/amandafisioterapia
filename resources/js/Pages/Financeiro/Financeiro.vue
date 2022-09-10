@@ -76,7 +76,7 @@ let formatBrazilianReal = Intl.NumberFormat('pt-BR');
                                     }" disabled :value="`R$ ${formatBrazilianReal.format(resultado)}`" />
                             </div>
                         <FAB model="Lançamento" rota="adicionarFinanceiro"></FAB>
-                        <table id="tabela-financeiro">
+                        <table id="tabela-financeiro" class="text-sky-800">
                             <thead>
                                 <tr>
                                     <th>Data</th>
@@ -91,18 +91,6 @@ let formatBrazilianReal = Intl.NumberFormat('pt-BR');
                             <tbody>
                                 <FinanceiroTableRow v-for="lancamento in lancamentos" :key="lancamento.id" :lancamento="lancamento"/>
                             </tbody>
-                            <!-- <tfoot>
-                                <tr>
-                                    <td colspan="5" class="dt-right">Subtotal:</td>
-                                    <td class="espaco-entre" :class="{
-                                        'bg-green-100 !important hover:bg-green-100 hover:text-green-900': resultado >= 0
-                                        , 'bg-red-100 !important hover:bg-red-100 hover:text-red-900': resultado < 0
-                                    }">
-                                        <span>R$</span><span> {{ formatBrazilianReal.format(resultado) }}</span>
-                                    </td>
-                                    <td><span display="none"></span></td>
-                                </tr>
-                            </tfoot> -->
                         </table>
                     </div>
                 </div>
@@ -112,9 +100,5 @@ let formatBrazilianReal = Intl.NumberFormat('pt-BR');
 </template>
 
 <style scoped>
-.espaco-entre {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: space-between !important;
-}
+
 </style>

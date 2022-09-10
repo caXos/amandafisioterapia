@@ -64,7 +64,7 @@ onMounted(() => {
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <FAB model="Paciente" rota="adicionarPaciente"></FAB>
-                        <table id="tabela-pacientes">
+                        <table id="tabela-pacientes" class="text-sky-800">
                             <thead>
                                 <tr>
                                     <th>Nome</th>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreCompromissoRequest;
 use App\Http\Requests\UpdateCompromissoRequest;
 use App\Models\Compromisso;
@@ -71,11 +72,16 @@ class CompromissoController extends Controller
         $atividades = Atividade::all('id','name','usesAparatus');
         $aparelhos = Aparelho::all('id','name');
         $fisios = User::all('id','name');
+        $outrosCompromissos = Compromisso::where('ativo', true)->get();
+        foreach($outrosCompromissos as $compromisso) {
+            $compromisso->atendimentos = $compromisso->atendimentosValidos;
+        }
         return Inertia::render('Agenda/CompromissoForm', [
             'pacientes' => $pacientes, 
             'atividades' => $atividades, 
             'aparelhos' => $aparelhos, 
-            'fisios' => $fisios
+            'fisios' => $fisios,
+            'outrosCompromissos' => $outrosCompromissos
         ]);
     }
 
@@ -118,11 +124,17 @@ class CompromissoController extends Controller
      * @param  \App\Models\Compromisso  $compromisso
      * @return \Illuminate\Http\Response
      */
-    public function show(Compromisso $compromisso)
-    {
-        //
-    }
+    // public function show(Compromisso $compromisso)
+    // {
+    //     //
+    // }
 
+    public function show()
+    {
+        $request = "teste";
+        dd($request);
+        return $compromisso = Compromisso::where('dia', $request->dia)->where('hora', $request->hora)->get();
+    }
     /**
      * Show the form for editing the specified resource.
      *

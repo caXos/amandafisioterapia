@@ -112,16 +112,18 @@ const submit = () => {
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <form @submit.prevent="submit">
-                            <div>
-                                <BreezeLabel for="dia" value="Dia" />
-                                <BreezeInput id="dia" type="date" class="mt-1 block w-full" v-model="form.dia" required
-                                    autofocus />
-                            </div>
+                            <div class="lg:grid lg:grid-cols-2">
+                                <div class="lg:pr-2">
+                                    <BreezeLabel for="dia" value="Dia" />
+                                    <BreezeInput id="dia" type="date" class="mt-1 block w-full" v-model="form.dia" required
+                                        autofocus />
+                                </div>
 
-                            <div class="mt-4">
-                                <BreezeLabel for="hora" value="Hora" />
-                                <BreezeInput id="hora" type="time" class="mt-1 block w-full" v-model="form.hora"
-                                    required />
+                                <div class="mt-4 lg:mt-0 lg:pl-2">
+                                    <BreezeLabel for="hora" value="Hora" />
+                                    <BreezeInput id="hora" type="time" class="mt-1 block w-full" v-model="form.hora"
+                                        required />
+                                </div>
                             </div>
 
                             <div class="mt-4">
@@ -136,16 +138,18 @@ const submit = () => {
                                     v-model="form.detalhe" />
                             </div>
 
-                            <div class="mt-4">
-                                <BreezeLabel for="tipo" value="Tipo" />
-                                <FinanceiroTipoSelect id="tipo" class="mt-1 block w-full" v-model="form.tipo"
-                                    required />
-                            </div>
+                            <div class="lg:grid lg:grid-cols-2">
+                                <div class="mt-4 lg:pr-2">
+                                    <BreezeLabel for="tipo" value="Tipo" />
+                                    <FinanceiroTipoSelect id="tipo" class="mt-1 block w-full" v-model="form.tipo"
+                                        required />
+                                </div>
 
-                            <div class="mt-4">
-                                <BreezeLabel for="valor" value="Valor" />
-                                <BreezeInput id="valor" type="number" step="0.01" class="mt-1 block w-full"
-                                    v-model="form.valor" required />
+                                <div class="mt-4 lg:pl-2">
+                                    <BreezeLabel for="valor" value="Valor" />
+                                    <BreezeInput id="valor" type="number" min="0" step="0.01" class="mt-1 block w-full"
+                                        v-model="form.valor" required />
+                                </div>
                             </div>
 
                             <div class="flex items-center justify-end mt-4">

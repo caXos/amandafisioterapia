@@ -21,6 +21,7 @@ const props = defineProps({
     status: String,
 
     compromisso: Object,
+    outrosCompromissos: Object
 });
 
 const form = useForm({
@@ -35,7 +36,8 @@ const form = useForm({
     compromisso_id: Number
 });
 
-const localStatus = ref(props.status)
+const status = ref(props.status)
+const compromisso = ref(props.compromisso)
 const habilitaAparelhos = ref([false, false, false])
 const vagas = ref(0)
 
@@ -60,7 +62,7 @@ const submit = () => {
     // if(validaFormulario()) {
     //     //formulário ok, segue com o gravar compromisso ou editar compromisso
     // }
-    // localStatus.value = 'erro'
+    // status.value = 'erro'
     // form.setError('atendimento2', 'Ha erros no formulario do atendimento 2')
     if (props.compromisso == null) {
         form.post(route('gravarCompromisso'), {
@@ -120,45 +122,71 @@ onMounted(function () {
     }
 });
 
-function validaFormulario() {
-    //Os inputs dia e hora já são validados pelo atributo required, mas é necessário validar seus valores
-    let diaDeHoje = new Date().getDate()
-    let diaPreenchido = new Date(form.dia)
-    if (diaPreenchido < diaDeHoje) {
-        //Erro: não é permitido marcar compromissos passados
-        localStatus.value = 'erro'
-        form.setError('Erro01', 'Não é permitido marcar compromissos em dias passados')
-        return false
-    } else {
-        let horaAgora = new Date().getTime()
-        let horaPreenchida = new Date(form.hora)
-        if (horaPreenchida < horaAgora) {
-            //Erro: é permitido marcar compromissos no mesmo dia, mas não em hora anterior
-            localStatus.value = 'erro'
-            form.setError('Erro02', 'Não é permitido marcar compromissos no dia atual com hora passada')
-        } else {
-            //Tudo ok com dia e hora, agora é a vez de consultar o atendimento 01
-            if ((form.pacientes[0] === null || form.pacientes[0] === undefined || form.pacientes[0] === '' || form.pacientes[0] === 0)
-                && (form.atividades[0] === null || form.atividades[0] === undefined || form.atividades[0] === '' || form.atividades[0] === 0)
-                && (form.aparelhos[0] === null || form.aparelhos[0] === undefined || form.aparelhos[0] === '' || form.aparelhos[0] === 0)
-                && (form.fisios[0] === null || form.fisios[0] === undefined || form.fisios[0] === '' || form.fisios[0] === 0)
-            ) {
-                //Todos os campos do atendimento 01 estão 'em branco', então, em princípio, tudo certo...
-            } else {
-                //Um dos campos do atendimento 01 foi preenchido, mas pelo menos um ficou em branco, então é erro
-                localStatus.value = 'erro'
-                if ((form.pacientes[0] === null || form.pacientes[0] === undefined || form.pacientes[0] === '' || form.pacientes[0] === 0)) form.setError('Erro03', 'É necessário preencher o nome do paciente do atendimento 01')
-                if ((form.atividades[0] === null || form.atividades[0] === undefined || form.atividades[0] === '' || form.atividades[0] === 0)) form.setError('Erro04', 'É necessário preencher a atividade do atendimento 01')
-                if (this.habilitaAparelhos[0] === true && (form.aparelhos[0] === null || form.aparelhos[0] === undefined || form.aparelhos[0] === '' || form.aparelhos[0] === 0)) form.setError('Erro05', 'É necessário indicar o aparelho da atividade do atendimento 01')
-                if ((form.fisios[0] === null || form.fisios[0] === undefined || form.fisios[0] === '' || form.fisios[0] === 0)) form.setError('Erro06', 'É necessário preencher o(a) fisioterapeuta do atendimento 01')
-                return false
-            }
-        }
-    }
-}
+// function validaFormulario() {
+//     //Os inputs dia e hora já são validados pelo atributo required, mas é necessário validar seus valores
+//     let diaDeHoje = new Date().getDate()
+//     let diaPreenchido = new Date(form.dia)
+//     if (diaPreenchido < diaDeHoje) {
+//         //Erro: não é permitido marcar compromissos passados
+//         status.value = 'erro'
+//         form.setError('Erro01', 'Não é permitido marcar compromissos em dias passados')
+//         return false
+//     } else {
+//         let horaAgora = new Date().getTime()
+//         let horaPreenchida = new Date(form.hora)
+//         if (horaPreenchida < horaAgora) {
+//             //Erro: é permitido marcar compromissos no mesmo dia, mas não em hora anterior
+//             status.value = 'erro'
+//             form.setError('Erro02', 'Não é permitido marcar compromissos no dia atual com hora passada')
+//         } else {
+//             //Tudo ok com dia e hora, agora é a vez de consultar o atendimento 01
+//             if ((form.pacientes[0] === null || form.pacientes[0] === undefined || form.pacientes[0] === '' || form.pacientes[0] === 0)
+//                 && (form.atividades[0] === null || form.atividades[0] === undefined || form.atividades[0] === '' || form.atividades[0] === 0)
+//                 && (form.aparelhos[0] === null || form.aparelhos[0] === undefined || form.aparelhos[0] === '' || form.aparelhos[0] === 0)
+//                 && (form.fisios[0] === null || form.fisios[0] === undefined || form.fisios[0] === '' || form.fisios[0] === 0)
+//             ) {
+//                 //Todos os campos do atendimento 01 estão 'em branco', então, em princípio, tudo certo...
+//             } else {
+//                 //Um dos campos do atendimento 01 foi preenchido, mas pelo menos um ficou em branco, então é erro
+//                 status.value = 'erro'
+//                 if ((form.pacientes[0] === null || form.pacientes[0] === undefined || form.pacientes[0] === '' || form.pacientes[0] === 0)) form.setError('Erro03', 'É necessário preencher o nome do paciente do atendimento 01')
+//                 if ((form.atividades[0] === null || form.atividades[0] === undefined || form.atividades[0] === '' || form.atividades[0] === 0)) form.setError('Erro04', 'É necessário preencher a atividade do atendimento 01')
+//                 if (this.habilitaAparelhos[0] === true && (form.aparelhos[0] === null || form.aparelhos[0] === undefined || form.aparelhos[0] === '' || form.aparelhos[0] === 0)) form.setError('Erro05', 'É necessário indicar o aparelho da atividade do atendimento 01')
+//                 if ((form.fisios[0] === null || form.fisios[0] === undefined || form.fisios[0] === '' || form.fisios[0] === 0)) form.setError('Erro06', 'É necessário preencher o(a) fisioterapeuta do atendimento 01')
+//                 return false
+//             }
+//         }
+//     }
+// }
 
 function alteraQtdevagas(evt) {
     vagas.value = parseInt(evt.target.value)
+}
+
+function buscaCompromisso() {
+    if ( $('#dia').val() !== '' && $('#hora').val() !== ''  ) {
+        let verificaDia = $('#dia').val()
+        let verificaHora = $('#hora').val()
+        verificaHora = verificaHora.concat(":00")
+        for (let i=0; i<props.outrosCompromissos.length; i++) {
+            if (props.outrosCompromissos[i].dia === verificaDia && props.outrosCompromissos[i].hora === verificaHora) {
+                console.log('achei um compromisso j marcado com esse dia e hora')
+                compromisso.value = props.outrosCompromissos[i]
+                vagas.value = props.outrosCompromissos[i].vagas
+                $('#vagas').val(props.outrosCompromissos[i].vagas)
+                for (let j=0; j<props.outrosCompromissos[i].vagas; j++) {
+                    $('#paciente-' + j).val(parseInt(props.outrosCompromissos[i].atendimentos[j].paciente_id))
+                    $('#atividade-' + j).val(props.outrosCompromissos[i].atendimentos[j].atividade_id)
+                    if (props.outrosCompromissos[i].atendimentos[j].aparelho_id !== null && props.outrosCompromissos[i].atendimentos[j].aparelho_id !== undefined && props.outrosCompromissos[i].atendimentos[j].aparelho_id !== '' && props.outrosCompromissos[i].atendimentos[j].aparelho_id >= 0) {
+                        $('#aparelho-' + j).val(props.outrosCompromissos[i].atendimentos[j].aparelho_id)
+                        habilitaAparelhos._rawValue[j] = true
+                        $('#aparelho-' + j).prop('disabled', '').prop('required', 'required').removeClass('text-gray-400')
+                    }
+                    $('#fisio-' + i).val(props.outrosCompromissos[i].atendimentos[j].fisio_id)
+                }
+            }
+        }
+    }
 }
 </script>
 
@@ -172,8 +200,6 @@ function trocaAtividade(evt) { //TODO: melhorar esse método
 function trocaAtividade_bckp(evt) {
     this.atividadeTeste = evt.target.selectedIndex;
 }
-
-
 </script>
 
 <template>
@@ -185,10 +211,10 @@ function trocaAtividade_bckp(evt) {
             <p class="font-semibold text-sky-800 leading-tight">
                 Agenda - Criar/editar compromisso
             </p>
-            <div v-if="localStatus != undefined" class="mb-4 font-medium text-sm text-green-600">
-                {{ localStatus }}
+            <div v-if="status != undefined" class="mb-4 font-medium text-sm text-green-600">
+                {{ status }}
             </div>
-            <div v-if="localStatus === 'erro'" class="mb-4 font-medium text-sm text-red-600">
+            <div v-if="status === 'erro'" class="mb-4 font-medium text-sm text-red-600">
                 <div v-if="form.errors != ''">{{ form.errors.atendimento2 }}</div>
             </div>
         </template>
@@ -201,14 +227,17 @@ function trocaAtividade_bckp(evt) {
                             <div class="mb-1 lg:grid lg:grid-cols-3">
                                 <div class="lg:mr-1">
                                     <BreezeLabel for="dia" value="Data" />
-                                    <BreezeInput id="dia" type="date" class="mt-1 block w-full" v-model="form.dia" required
-                                        autofocus />
+                                    <BreezeInput id="dia" type="date" class="mt-1 block w-full" 
+                                        v-model="form.dia" 
+                                        required autofocus 
+                                        @blur="buscaCompromisso" />
                                 </div>
 
                                 <div class="mt-4 lg:mx-1 lg:mt-0">
                                     <BreezeLabel for="hora" value="Hora" />
                                     <BreezeInput id="hora" type="time" class="mt-1 block w-full" v-model="form.hora"
-                                        required />
+                                        required
+                                        @blur="buscaCompromisso" />
                                 </div>
                                 <div class="mt-4 lg:ml-1 lg:mt-0">
                                     <BreezeLabel for="vagas" value="Vagas" />
@@ -282,9 +311,9 @@ function trocaAtividade_bckp(evt) {
                                 Voltar
                                 </Link>
 
-                                <Link v-if="compromisso !== undefined"
+                                <Link v-if="compromisso != null"
                                     class="inline-flex items-center ml-4 px-4 py-2 bg-rose-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-rose-700 active:bg-rose-900 focus:outline-none focus:border-rose-900 focus:shadow-outline-rose transition ease-in-out duration-150"
-                                    :href="route('deletarCompromisso', [props.compromisso.id])">
+                                    :href="route('deletarCompromisso', [compromisso.id])">
                                 Remover
                                 </Link>
 

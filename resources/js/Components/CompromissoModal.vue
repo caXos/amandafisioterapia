@@ -21,12 +21,12 @@ defineEmits(['fecharModal']);
                 <div>{{ new Date(compromisso.dia).toLocaleDateString() }}, {{ new Date(compromisso.dia).toLocaleString('pt-BR', {weekday: 'long'}) }} - {{ compromisso.hora.substring(0, 5) }}</div>
                 <div>{{segundaLinha}}</div>
             </div>
-            <div class="mt-2 mb-1">
+            <div class="mt-2 mb-1 grid grid-cols-2 items-center justify-center text-center">
                 <span
-                    class="mx-4 material-symbols-outlined text-color-inherit mx-1 cursor-pointer rounded-full ring-offset-2 hover:ring-2"
+                    class="mx-4 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
                     :title="`Confirmar`" @click="$emit('fecharmodal')">done</span>
                 <span
-                    class="mx-4 material-symbols-outlined text-color-inherit mx-1 cursor-pointer rounded-full ring-offset-2 hover:ring-2"
+                    class="mx-4 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
                     :title="`Cancelar`" @click="$emit('fecharModal')">cancel</span>
             </div>
         </div>

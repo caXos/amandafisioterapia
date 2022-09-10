@@ -143,40 +143,45 @@ function mascaraTelefone(evt) {
                                 <PlanoSelect id="plano" class="mt-1 block w-full" v-model="form.plano" :planos="planos"
                                     :selectedIndex="planos.id" required @change="habilitaDataInicio()" />
                             </div>
-                            <div class="mt-4">
-                                <BreezeLabel for="inicio" value="Data Início" />
-                                <BreezeInput id="inicio" type="date" class="mt-1 block w-full" v-model="form.inicio"
-                                    @change="calculaFim($event)" required disabled />
-                            </div>
-                            <div class="mt-4">
-                                <BreezeLabel for="fim" value="Data Fim" />
-                                <BreezeInput id="fim" type="date" class="mt-1 block w-full" v-model="form.fim"
-                                    disabled />
+                            <div class="lg:grid lg:grid-cols-2">
+                                <div class="mt-4 lg:pr-2">
+                                    <BreezeLabel for="inicio" value="Data Início" />
+                                    <BreezeInput id="inicio" type="date" class="mt-1 block w-full" v-model="form.inicio"
+                                        @change="calculaFim($event)" required disabled />
+                                </div>
+                                <div class="mt-4 lg:pl-2">
+                                    <BreezeLabel for="fim" value="Data Fim" />
+                                    <BreezeInput id="fim" type="date" class="mt-1 block w-full" v-model="form.fim"
+                                        disabled />
+                                </div>
                             </div>
                             <div class="mt-4">
                                 <BreezeLabel for="fisio" value="Fisioterapeuta" />
                                 <FisioSelect id="fisio" class="mt-1 block w-full" v-model="form.fisio" :fisios="fisios"
                                     :selectedIndex="fisio_id" required />
                             </div>
-                            <div>
+
+                            <div class="mt-4">
                                 <BreezeLabel for="observacao" value="Observação" />
                                 <BreezeInput id="observacao" type="text" class="mt-1 block w-full"
                                     v-model="form.observacao" placeholder="Alguma informação relevante" />
                             </div>
 
-                            <div class="mt-4">
-                                <BreezeLabel for="telefone" value="Telefone" />
-                                <!-- <BreezeInput id="telefone" class="mt-1 block w-full" type="text" v-model="form.telefone"
-                                    pattern="(99) 999-999-999" data-mask="(99) 999-999-999" placeholder='(99) 999-999-999' 
-                                    @change="mascaraTelefone($event)" required /> -->
-                                    <BreezeInput id="telefone" class="mt-1 block w-full" type="text" v-model="form.telefone"
-                                    placeholder='(99) 999-999-999' @change="mascaraTelefone($event)" required />
-                            </div>
+                            <div class="lg:grid lg:grid-cols-2">
+                                <div class="mt-4 lg:pr-2">
+                                    <BreezeLabel for="telefone" value="Telefone" />
+                                    <!-- <BreezeInput id="telefone" class="mt-1 block w-full" type="text" v-model="form.telefone"
+                                        pattern="(99) 999-999-999" data-mask="(99) 999-999-999" placeholder='(99) 999-999-999' 
+                                        @change="mascaraTelefone($event)" required /> -->
+                                        <BreezeInput id="telefone" class="mt-1 block w-full" type="text" v-model="form.telefone"
+                                        placeholder='(99) 999-999-999' @change="mascaraTelefone($event)" required />
+                                </div>
 
-                            <div class="mt-4">
-                                <BreezeLabel for="nascimento" value="Data Nascimento" />
-                                <BreezeInput id="nascimento" type="date" class="mt-1 block w-full" v-model="form.nascimento"
-                                    required />
+                                <div class="mt-4 lg:pl-2">
+                                    <BreezeLabel for="nascimento" value="Data Nascimento" />
+                                    <BreezeInput id="nascimento" type="date" class="mt-1 block w-full" v-model="form.nascimento"
+                                        required />
+                                </div>
                             </div>
 
                             <div class="flex items-center justify-end mt-4">

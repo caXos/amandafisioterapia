@@ -31,7 +31,6 @@ const modalAtendimentoConteudo = ref({
 });
 
 function abrirModalNotificarCompromissoTodo(compromisso) {
-    console.log(compromisso)
     if (compromisso.atendimentos.length === 1) {
         modalConteudo.value.titulo = 'Notificar paciente'
         modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja notificar o(a) paciente do seguinte compromisso?'

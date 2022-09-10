@@ -83,15 +83,17 @@ const submit = () => {
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <form @submit.prevent="submit">
-                            <div>
-                                <BreezeLabel for="dia" value="Data" />
-                                <BreezeInput id="dia" type="date" class="mt-1 block w-full" v-model="form.dia"
-                                    required />
-                            </div>
-                            <div class="mt-4">
-                                <BreezeLabel for="hora" value="Hora" />
-                                <BreezeInput id="hora" type="time" class="mt-1 block w-full" v-model="form.hora"
-                                    required />
+                            <div class="lg:grid lg:grid-cols-2">
+                                <div class="lg:pr-2">
+                                    <BreezeLabel for="dia" value="Data" />
+                                    <BreezeInput id="dia" type="date" class="mt-1 block w-full" v-model="form.dia"
+                                        required />
+                                </div>
+                                <div class="mt-4 lg:pl-2 lg:mt-0">
+                                    <BreezeLabel for="hora" value="Hora" />
+                                    <BreezeInput id="hora" type="time" class="mt-1 block w-full" v-model="form.hora"
+                                        required />
+                                </div>
                             </div>
                             <div class="mt-4">
                                 <BreezeLabel for="descricao" value="Descrição" />

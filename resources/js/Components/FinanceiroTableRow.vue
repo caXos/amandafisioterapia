@@ -17,8 +17,8 @@ function editarLancamento(id) {
 
 <template>
     <tr  :class="{
-        'bg-green-100 hover:bg-green-100 hover:text-green-900': lancamento.tipo === 1
-        ,'bg-red-100 hover:bg-red-100 hover:text-red-900': lancamento.tipo === 2
+        'bg-green-100 hover:bg-green-100 text-green-600': lancamento.tipo === 1
+        ,'bg-red-100 hover:bg-red-100 text-red-800': lancamento.tipo === 2
         }">
         <td>{{ lancamento.dia }}</td>
         <td>{{ lancamento.hora }}</td>
