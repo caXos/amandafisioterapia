@@ -72,7 +72,8 @@ onMounted(() => {
                                 <tr v-for="prontuario in prontuarios" :key="prontuario.id">
                                     <td>{{prontuario.dia}}</td>
                                     <td>{{prontuario.hora}}</td>
-                                    <td>{{prontuario.descricao.substring(0,150)}}...</td>
+                                    <!-- <td>{{prontuario.descricao.substring(0,150)}}...</td> -->
+                                    <td class="reticencias">{{prontuario.descricao}}</td>
                                     <td>
                                         <div class="grid grid-cols-2">
                                             <div>
@@ -96,3 +97,12 @@ onMounted(() => {
         </div>
     </BreezeAuthenticatedLayout>
 </template>
+
+<style scoped>
+    .reticencias {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+    }
+</style>

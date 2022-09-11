@@ -28,7 +28,7 @@ onMounted(function () {
         $('#hora').val('');
         $('#descricao').val('');
     } else {
-        console.log(props.prontuario);
+        // console.log(props.prontuario);
         $('#dia').val(props.prontuario.dia);
         $('#hora').val(props.prontuario.hora);
         $('#descricao').val(props.prontuario.descricao);
@@ -85,7 +85,7 @@ const submit = () => {
                         <form @submit.prevent="submit">
                             <div class="lg:grid lg:grid-cols-2">
                                 <div class="lg:pr-2">
-                                    <BreezeLabel for="dia" value="Data" />
+                                    <BreezeLabel for="dia" value="Dia" />
                                     <BreezeInput id="dia" type="date" class="mt-1 block w-full" v-model="form.dia"
                                         required />
                                 </div>

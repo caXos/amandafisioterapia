@@ -287,33 +287,40 @@ function trocaAtividade_bckp(evt) {
                                             v-model="form.fisios[index]" :fisios="fisios" required />
                                     </div>
 
-                                    <div class="mt-4">
-                                        <BreezeLabel :for="`quantidade-${index}`" value="Quantidade" />
-                                        <BreezeInput id="quantidade" type="number" step="1" min="1" max="99"
-                                            class="mt-1 block w-full" v-model="form.quantidade" required value="1" />
-                                    </div>
-
-                                    <div class="flex items-center justify-center mt-2 mb-1">
-                                        <span
-                                            class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                                            :title="`Notificar todos`"
-                                            @click="$emit('notificarCompromissoToda', compromisso)">notifications</span>
-                                        <span
-                                            class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                                            title="Marcar todos como completado"
-                                            @click="$emit('completarCompromissoToda',compromisso)">done_all</span>
-                                        <span
-                                            class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                                            :title="'Marcar todos com falta'"
-                                            @click="$emit('faltarCompromissoTodo', compromisso)">event_busy</span>
-                                        <span
-                                            class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                                            :title="'Deletar todos sem completar'"
-                                            @click="$emit('deletarCompromissoTodo', compromisso)">delete</span>
-                                        <span
-                                            class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                                            :title="'Agendar retorno para todos'"
-                                            @click="$emit('retornarCompromissoTodo', compromisso)">forward</span>
+                                    <!-- Receber o valor abaixo da seguinte forma:
+                                    com o id do plano, tem como saber o total de atendimentos do plano, 
+                                    quantos atendimentos ainda há, e a frequencia.
+                                    dividir a quantidade que ainda há pela frequencia, e sugerir o valor, arredondado pra baixo.
+                                    isso seria uma sugestão para dividir os atendimentos de forma igual -->
+                                    <div class="lg:grid lg:grid-cols-2">
+                                        <div class="mt-4">
+                                            <BreezeLabel :for="`quantidade-${index}`" value="Quantidade" />
+                                            <BreezeInput id="quantidade" type="number" step="1" min="1" max="99"
+                                                class="mt-1 block w-full" v-model="form.quantidade" required value="1" />
+                                        </div>
+                                    
+                                        <div class="flex items-center justify-center mt-2 mb-1">
+                                            <span
+                                                class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
+                                                :title="`Notificar todos`"
+                                                @click="$emit('notificarCompromissoToda', compromisso)">notifications</span>
+                                            <span
+                                                class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
+                                                title="Marcar todos como completado"
+                                                @click="$emit('completarCompromissoToda',compromisso)">done_all</span>
+                                            <span
+                                                class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
+                                                :title="'Marcar todos com falta'"
+                                                @click="$emit('faltarCompromissoTodo', compromisso)">event_busy</span>
+                                            <span
+                                                class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
+                                                :title="'Deletar todos sem completar'"
+                                                @click="$emit('deletarCompromissoTodo', compromisso)">delete</span>
+                                            <span
+                                                class="inline-flex items-center mx-4 my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
+                                                :title="'Agendar retorno para todos'"
+                                                @click="$emit('retornarCompromissoTodo', compromisso)">forward</span>
+                                        </div>
                                     </div>
                                 </template>
                             </Fieldset>
