@@ -21,7 +21,8 @@ const props = defineProps({
     status: String,
 
     compromisso: Object,
-    outrosCompromissos: Object
+    outrosCompromissos: Object,
+    planos_pacientes: Object
 });
 
 const form = useForm({
@@ -32,6 +33,7 @@ const form = useForm({
     aparelhos: Array,
     fisios: Array,
     vagas: Number,
+    quantidade: Number,
 
     compromisso_id: Number
 });
@@ -98,7 +100,7 @@ onMounted(function () {
     } else {
         vagas.value = props.compromisso.vagas
         let diaDeHoje = new Date().toISOString().substring(0, 10)
-        $('#dia').val(props.compromisso.dia).prop('min', diaDeHoje)
+        $('#dia').val(props.compromisso.dia)//.prop('min', diaDeHoje)
         $('#hora').val(props.compromisso.hora.substring(0, 5))
         $('#vagas').val(props.compromisso.vagas)
         form.compromisso_id = props.compromisso.id
@@ -188,6 +190,11 @@ function buscaCompromisso() {
         }
     }
 }
+
+function verificaAtividadePaciente(event) {
+    $('#atividade-'+event.target.id.substring(9)).val(props.planos_pacientes[parseInt(event.target.value)].atividades)
+}
+
 </script>
 
 <script>
@@ -254,7 +261,8 @@ function trocaAtividade_bckp(evt) {
                                     <div class="-mt-4">
                                         <BreezeLabel :for="`paciente-${index}`" value="Paciente" />
                                         <PacienteSelect :id="`paciente-${index}`" class="mt-1 block w-full"
-                                            v-model="form.pacientes[index]" :pacientes="pacientes" required />
+                                            v-model="form.pacientes[index]" :pacientes="pacientes" required 
+                                            @change="verificaAtividadePaciente($event)" />
                                     </div>
 
                                     <div class="mt-4">
@@ -277,6 +285,12 @@ function trocaAtividade_bckp(evt) {
                                         <BreezeLabel :for="`fisio-${index}`" value="Fisioterapeuta" />
                                         <FisioSelect :id="`fisio-${index}`" class="mt-1 block w-full"
                                             v-model="form.fisios[index]" :fisios="fisios" required />
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <BreezeLabel :for="`quantidade-${index}`" value="Quantidade" />
+                                        <BreezeInput id="quantidade" type="number" step="1" min="1" max="99"
+                                            class="mt-1 block w-full" v-model="form.quantidade" required value="1" />
                                     </div>
 
                                     <div class="flex items-center justify-center mt-2 mb-1">

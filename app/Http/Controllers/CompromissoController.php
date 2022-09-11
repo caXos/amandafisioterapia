@@ -12,6 +12,7 @@ use App\Models\Atividade;
 use App\Models\Aparelho;
 use App\Models\Atendimento;
 use App\Models\User;
+use App\Models\PlanoPaciente;
 
 class CompromissoController extends Controller
 {
@@ -76,12 +77,19 @@ class CompromissoController extends Controller
         foreach($outrosCompromissos as $compromisso) {
             $compromisso->atendimentos = $compromisso->atendimentosValidos;
         }
+        $planos_pacientes = PlanoPaciente::all();
+        foreach($planos_pacientes as $plano_paciente) {
+            // $plano_paciente->atividades;
+            if ($plano_paciente-> id <= 25) $plano_paciente->atividades = 1;
+            else $plano_paciente->atividades = 2;
+        }
         return Inertia::render('Agenda/CompromissoForm', [
             'pacientes' => $pacientes, 
             'atividades' => $atividades, 
             'aparelhos' => $aparelhos, 
             'fisios' => $fisios,
-            'outrosCompromissos' => $outrosCompromissos
+            'outrosCompromissos' => $outrosCompromissos,
+            'planos_pacientes' => $planos_pacientes,
         ]);
     }
 
@@ -133,7 +141,7 @@ class CompromissoController extends Controller
     {
         $request = "teste";
         dd($request);
-        return $compromisso = Compromisso::where('dia', $request->dia)->where('hora', $request->hora)->get();
+        //return $compromisso = Compromisso::where('dia', $request->dia)->where('hora', $request->hora)->get();
     }
     /**
      * Show the form for editing the specified resource.
@@ -180,7 +188,7 @@ class CompromissoController extends Controller
         foreach($atendimentos as $atendimento) {
             $atendimento->cumprido = true;
             $atendimento->ativo = true;
-            $atendimento->updated_at = date('Y-m-d H:i:s');
+            // $atendimento->updated_at = date('Y-m-d H:i:s');
             $atendimento->save();
         }
         /**
@@ -198,6 +206,8 @@ class CompromissoController extends Controller
             ]);
             $novoAtendimento->save();
         }
+        $compromisso->dia = $request->dia;
+        $compromisso->hora = $request->hora;
         $compromisso->vagas = $request->vagas;
         $compromisso->save();
         return redirect()->route("agenda",)->with('status','Compromisso alterado');
@@ -229,11 +239,11 @@ class CompromissoController extends Controller
         foreach($atendimentos as $atendimento) {
             $atendimento->cumprido = true;
             $atendimento->ativo = false;
-            $atendimento->updated_at = date('Y-m-d H:i:s');
+            // $atendimento->updated_at = date('Y-m-d H:i:s');
             $atendimento->save();
         }
         $compromisso->ativo = false;
-        $compromisso->updated_at = date('Y-m-d H:i:s');
+        // $compromisso->updated_at = date('Y-m-d H:i:s');
         $compromisso->save();
         // return response(['status','Compromisso e '.sizeof($atendimentos).' completados!']);
         return redirect()->route("agenda",)->with('status','Compromisso e '.sizeof($atendimentos).' completados!');
@@ -254,7 +264,7 @@ class CompromissoController extends Controller
         foreach($atendimentos as $atendimento) {
             $atendimento->cumprido = true;
             $atendimento->ativo = true;
-            $atendimento->updated_at = date('Y-m-d H:i:s');
+            // $atendimento->updated_at = date('Y-m-d H:i:s');
             $atendimento->save();
         }
         // return response(['status','Compromisso deletado']);
