@@ -73,7 +73,7 @@ let formatBrazilianReal = Intl.NumberFormat('pt-BR');
                                     <td>{{ plano.tempo }}</td>
                                     <td>{{ plano.frequencia }}</td>
                                     <td>{{ plano.ferias }}</td>
-                                    <td>{{ formatBrazilianReal.format(parseFloat(plano.valorTotal)) }}</td>
+                                    <td class="grid grid-cols-2"><span class="text-left">R$ </span><span class="text-right">{{ formatBrazilianReal.format(parseFloat(plano.valorTotal)) }},00</span></td>
                                 </tr>
                             </tbody>
                         </table>

@@ -73,7 +73,7 @@ class PacienteController extends Controller
      */
     public function store(StorePacienteRequest $request)
     {
-        // dd($request->nome, $request->plano);
+        dd($request);
         $this->authorize('create', Paciente::class);
         $paciente = new Paciente([
             'nome' => $request->nome,

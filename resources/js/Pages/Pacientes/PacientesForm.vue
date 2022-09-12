@@ -6,9 +6,9 @@ import BreezeLabel from '@/Components/Label.vue';
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
 import { Head, useForm, Link } from '@inertiajs/inertia-vue3';
 import { onMounted, computed, ref } from 'vue';
-import axios from 'axios';
 import FisioSelect from '@/Components/FisioSelect.vue';
 import PlanoSelect from '@/Components/PlanoSelect.vue';
+import Fieldset from '@/Components/Fieldset.vue';
 
 const props = defineProps({
     status: String,
@@ -26,7 +26,8 @@ const form = useForm({
     fisio: Number,
     observacao: String,
     telefone: String,
-    nascimento: Date
+    nascimento: Date,
+    horarios: String
 });
 
 onMounted(function () {
@@ -51,8 +52,20 @@ onMounted(function () {
     }
 });
 const submit = () => {
+    form.nome = $('#nome').val();
+    form.plano = parseInt($('#plano').val());
+    form.inicio = $('#inicio').val();
+    form.fim = $('#fim').val();
+    form.fisio = $('#fisio').val();
+    form.observacao = $('#observacao').val();
+    form.telefone = $('#telefone').val();
+    form.nascimento = $('#nascimento').val();
+    let horariosArray = []
+    for (let i=0; i<5; i++) {
+        horariosArray.push($('#horarios-'+i).val())
+    }
+    form.horarios = horariosArray;
     if (props.paciente == null || props.paciente == undefined || props.paciente == '' || props.paciente.length == 0) {
-        form.fim = $('#fim').val();
         form.post(route('gravarPaciente'), {
             onFinish: () => {
                 $('#plano').val('0')
@@ -61,14 +74,6 @@ const submit = () => {
             }
         });
     } else {
-        form.nome = $('#nome').val();
-        form.plano = parseInt($('#plano').val());
-        form.inicio = $('#inicio').val();
-        form.fim = $('#fim').val();
-        form.fisio = $('#fisio').val();
-        form.observacao = $('#observacao').val();
-        form.telefone = $('#telefone').val();
-        form.nascimento = $('#nascimento').val();
         form.post(route('editarPaciente', [props.paciente.id]), {
             onFinish: () => {
                 $('#plano').val('0')
@@ -83,30 +88,18 @@ const submit = () => {
 
 <script>
 function habilitaDataInicio() {
-    console.log('habilita data de inicio')
     $('#inicio').removeAttr('disabled');
+    $('#atendimentos_totais').val($('#plano>option:selected').attr('qtdAtendimentos'))
+    $('#atendimentos_para_criar').prop('max', $('#plano>option:selected').attr('qtdAtendimentos')).val($('#plano>option:selected').attr('qtdAtendimentos'))
 }
 function calculaFim(evt) {
     $('#fim').removeAttr('disabled');
     var tempoPhp = $('#plano>option:selected').attr('tempoPHP');
     var dataInicio = $('#inicio').val();
     var dataFim = null;
-    if (tempoPhp === '+1 Month') {
-        dataFim = new Date(dataInicio).setMonth(new Date(dataInicio).getMonth()+1);
-        dataFim = new Date(dataFim).toISOString();
-        $('#fim').val(dataFim.substring(0,10));
-    }
-    else if (tempoPhp === '+4 Months') {
-        dataFim = new Date(dataInicio).setMonth(new Date(dataInicio).getMonth()+4);
-        dataFim = new Date(dataFim).toISOString();
-        $('#fim').val(dataFim.substring(0,10));
-    }
-    // else if (tempoPhp === '+6 Months 15 Days') {
-    //     dataFim = new Date(dataInicio).setMonth(new Date(dataInicio).getMonth()+6);
-    //     dataFim = new Date(dataFim).setDate(new Date(dataInicio).getDate()+15);
-    //     dataFim = new Date(dataFim).toISOString();
-    //     $('#fim').val(dataFim.substring(0,10));
-    // }
+    dataFim = new Date(dataInicio).setMonth( new Date(dataInicio).getMonth() + (tempoPhp/30) )
+    dataFim = new Date(dataFim).toISOString()
+    $('#fim').val(dataFim.substring(0,10))
 }
 function mascaraTelefone(evt) {
     // console.log('mascaraTelefone', evt);
@@ -138,28 +131,6 @@ function mascaraTelefone(evt) {
                                 <BreezeInput id="nome" type="text" class="mt-1 block w-full" v-model="form.nome"
                                     placeholder="Nome completo do paciente" required autofocus />
                             </div>
-                            <div class="mt-4">
-                                <BreezeLabel for="plano" value="Plano" />
-                                <PlanoSelect id="plano" class="mt-1 block w-full" v-model="form.plano" :planos="planos"
-                                    :selectedIndex="planos.id" required @change="habilitaDataInicio()" />
-                            </div>
-                            <div class="lg:grid lg:grid-cols-2">
-                                <div class="mt-4 lg:pr-2">
-                                    <BreezeLabel for="inicio" value="Data Início" />
-                                    <BreezeInput id="inicio" type="date" class="mt-1 block w-full" v-model="form.inicio"
-                                        @change="calculaFim($event)" required disabled />
-                                </div>
-                                <div class="mt-4 lg:pl-2">
-                                    <BreezeLabel for="fim" value="Data Fim" />
-                                    <BreezeInput id="fim" type="date" class="mt-1 block w-full" v-model="form.fim"
-                                        disabled />
-                                </div>
-                            </div>
-                            <div class="mt-4">
-                                <BreezeLabel for="fisio" value="Fisioterapeuta" />
-                                <FisioSelect id="fisio" class="mt-1 block w-full" v-model="form.fisio" :fisios="fisios"
-                                    :selectedIndex="fisio_id" required />
-                            </div>
 
                             <div class="mt-4">
                                 <BreezeLabel for="observacao" value="Observação" />
@@ -183,7 +154,72 @@ function mascaraTelefone(evt) {
                                         required />
                                 </div>
                             </div>
+                            <div class="lg:grid lg:grid-cols-2">
+                                <div class="mt-4 lg:pr-2">
+                                    <BreezeLabel for="plano" value="Plano" />
+                                    <PlanoSelect id="plano" class="mt-1 block w-full" v-model="form.plano" :planos="planos"
+                                        :selectedIndex="planos.id" required @change="habilitaDataInicio()" />
+                                </div>
+                                <div class="mt-4 lg:pl-2">
+                                    <BreezeLabel for="fisio" value="Fisioterapeuta" />
+                                    <FisioSelect id="fisio" class="mt-1 block w-full" v-model="form.fisio" :fisios="fisios"
+                                        :selectedIndex="fisio_id" required />
+                                </div>
+                            </div>
+                            <div class="lg:grid lg:grid-cols-2">
+                                <div class="mt-4 lg:pr-2">
+                                    <BreezeLabel for="inicio" value="Data Início" />
+                                    <BreezeInput id="inicio" type="date" class="mt-1 block w-full" v-model="form.inicio"
+                                        @change="calculaFim($event)" required disabled />
+                                </div>
+                                <div class="mt-4 lg:pl-2">
+                                    <BreezeLabel for="fim" value="Data Fim" />
+                                    <BreezeInput id="fim" type="date" class="mt-1 block w-full" v-model="form.fim"
+                                        disabled />
+                                </div>
+                            </div>
 
+                            <div class="lg:grid lg:grid-cols-2">
+                                <div class="mt-4 lg:pr-2">
+                                    <BreezeLabel for="atendimentos_totais" value="Quantidade de atendimentos do plano" />
+                                        <BreezeInput id="atendimentos_totais" type="number" class="mt-1 block w-full" disabled />
+                                </div>
+                                <div class="mt-4 lg:pl-2">
+                                    <BreezeLabel for="atendimentos_para_criar" value="Quantidade de atendimentos para gerar" />
+                                        <BreezeInput id="atendimentos_para_criar" type="number" step="1" min="0" class="mt-1 block w-full" v-model="form.inicio" required />
+                                </div>
+                            </div>
+
+                            <Fieldset>
+                                <template #rotulo>
+                                    Dias e Horários
+                                </template>
+                                <template #conteudo :class="'mt-0'">
+                                    <div class="lg:grid lg:grid-cols-5">
+                                        <div class="lg:mt-0 lg:pr-2">
+                                            <BreezeLabel for="horarios-0" value="Segunda-feira" />
+                                            <BreezeInput id="horarios-0" type="time" class="block w-full" v-model="form.horarios[0]" />
+                                        </div>
+                                        <div class="lg:mt-0 lg:px-2">
+                                            <BreezeLabel for="horarios-1" value="Terça-feira" />
+                                            <BreezeInput id="horarios-1" type="time" class="block w-full" v-model="form.horarios[1]" />
+                                        </div>
+                                        <div class="lg:mt-0 lg:px-2">
+                                            <BreezeLabel for="horarios-2" value="Quarta-feira" />
+                                            <BreezeInput id="horarios-2" type="time" class="block w-full" v-model="form.horarios[2]" />
+                                        </div>
+                                        <div class="lg:mt-0 lg:px-2">
+                                            <BreezeLabel for="horarios-3" value="Quinta-feira" />
+                                            <BreezeInput id="horarios-3" type="time" class="block w-full" v-model="form.horarios[3]" />
+                                        </div>
+                                        <div class="lg:mt-0 lg:pl-2">
+                                            <BreezeLabel for="horarios-4" value="Sexta-feira" />
+                                            <BreezeInput id="horarios-4" type="time" class="block w-full" v-model="form.horarios[4]" />
+                                        </div>
+                                    </div>
+                                </template>
+                            </Fieldset>
+                            
                             <div class="flex items-center justify-end mt-4">
                                 <Link class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:shadow-outline-slate transition ease-in-out duration-150" :href="route('pacientes')">
                                     Voltar
