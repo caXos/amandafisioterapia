@@ -6,6 +6,7 @@ use App\Models\Paciente;
 use App\Models\User;
 use App\Models\Plano;
 use App\Models\PlanoPaciente;
+use App\Models\Atendimento;
 use App\Http\Requests\StorePacienteRequest;
 use App\Http\Requests\UpdatePacienteRequest;
 use Inertia\Inertia;
@@ -35,10 +36,19 @@ class PacienteController extends Controller
             $plano = Plano::find($planoPaciente[0]->plano_id);
             // dd($plano);
             $paciente->plano_nome = $plano->nome;
+            $paciente->atendimentos_total = $plano->atendimentos; //Total de Atendimentos que o plano dá direito
+            $atendimentos_agendados = sizeof(Atendimento::where('paciente_id', $paciente->id)->where('ativo', true)->where('cumprido',false)->get());
+            $paciente->atendimentos_agendados = $atendimentos_agendados; //Quantidade de atendimentos agendados
+            $atendimentos_cumpridos = sizeof(Atendimento::where('paciente_id', $paciente->id)->where('ativo', false)->where('cumprido',true)->get());
+            $paciente->atendimentos_cumpridos = $atendimentos_cumpridos; //Quantidade de atendimentos cumpridos
+            $atendimentos_faltados = sizeof(Atendimento::where('paciente_id', $paciente->id)->where('ativo', false)->where('cumprido',false)->get());
+            $paciente->atendimentos_faltados = $atendimentos_faltados; //Quantidade de atendimentos faltados
             $paciente->plano_inicio = $planoPaciente[0]->inicio;
             $paciente->plano_fim = $planoPaciente[0]->fim;
             $paciente->atendimentos = $plano->atendimentos; //Calcular melhor isso aqui: mostrar total de atendimentos, quantos estao agendados, quantos foram cumpridos e faltados, quantos ainda faltam
         }
+        /**pegar o total de atendimentos do plano */
+
         return Inertia::render('Pacientes/Pacientes',['pacientes' => $pacientes]);
     }
 

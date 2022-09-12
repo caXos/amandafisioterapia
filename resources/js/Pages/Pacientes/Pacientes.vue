@@ -90,7 +90,7 @@ onMounted(() => {
                                     <td>{{paciente.plano_nome}}</td>
                                     <td><span class="hidden">{{paciente.plano_inicio}}</span>{{ new Date(new Date(paciente.plano_inicio).setDate(new Date(paciente.plano_inicio).getDate()+1)).toLocaleDateString() }}</td>
                                     <td><span class="hidden">{{paciente.plano_fim}}</span>{{ new Date(new Date(paciente.plano_fim).setDate(new Date(paciente.plano_fim).getDate()+1)).toLocaleDateString() }}</td>
-                                    <td title="Realizados: r% - Presenças: p% - Faltas: f%">{{paciente.atendimentos}}/{{paciente.atendimentos}}/{{paciente.atendimentos}}/{{paciente.atendimentos}}/{{paciente.atendimentos}}</td>
+                                    <td :title="`Presenças: ${paciente.atendimentos_cumpridos/paciente.atendimentos * 100}% - Faltas: ${paciente.atendimentos_faltados/paciente.atendimentos * 100}%`">{{paciente.atendimentos}}/{{paciente.atendimentos_agendados}}/{{paciente.atendimentos_cumpridos}}/{{paciente.atendimentos_faltados}}/{{ (paciente.atendimentos - (paciente.atendimentos_agendados+paciente.atendimentos_cumpridos+paciente.atendimentos_faltados) ) }}</td>
                                     <td>{{paciente.fisio_nome.split(" ")[0]}}</td>
                                     <td>{{paciente.observacao}}</td>
                                     <td>{{paciente.telefone}}</td>
