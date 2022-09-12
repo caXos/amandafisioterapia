@@ -192,7 +192,10 @@ function buscaCompromisso() {
 }
 
 function verificaAtividadePaciente(event) {
-    $('#atividade-'+event.target.id.substring(9)).val(props.planos_pacientes[parseInt(event.target.value)].atividades)
+    let indice = event.target.id.substring(9)
+    $('#atividade-'+indice).val(props.planos_pacientes[parseInt(event.target.value)].atividades)
+    habilitaAparelhos[indice] = props.atividades[indice].usesAparatus;
+    habilitaAparelhos[indice] === true ? $('#aparelho-' + indice).prop('required', 'required').prop('disabled', '') : $('#aparelho-' + indice).prop('disabled', 'disabled').removeProp('required').val(1)
 }
 
 </script>
