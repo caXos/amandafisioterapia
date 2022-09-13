@@ -123,7 +123,7 @@ class CompromissoController extends Controller
             ]);
             $novoAtendimento->save();
         }
-        return redirect()->route("agenda",)->with('status','Compromisso criado');
+        return redirect()->route("agenda",['status'=>'Compromisso criado']);
     }
 
     /**
@@ -210,7 +210,7 @@ class CompromissoController extends Controller
         $compromisso->hora = $request->hora;
         $compromisso->vagas = $request->vagas;
         $compromisso->save();
-        return redirect()->route("agenda",)->with('status','Compromisso alterado');
+        return redirect()->route("agenda",['status'=>'Compromisso alterado']);
     }
 
     // public function update(UpdateCompromissoRequest $request, Compromisso $compromisso)
@@ -246,7 +246,7 @@ class CompromissoController extends Controller
         // $compromisso->updated_at = date('Y-m-d H:i:s');
         $compromisso->save();
         // return response(['status','Compromisso e '.sizeof($atendimentos).' completados!']);
-        return redirect()->route("agenda",)->with('status','Compromisso e '.sizeof($atendimentos).' completados!');
+        return redirect()->route("agenda",['status'=>'Compromisso e '.sizeof($atendimentos).' completados!']);
     }
 
     /**
@@ -268,7 +268,7 @@ class CompromissoController extends Controller
             $atendimento->save();
         }
         // return response(['status','Compromisso deletado']);
-        return redirect()->route("agenda",)->with('status','Compromisso deletado');
+        return redirect()->route("agenda",['status'=>'Compromisso deletado']);
     }
 
     /**
@@ -280,6 +280,25 @@ class CompromissoController extends Controller
     public function destroy(Compromisso $compromisso)
     {
         //
+    }
+
+    /**
+     * Notifica os pacientes de todos os atendimentos do compromisso.
+     * @param  \App\Models\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function notificarCompromisso(Request $request)
+    {
+        $compromisso = Compromisso::find($request->id);
+        $pacientesNotificados = '';
+        foreach($compromisso->atendimentos as $atendimento) {
+            $paciente = Paciente::find($atendimento->paciente_id);
+            $pacientesNotificados .= $paciente->nome;
+            $pacientesNotificados .= ', ';
+        }
+        $pacientesNotificados .= 'foram notificados';
+        dd($pacientesNotificados);
+        return redirect()->route('agenda', ['status'=>'Pacientes notificados']);
     }
 }
 

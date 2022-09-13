@@ -69,11 +69,16 @@ let formatBrazilianReal = Intl.NumberFormat('pt-BR');
                     <div class="p-6 bg-white border-b border-gray-200">
                         <div>
                                 <BreezeLabel for="subtotal" value="Subtotal" />
-                                <BreezeInput id="subtotal" type="text" :class="{
+                                <!-- <BreezeInput id="subtotal" type="text" :class="{
                                     'mt-1 block w-full text-center bg-green-100 text-green-900 border-green-600 mb-2': resultado > 0
                                     ,'mt-1 block w-full text-center bg-amber-100 text-amber-900 border-amber-600 mb-2': resultado === 0
                                     ,'mt-1 block w-full text-center bg-red-100 text-red-900 border-red-600 mb-2': resultado < 0
-                                    }" disabled :value="`R$ ${formatBrazilianReal.format(resultado)}`" />
+                                    }" disabled :value="`R$ ${formatBrazilianReal.format(resultado)}`" /> -->
+                                <BreezeInput id="subtotal" type="text" :class="{
+                                    'mt-1 block w-full text-center bg-green-100 text-green-900 border-green-600 mb-2': parseFloat(resultado) > 0
+                                    ,'mt-1 block w-full text-center bg-amber-100 text-amber-900 border-amber-600 mb-2': parseFloat(resultado) === 0
+                                    ,'mt-1 block w-full text-center bg-red-100 text-red-900 border-red-600 mb-2': parseFloat(resultado) < 0
+                                    }" disabled :value="`R$ ${resultado}`" />
                             </div>
                         <FAB model="Lançamento" rota="adicionarFinanceiro"></FAB>
                         <table id="tabela-financeiro" class="text-sky-800">

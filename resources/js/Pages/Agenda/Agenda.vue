@@ -21,7 +21,8 @@ const modalConteudo = ref({
     'titulo': null,
     'primeiraLinha': null,
     'segundaLinha': null,
-    'compromisso': null
+    'compromisso': null,
+    'rota': null
 });
 
 const modalAtendimentoConteudo = ref({
@@ -31,6 +32,7 @@ const modalAtendimentoConteudo = ref({
 });
 
 function abrirModalNotificarCompromissoTodo(compromisso) {
+    console.log(compromisso)
     if (compromisso.atendimentos.length === 1) {
         modalConteudo.value.titulo = 'Notificar paciente'
         modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja notificar o(a) paciente do seguinte compromisso?'
@@ -41,6 +43,7 @@ function abrirModalNotificarCompromissoTodo(compromisso) {
         modalConteudo.value.segundaLinha = 'Serão notificados(as) ' + compromisso.atendimentos.length + ' pacientes.'
     }
     modalConteudo.value.compromisso = compromisso
+    modalConteudo.value.rota = 'notificarCompromisso/'+compromisso.id
     modal.value = true
 }
 
@@ -130,7 +133,7 @@ function fecharModalAtendimento() {
             <p class="font-semibold text-sky-800 leading-tight">
                 Agenda
             </p>
-            <div v-if="localStatus != undefined" class="mb-4 font-medium text-sm text-green-600">
+            <div v-if="localStatus != undefined" class="my-2 font-medium text-sm text-green-600 text-center">
                 {{ localStatus }}
             </div>
         </template>
@@ -156,6 +159,7 @@ function fecharModalAtendimento() {
                             :compromisso="modalConteudo.compromisso"
                             :primeiraLinha="modalConteudo.primeiraLinha"
                             :segundaLinha="modalConteudo.segundaLinha"
+                            :rota="modalConteudo.rota"
                             />
                         <AtendimentoModal v-if="modalAtendimento == true"
                             :atendimento="modalAtendimentoConteudo.atendimento"

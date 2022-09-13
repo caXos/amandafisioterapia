@@ -69,6 +69,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::post('atualizarCompromisso',[CompromissoController::class, 'update'])->name('atualizarCompromisso');
     Route::post('completarCompromisso/{id}',[CompromissoController::class, 'completarCompromisso'])->name('completarCompromisso');
     Route::get('deletarCompromisso/{id}',[CompromissoController::class, 'deletarCompromisso'])->name('deletarCompromisso');
+    Route::get('notificarCompromisso/{id}',[CompromissoController::class, 'notificarCompromisso'])->name('deletarCompromisso');
 
     Route::get('adicionarFinanceiro',[FinanceiroController::class, 'create'])->name('adicionarFinanceiro');
     Route::post('adicionarFinanceiro',[FinanceiroController::class, 'store'])->name('gravarFinanceiro');

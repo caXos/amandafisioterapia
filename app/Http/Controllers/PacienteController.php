@@ -93,7 +93,7 @@ class PacienteController extends Controller
             'ativo' => true
         ]);
         $planoPaciente->save();
-        return redirect()->route("pacientes",)->with('status','Paciente criado');
+        return redirect()->route("pacientes",['status'=>'Paciente criado']);
     }
 
     /**
@@ -161,7 +161,7 @@ class PacienteController extends Controller
         $planoPaciente[0]->ativo = true;
         // dd($planoPaciente);
         $planoPaciente[0]->save();
-        return redirect()->route("pacientes",)->with('status','Paciente alterado');
+        return redirect()->route("pacientes",['status'=>'Cadastro de Paciente alterado']);
     }
 
     public function deletarPaciente(UpdatePacienteRequest $request)
@@ -177,7 +177,7 @@ class PacienteController extends Controller
         $planoPaciente[0]->ativo = false;
         // dd($planoPaciente);
         $planoPaciente[0]->save();
-        return redirect()->route("pacientes",)->with('status','Paciente alterado');
+        return redirect()->route("pacientes",['status'=>'Cadastro de Paciente alterado']);
     }
 
     /**

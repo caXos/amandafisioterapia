@@ -24,6 +24,7 @@ class FinanceiroController extends Controller
             $lancamento->hora = substr($lancamento->hora,0,5);
             $lancamento->valor = number_format($lancamento->valor,2,',', '.');
         }
+        $resultado = number_format($resultado,2,',', '.');
         return Inertia::render('Financeiro/Financeiro',['lancamentos' => $lancamentos, 'resultado'=>$resultado]);
     }
 
@@ -61,7 +62,7 @@ class FinanceiroController extends Controller
             'valor' => $request->valor,
         ]);
         $financeiro->save();
-        return redirect()->route("financeiro",)->with('status','Lançamento criado');
+        return redirect()->route("financeiro",['status'=>'Lançamento criado']);
     }
 
     /**
@@ -109,7 +110,7 @@ class FinanceiroController extends Controller
         $financeiro->tipo = $request->tipo;
         $financeiro->valor = $request->valor;
         $financeiro->save();
-        return redirect()->route("financeiro",)->with('status','Lançamento editado');
+        return redirect()->route("financeiro",['status'=>'Lançamento alterado']);
     }
 
     public function deletarFinanceiro(UpdateFinanceiroRequest $request)
@@ -121,7 +122,7 @@ class FinanceiroController extends Controller
         $financeiro->save();
         // $financeiro->delete();
  
-        return redirect('financeiro')->with('success', 'Financeiro removido.'); 
+        return redirect()->route('financeiro',['status'=>'Lançamento removido']);
     }
 
     /**

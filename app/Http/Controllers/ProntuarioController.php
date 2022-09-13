@@ -54,7 +54,7 @@ class ProntuarioController extends Controller
         ]);
         // dd($prontuario);
         $prontuario->save();
-        return redirect()->route("prontuariosPaciente",[$request->paciente_id])->with('status','Prontuário criado');
+        return redirect()->route("prontuariosPaciente",[$request->paciente_id, 'status'=>'Prontuário criado']);
     }
 
     /**
@@ -98,7 +98,7 @@ class ProntuarioController extends Controller
         $prontuario->descricao = $request->descricao;
         $prontuario->paciente_id = $request->paciente_id;
         $prontuario->save();
-        return redirect()->route("prontuariosPaciente",[$request->paciente_id])->with('status','Prontuário editado');
+        return redirect()->route("prontuariosPaciente",[$request->paciente_id, 'status'=>'Prontuário editado']);
     }
 
     public function deletarProntuario(UpdateProntuarioRequest $request/*, Prontuario $prontuario*/)
@@ -108,7 +108,7 @@ class ProntuarioController extends Controller
         $prontuario = Prontuario::find($request->id);
         $prontuario->ativo = false;
         $prontuario->save();
-        return redirect()->route("prontuariosPaciente",[$request->paciente_id])->with('status','Prontuário deletado');
+        return redirect()->route("prontuariosPaciente",[$request->paciente_id, 'status'=>'Prontuário deletado']);
     }
 
     /**

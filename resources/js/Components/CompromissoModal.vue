@@ -1,9 +1,12 @@
 <script setup>
+import { Link } from '@inertiajs/inertia-vue3';
+
 const props = defineProps([
     'titulo',
     'primeiraLinha',
     'segundaLinha',
-    'compromisso'
+    'compromisso',
+    'rota'
 ]);
 
 defineEmits(['fecharModal']);
@@ -22,9 +25,11 @@ defineEmits(['fecharModal']);
                 <div>{{segundaLinha}}</div>
             </div>
             <div class="mt-2 mb-1 grid grid-cols-2 items-center justify-center text-center">
-                <span
-                    class="mx-4 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                    :title="`Confirmar`" @click="$emit('fecharmodal')">done</span>
+                <Link :href="rota">
+                    <span
+                        class="mx-4 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
+                        :title="`Confirmar`">done</span>
+                </Link>
                 <span
                     class="mx-4 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
                     :title="`Cancelar`" @click="$emit('fecharModal')">cancel</span>

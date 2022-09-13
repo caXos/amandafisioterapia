@@ -35,7 +35,7 @@ defineEmits(['fecharModalAtendimento']);
                         :title="`Notificar paciente`" @click="$emit('notificarAgendaToda', agenda)">notifications</span>
                 <!-- </Link> -->
                 <span class="my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
-                    title="Marcar como completado" @click="$emit('completarAgendaToda',agenda)">done_all</span>
+                    title="Marcar como completado" @click="$emit('completarAgendaToda',agenda)">done</span>
                 <span class="my-2 material-symbols-outlined text-color-inherit cursor-pointer rounded-full ring-offset-2 hover:ring-2"
                     :title="'Marcar com falta'"
                     @click="$emit('faltarAgendaToda', agenda)">event_busy</span>
