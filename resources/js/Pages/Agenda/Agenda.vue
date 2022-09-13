@@ -58,6 +58,7 @@ function abrirModalCompletarCompromissoTodo(compromisso) {
         modalConteudo.value.segundaLinha = 'Serão registrados como completado ' + compromisso.atendimentos.length + ' atendimentos.'
     }
     modalConteudo.value.compromisso = compromisso
+    modalConteudo.value.rota = 'completarCompromisso/'+compromisso.id
     modal.value = true
 }
 
@@ -72,6 +73,7 @@ function abrirModalFaltarCompromissoTodo(compromisso) {
         modalConteudo.value.segundaLinha = 'Serão registrados como falta ' + compromisso.atendimentos.length + ' atendimentos.'
     }
     modalConteudo.value.compromisso = compromisso
+    modalConteudo.value.rota = 'notificarCompromisso/'+compromisso.id //alterar para faltar compromisso
     modal.value = true
 }
 
@@ -86,6 +88,7 @@ function abrirModalDeletarCompromissoTodo(compromisso) {
         modalConteudo.value.segundaLinha = 'Serão desmarcados ' + compromisso.atendimentos.length + ' atendimentos.'
     }
     modalConteudo.value.compromisso = compromisso
+    modalConteudo.value.rota = 'deletarCompromisso/'+compromisso.id
     modal.value = true
 }
 
@@ -100,6 +103,7 @@ function abrirModalRetornarCompromissoTodo(compromisso) {
         modalConteudo.value.segundaLinha = 'Serão agendados retornos para ' + compromisso.atendimentos.length + ' atendimentos.'
     }
     modalConteudo.value.compromisso = compromisso
+    modalConteudo.value.rota = 'notificarCompromisso/'+compromisso.id //alterar para faltar compromisso
     modal.value = true
 }
 
@@ -131,7 +135,7 @@ function fecharModalAtendimento() {
     <BreezeAuthenticatedLayout>
         <template #header>
             <p class="font-semibold text-sky-800 leading-tight">
-                Agenda
+                Agenda <span v-if="teste != undefined">teste</span>
             </p>
             <div v-if="localStatus != undefined" class="my-2 font-medium text-sm text-green-600 text-center">
                 {{ localStatus }}

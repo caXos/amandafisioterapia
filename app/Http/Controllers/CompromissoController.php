@@ -14,6 +14,8 @@ use App\Models\Atendimento;
 use App\Models\User;
 use App\Models\PlanoPaciente;
 
+use Illuminate\Support\Facades\Route;
+
 class CompromissoController extends Controller
 {
     /**
@@ -297,8 +299,11 @@ class CompromissoController extends Controller
             $pacientesNotificados .= ', ';
         }
         $pacientesNotificados .= 'foram notificados';
-        dd($pacientesNotificados);
-        return redirect()->route('agenda', ['status'=>'Pacientes notificados']);
+        // dd($pacientesNotificados);
+        // return redirect()->route('agenda', ['teste'=>'Pacientes notificados']);
+        // return view('agenda', ['teste'=>'Pacientes notificados']);
+        // session()->flash('teste', 'Pacientes');
+        return redirect()->route('agenda')->with('status','Pacientes notificados');
     }
 }
 
