@@ -194,17 +194,21 @@ function buscaCompromisso() {
 function verificaAtividadePaciente(event) {
     let indice = event.target.id.substring(9)
     $('#atividade-'+indice).val(props.planos_pacientes[parseInt(event.target.value)].atividades)
-    habilitaAparelhos[indice] = props.atividades[indice].usesAparatus;
+    habilitaAparelhos[indice] = props.atividades[$('#atividade-'+indice).val()].usesAparatus;
     habilitaAparelhos[indice] === true ? $('#aparelho-' + indice).prop('required', 'required').prop('disabled', '') : $('#aparelho-' + indice).prop('disabled', 'disabled').removeProp('required').val(1)
 }
+
 
 </script>
 
 <script>
 function trocaAtividade(evt) { //TODO: melhorar esse método
+    // console.log(evt)
     let indice = evt.target.id.substring(10)
+    console.log(this.habilitaAparelhos)
+    console.log(this.habilitaAparelhos[indice])
     this.habilitaAparelhos[indice] = this.props.atividades[evt.target.selectedIndex - 1].usesAparatus;
-    this.habilitaAparelhos[indice] === true ? $('#aparelho-' + indice).prop('required', 'required').prop('disabled', '') : $('#aparelho-' + indice).prop('disabled', 'disabled').removeProp('required').val(1)
+    // this.habilitaAparelhos[indice] === true ? $('#aparelho-' + indice).prop('required', 'required').prop('disabled', '') : $('#aparelho-' + indice).prop('disabled', 'disabled').removeProp('required').val(1)
 }
 
 function trocaAtividade_bckp(evt) {
@@ -275,13 +279,12 @@ function trocaAtividade_bckp(evt) {
                                             @change="trocaAtividade($event)" required />
                                     </div>
 
-                                    <div :class="{
-                                            'mt-4': habilitaAparelhos[index] === true
-                                            , 'mt-4 text-gray-400': habilitaAparelhos[index] === false
-                                            }">
+                                    <div class="mt-4" :class="{'text-gray-400': habilitaAparelhos[index] !== true}">
                                         <BreezeLabel :for="`aparelho-${index}`" value="Aparelho" />
                                         <AparelhoSelect :id="`aparelho-${index}`" class="mt-1 block w-full"
-                                            v-model="form.aparelhos[index]" :aparelhos="aparelhos" disabled required />
+                                            v-model="form.aparelhos[index]" :aparelhos="aparelhos" 
+                                            :disabled="habilitaAparelhos[index] !== true" 
+                                            :required="habilitaAparelhos[index] === true" />
                                     </div>
 
                                     <div class="mt-4">
