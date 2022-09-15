@@ -72,10 +72,17 @@ const submit = () => {
     form.nascimento = $('#nascimento').val();
     let diasArray = []
     let horariosArray = []
-    for (let i = 0; i < frequencia.value-1; i++) {
-        diasArray.push($('#dias-' + i).val())
-        horariosArray.push($('#horarios-' + i).val())
+    if (frequencia.value-1 === 0) {
+        diasArray.push(new Date($('#inicio').val()).getDay()+1)
+        horariosArray.push($('#horarios-0').val()-1)
     }
+    else {
+        for (let i = 0; i < frequencia.value-1; i++) {
+            diasArray.push($('#dias-' + i).val())
+            horariosArray.push($('#horarios-' + i).val())
+        }
+    }
+
     form.dias = diasArray
     form.horarios = horariosArray;
 
@@ -233,7 +240,7 @@ function mascaraTelefone(evt) {
                                                 <BreezeLabel :for="`dias-${index-1}`" value="Dia" />
                                                 <select class="border-cyan-300 focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-opacity-50 rounded-md shadow-sm block w-full" :id="`dias-${index-1}`">
                                                     <option v-for="(diaDaSemana, index) in diasDaSemana" :key="index"
-                                                        :value="index">
+                                                        :value="index+1">
                                                         {{diaDaSemana}}
                                                     </option>
                                                 </select>

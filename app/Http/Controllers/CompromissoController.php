@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCompromissoRequest;
+use App\Http\Requests\StorePacienteRequest;
 use App\Http\Requests\UpdateCompromissoRequest;
 use App\Models\Compromisso;
 use Inertia\Inertia;
@@ -94,6 +95,48 @@ class CompromissoController extends Controller
             'planos_pacientes' => $planos_pacientes,
         ]);
     }
+
+    /**
+     * Cria os primeiros atendimentos, quando vem da tela de criacao de paciente
+     */
+    public static function criarCompromissos(StorePacienteRequest $request) 
+    {
+        
+        // dd($request);
+        $diaPrimeiroAtendimento = $request->inicio;
+        $diaPrimeiroAtendimento = strtotime($diaPrimeiroAtendimento);
+        $diaPrimeiroAtendimento = getDate($diaPrimeiroAtendimento);
+        $diasArray = [];
+        foreach($request->dias as $diaInt) {
+            array_push($diasArray, intval($diaInt));
+        }
+        $key = array_search($diaPrimeiroAtendimento['wday'], $diasArray);
+        dd($request->inicio.$request->horarios[$key]);
+        /*$plano = Plano::find($request->plano);
+        dump($plano);
+        
+        //Encontra qual dia da semana eh o dia do inicio do plano
+        $dataInicio = $request->inicio." ".$request->horarios[0];
+        $dataInicio = strtotime($dataInicio);
+        $dataArray = getDate($dataInicio);
+        dump($dataInicio);
+        dump($dataArray); //domingo = 0, segunda = 1, terca = 2, sabado = 6
+        $key = array_search($dataArray['wday'], $request->dias, true);
+        dump($dataArray['wday']);
+        dump($request->dias);
+        $diasArray = [];
+        foreach($request->dias as $diaInt) {
+            array_push($diasArray, intval($diaInt));
+        }
+        $key = array_search($dataArray['wday'], $diasArray);
+        dd($key);
+        $compromisso
+        for ($i=0; $i<$plano->atendimentos; $i++) {
+        }
+        */
+    }
+
+
 
     /**
      * Store a newly created resource in storage.
