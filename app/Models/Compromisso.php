@@ -18,6 +18,7 @@ class Compromisso extends Model
         'dia',
         'hora',
         'vagas',
+        'vagas_preenchidas',
         'ativo'
     ];
 

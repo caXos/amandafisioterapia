@@ -61,6 +61,11 @@ class PacienteController extends Controller
     {
         // dd('create paciente');
         $planos = Plano::orderBy('id')->where('ativo', true)->get();
+        foreach($planos as $plano) {
+            $plano->atividade = explode(" ",$plano->nome,1);
+            if($plano->atividade == "Pilates") $plano->atividade = 1;
+            else $plano->atividade = 2;
+        }
         $fisios = User::orderBy('name')->where('ativo', true)->get();//TODO traduzir para nome
         return Inertia::render('Pacientes/PacientesForm',['planos'=>$planos, 'fisios'=>$fisios]);
     }
@@ -125,6 +130,21 @@ class PacienteController extends Controller
         $fisios = User::orderBy('name')->where('ativo', true)->get();//TODO traduzir para nome
         $planoPaciente = PlanoPaciente::where('paciente_id',  $paciente->id)->where('plano_id',$paciente->plano_id)->where('ativo', true)->limit(1)->get();
         // dd($planoPaciente);
+
+        $planoPaciente = PlanoPaciente::where('plano_id', $paciente->plano_id)->limit(1)->get();
+        $plano = Plano::find($paciente->plano_id);
+        $paciente->plano_nome = $plano->nome;
+        $paciente->atendimentos_total = $plano->atendimentos; //Total de Atendimentos que o plano dá direito
+        $atendimentos_agendados = sizeof(Atendimento::where('paciente_id', $paciente->id)->where('ativo', true)->where('cumprido',false)->get());
+        $paciente->atendimentos_agendados = $atendimentos_agendados; //Quantidade de atendimentos agendados
+        $atendimentos_cumpridos = sizeof(Atendimento::where('paciente_id', $paciente->id)->where('ativo', false)->where('cumprido',true)->get());
+        $paciente->atendimentos_cumpridos = $atendimentos_cumpridos; //Quantidade de atendimentos cumpridos
+        $atendimentos_faltados = sizeof(Atendimento::where('paciente_id', $paciente->id)->where('ativo', false)->where('cumprido',false)->get());
+        $paciente->atendimentos_faltados = $atendimentos_faltados; //Quantidade de atendimentos faltados
+        $paciente->plano_inicio = $planoPaciente[0]->inicio;
+        $paciente->plano_fim = $planoPaciente[0]->fim;
+        $paciente->atendimentos = $plano->atendimentos;
+
         return Inertia::render('Pacientes/PacientesForm',['paciente'=>$paciente, 'planos'=>$planos, 'fisios'=>$fisios, 'plano'=>$planoPaciente[0]]);
     }
     /**

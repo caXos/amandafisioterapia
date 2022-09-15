@@ -14,6 +14,7 @@ use App\Models\Aparelho;
 use App\Models\Atendimento;
 use App\Models\User;
 use App\Models\PlanoPaciente;
+use App\Models\Plano;
 
 use Illuminate\Support\Facades\Route;
 
@@ -111,29 +112,13 @@ class CompromissoController extends Controller
             array_push($diasArray, intval($diaInt));
         }
         $key = array_search($diaPrimeiroAtendimento['wday'], $diasArray);
-        dd($request->inicio.$request->horarios[$key]);
-        /*$plano = Plano::find($request->plano);
+        $diasParaMarcar = [];
+        array_push($diasParaMarcar, $diaPrimeiroAtendimento);
+        // dd($request->inicio.' '.$request->horarios[$key]);
+        $plano = Plano::find($request->plano);
         dump($plano);
         
-        //Encontra qual dia da semana eh o dia do inicio do plano
-        $dataInicio = $request->inicio." ".$request->horarios[0];
-        $dataInicio = strtotime($dataInicio);
-        $dataArray = getDate($dataInicio);
-        dump($dataInicio);
-        dump($dataArray); //domingo = 0, segunda = 1, terca = 2, sabado = 6
-        $key = array_search($dataArray['wday'], $request->dias, true);
-        dump($dataArray['wday']);
-        dump($request->dias);
-        $diasArray = [];
-        foreach($request->dias as $diaInt) {
-            array_push($diasArray, intval($diaInt));
-        }
-        $key = array_search($dataArray['wday'], $diasArray);
-        dd($key);
-        $compromisso
-        for ($i=0; $i<$plano->atendimentos; $i++) {
-        }
-        */
+        
     }
 
 

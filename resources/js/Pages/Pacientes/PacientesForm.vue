@@ -72,12 +72,12 @@ const submit = () => {
     form.nascimento = $('#nascimento').val();
     let diasArray = []
     let horariosArray = []
-    if (frequencia.value-1 === 0) {
-        diasArray.push(new Date($('#inicio').val()).getDay()+1)
-        horariosArray.push($('#horarios-0').val()-1)
+    if (frequencia.value - 1 === 0) {
+        diasArray.push(new Date($('#inicio').val()).getDay() + 1)
+        horariosArray.push($('#horarios-0').val() - 1)
     }
     else {
-        for (let i = 0; i < frequencia.value-1; i++) {
+        for (let i = 0; i < frequencia.value - 1; i++) {
             diasArray.push($('#dias-' + i).val())
             horariosArray.push($('#horarios-' + i).val())
         }
@@ -129,6 +129,14 @@ function calculaFim(evt) {
 function mascaraTelefone(evt) {
     // console.log('mascaraTelefone', evt);
     // $('#telefone').mask('(99) 999-999-999');
+}
+
+function desabilitaDias(evt) {
+    console.log(evt.target.selectedIndex)
+    if(evt.target.id === 'dias-0') {
+        // $('#dias-1>option').removeAttr('disabled')
+        $('#dias-1>option[value="'+(evt.target.selectedIndex+1)+'"]').prop('disabled','disabled')
+    }
 }
 </script>
 
@@ -238,7 +246,9 @@ function mascaraTelefone(evt) {
                                         <div v-for="index in frequencia-1" class="lg:grid lg:grid-cols-2">
                                             <div class="mt-4 lg:mt-0 lg:px-2" :class="{'mt-0':index==1}">
                                                 <BreezeLabel :for="`dias-${index-1}`" value="Dia" />
-                                                <select class="border-cyan-300 focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-opacity-50 rounded-md shadow-sm block w-full" :id="`dias-${index-1}`">
+                                                <select
+                                                    class="border-cyan-300 focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-opacity-50 rounded-md shadow-sm block w-full"
+                                                    :id="`dias-${index-1}`" @change="desabilitaDias($event)">
                                                     <option v-for="(diaDaSemana, index) in diasDaSemana" :key="index"
                                                         :value="index+1">
                                                         {{diaDaSemana}}
@@ -247,9 +257,49 @@ function mascaraTelefone(evt) {
                                             </div>
                                             <div class="lg:mt-0 lg:px-2">
                                                 <BreezeLabel :for="`horarios-${index-1}`" value="Horário" />
-                                                <BreezeInput :id="`horarios-${index-1}`" type="time" class="block w-full"
-                                                    v-model="form.horarios[index-1]" />
+                                                <BreezeInput :id="`horarios-${index-1}`" type="time"
+                                                    class="block w-full" v-model="form.horarios[index-1]" />
                                             </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </Fieldset>
+
+                            <Fieldset v-if="props.paciente != undefined">
+                                <template #rotulo>
+                                    Atendimentos
+                                </template>
+                                <template #conteudo>
+                                    <div class="lg:grid lg:grid-cols-5">
+                                        <div class="mt-4 lg:pr-2">
+                                            <BreezeLabel for="qtd_total_atendimentos"
+                                                value="Total do plano" />
+                                            <BreezeInput id="qtd_total_atendimentos" type="text"
+                                                class="mt-1 block w-full" disabled :value="paciente.atendimentos_total" />
+                                        </div>
+                                        <div class="mt-4 lg:pl-2">
+                                            <BreezeLabel for="qtd_atendimentos_agendados"
+                                                value="Agendados" />
+                                            <BreezeInput id="qtd_atendimentos_agendados" type="text"
+                                                class="mt-1 block w-full" disabled :value="paciente.atendimentos_agendados" />
+                                        </div>
+                                        <div class="mt-4 lg:pl-2">
+                                            <BreezeLabel for="qtd_atendimentos_cumpridos"
+                                                value="Cumpridos" />
+                                            <BreezeInput id="qtd_atendimentos_cumpridos" type="text"
+                                                class="mt-1 block w-full" disabled :value="paciente.atendimentos_cumpridos" />
+                                        </div>
+                                        <div class="mt-4 lg:pl-2">
+                                            <BreezeLabel for="qtd_atendimentos_faltados"
+                                                value="Faltados" />
+                                            <BreezeInput id="qtd_atendimentos_faltados" type="text"
+                                                class="mt-1 block w-full" disabled :value="paciente.atendimentos_faltados" />
+                                        </div>
+                                        <div class="mt-4 lg:pl-2">
+                                            <BreezeLabel for="qtd_atendimentos_restantes"
+                                                value="Restantes" />
+                                            <BreezeInput id="qtd_atendimentos_restantes" type="text"
+                                                class="mt-1 block w-full" disabled :value="(paciente.atendimentos - (paciente.atendimentos_agendados+paciente.atendimentos_cumpridos+paciente.atendimentos_faltados) )" />
                                         </div>
                                     </div>
                                 </template>

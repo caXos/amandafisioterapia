@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('dia');
             $table->time('hora');
             $table->integer('vagas')->default(3);
+            $table->integer('vagas_preenchidas')->default(0);
             $table->boolean('ativo')->default('true');
             $table->timestamps();
         });
