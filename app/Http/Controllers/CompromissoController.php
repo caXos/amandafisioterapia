@@ -104,21 +104,78 @@ class CompromissoController extends Controller
     {
         
         // dd($request);
-        $diaPrimeiroAtendimento = $request->inicio;
-        $diaPrimeiroAtendimento = strtotime($diaPrimeiroAtendimento);
-        $diaPrimeiroAtendimento = getDate($diaPrimeiroAtendimento);
-        $diasArray = [];
+        $horariosParaMarcar = array('dias' => array(), 'horas' => array());
+        $diasArray = []; //Dias da semana
+        $horasArray = []; //Horários
         foreach($request->dias as $diaInt) {
             array_push($diasArray, intval($diaInt));
         }
+        foreach($request->horarios as $horaString) {
+            array_push($horasArray, $horaString);
+        }
+        $horariosParaMarcar['dias'][0] = date_create($request->inicio);
+        // $horariosParaMarcar['dias'][0] = date($request->inicio);
+        // dd($horariosParaMarcar['dias'][0]->format('N'));
+        $indice = 0;
+        for($i=0; $i<7; $i++) {
+            $indice = array_search(intval($horariosParaMarcar['dias'][0]->format('N')),$diasArray);
+            if ($indice !== false) {
+                $horariosParaMarcar['horas'][0] = $horasArray[$indice];
+            } else {
+                date_add($horariosParaMarcar['dias'][0], date_interval_create_from_date_string("1 day"));
+            }
+        }
+        array_splice($diasArray, $indice, 1);
+        array_splice($horasArray, $indice, 1);
+
+        for ($i=0; $i<sizeof($diasArray); $i++) {
+            $horariosParaMarcar['dias'][$i+1] = $horariosParaMarcar['dias'][$i];
+            for($d=0; $d<7; $d++) {
+                $indice = array_search(intval($horariosParaMarcar['dias'][$i+1]->format('N')),$diasArray);
+                if ($indice !== false) {
+                    $horariosParaMarcar['horas'][$i+1] = $horasArray[$indice];
+                } else {
+                    date_add($horariosParaMarcar['dias'][$i+1], date_interval_create_from_date_string("1 day"));
+                }
+            }
+        }
+
+        // $horariosParaMarcar['dias'][0] = strtotime($horariosParaMarcar['dias'][0]);
+        // // $horariosParaMarcar['dias'][0] = getDate($horariosParaMarcar['dias'][0]);
+
+        // // dd($horariosParaMarcar['dias'][0]);
+        // $key = array_search($horariosParaMarcar['dias'][0]['wday'],$diasArray);
+        // $horariosParaMarcar['horas'][0] = $horasArray[$key];
+        
+        // for ($i=0; $i<(sizeof($request->dias)-1); $i++) {
+        //     $dataParadigma = mktime(0,0,0,$horariosParaMarcar['dias'][$i]['month'], $horariosParaMarcar['dias'][$i]['mday'], $horariosParaMarcar['dias'][$i]['year']);
+        //     // for($d=1; $d <= 6; $d++) {
+        //     //     $dataParaComparar = mktime(0,0,0,date_parse_from_format('m',$dataParadigma['dias'][$i]['month']), $dataParadigma['dias'][$i+$d]['mday'], $dataParadigma['dias'][$i]['year']);
+        //     //     $key = array_search($dataParaComparar, $diasArray);
+        //     //     if ($key != false) {
+        //     //         $horariosParaMarcar['dias'][$i] = $dataParaComparar;
+        //     //         $horariosParaMarcar['horas'][$i] = $horasArray[$key];
+        //     //     }
+        //     // }
+        // }
+        // dd($horariosParaMarcar);
+        /*
+        $diaPrimeiroAtendimento = $request->inicio;
+        $diaPrimeiroAtendimento = strtotime($diaPrimeiroAtendimento);
+        $diaPrimeiroAtendimento = getDate($diaPrimeiroAtendimento);
+        
         $key = array_search($diaPrimeiroAtendimento['wday'], $diasArray);
+        array_splice($diasArray, $key, 1);
+
+
         $diasParaMarcar = [];
         array_push($diasParaMarcar, $diaPrimeiroAtendimento);
         // dd($request->inicio.' '.$request->horarios[$key]);
         $plano = Plano::find($request->plano);
         dump($plano);
         
-        
+        sizeof($request->dias);
+        */
     }
 
 
