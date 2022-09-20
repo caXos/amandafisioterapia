@@ -74,7 +74,7 @@ const submit = () => {
     let horariosArray = []
     if (frequencia.value - 1 === 0) {
         diasArray.push(new Date($('#inicio').val()).getDay() + 1)
-        horariosArray.push($('#horarios-0').val() - 1)
+        horariosArray.push($('#horarios-0').val())
     }
     else {
         for (let i = 0; i < frequencia.value - 1; i++) {
@@ -91,7 +91,7 @@ const submit = () => {
             onFinish: () => {
                 $('#plano').val('0')
                 $('#fisio').val('0')
-                form.reset()
+                // form.reset()
             }
         });
     } else {
@@ -99,7 +99,7 @@ const submit = () => {
             onFinish: () => {
                 $('#plano').val('0')
                 $('#fisio').val('0')
-                form.reset()
+                // form.reset()
             }
         });
     }
