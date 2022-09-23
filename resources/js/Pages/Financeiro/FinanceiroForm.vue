@@ -12,7 +12,7 @@ import axios from 'axios';
 const props = defineProps({
     financeiro: Object,
     dataAtual: String,
-    horaAgora: String
+    horaAgora: String,
 });
 
 const form = useForm({
@@ -65,10 +65,24 @@ onMounted(function () {
 const submit = () => {
     if (props.financeiro == null) {
         form.post(route('gravarFinanceiro'), {
+            onSuccess: () => {
+                Swal.fire ({
+                    title: 'Sucesso',
+                    icon: 'success',
+                    text: 'Lançamento criado!'
+                })
+            },
+            onError: () => {
+                Swal.fire ({
+                    title: 'Erro',
+                    icon: 'error',
+                    text: 'Erro ao criar lançamento'
+                })
+            },
             onFinish: () => {
                 $('#tipo').val('0')
                 form.reset()
-            }
+            }            
         });
     } else {
         form.dia = $('#dia').val();
@@ -78,6 +92,20 @@ const submit = () => {
         form.tipo = $('#tipo').val();
         form.valor = $('#valor').val();
         form.post(route('editarFinanceiro', [props.financeiro.id]), {
+            onSuccess: () => {
+                Swal.fire ({
+                    title: 'Sucesso',
+                    icon: 'success',
+                    text: 'Lançamento editado!'
+                })
+            },
+            onError: () => {
+                Swal.fire ({
+                    title: 'Erro',
+                    icon: 'error',
+                    text: 'Erro ao editar lançamento'
+                })
+            },
             onFinish: () => {
                 $('#tipo').val('0')
                 form.reset()
@@ -86,10 +114,6 @@ const submit = () => {
     }
 
 };
-
-</script>
-
-<script>
 
 </script>
 

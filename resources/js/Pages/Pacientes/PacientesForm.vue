@@ -72,15 +72,10 @@ const submit = () => {
     form.nascimento = $('#nascimento').val();
     let diasArray = []
     let horariosArray = []
-    if (frequencia.value - 1 === 0) {
-        diasArray.push(new Date($('#inicio').val()).getDay() + 1)
-        horariosArray.push($('#horarios-0').val())
-    }
-    else {
-        for (let i = 0; i < frequencia.value - 1; i++) {
-            diasArray.push($('#dias-' + i).val())
-            horariosArray.push($('#horarios-' + i).val())
-        }
+
+    for (let i = 0; i < frequencia.value; i++) {
+        diasArray.push($('#dias-' + i).val())
+        horariosArray.push($('#horarios-' + i).val())
     }
 
     form.dias = diasArray
@@ -133,9 +128,9 @@ function mascaraTelefone(evt) {
 
 function desabilitaDias(evt) {
     console.log(evt.target.selectedIndex)
-    if(evt.target.id === 'dias-0') {
+    if (evt.target.id === 'dias-0') {
         // $('#dias-1>option').removeAttr('disabled')
-        $('#dias-1>option[value="'+(evt.target.selectedIndex+1)+'"]').prop('disabled','disabled')
+        $('#dias-1>option[value="' + (evt.target.selectedIndex + 1) + '"]').prop('disabled', 'disabled')
     }
 }
 </script>
@@ -229,21 +224,14 @@ function desabilitaDias(evt) {
                                 </div>
                             </div>
 
-                            <div v-if="frequencia === 1">
-                                <div class="lg:mt-0 lg:pr-2" title="O dia é o mesmo da data de início do plano">
-                                    <BreezeLabel for="horarios-0" value="Horário" />
-                                    <BreezeInput id="horarios-0" type="time" class="block w-full"
-                                        v-model="form.horarios[0]" />
-                                </div>
-                            </div>
-
-                            <Fieldset v-else-if="frequencia >= 2">
+                            <Fieldset v-if="frequencia > 0">
                                 <template #rotulo>
-                                    Dias e Horários
+                                    Dia<span v-if="frequencia >= 2">s</span> e Horário<span
+                                        v-if="frequencia >= 2">s</span>
                                 </template>
                                 <template #conteudo>
-                                    <div class="lg:grid" :class="`lg:grid-cols-${frequencia-1}`">
-                                        <div v-for="index in frequencia-1" class="lg:grid lg:grid-cols-2">
+                                    <div class="lg:grid" :class="`lg:grid-cols-${frequencia}`">
+                                        <div v-for="index in frequencia" class="lg:grid lg:grid-cols-2">
                                             <div class="mt-4 lg:mt-0 lg:px-2" :class="{'mt-0':index==1}">
                                                 <BreezeLabel :for="`dias-${index-1}`" value="Dia" />
                                                 <select
@@ -272,34 +260,34 @@ function desabilitaDias(evt) {
                                 <template #conteudo>
                                     <div class="lg:grid lg:grid-cols-5">
                                         <div class="mt-4 lg:pr-2">
-                                            <BreezeLabel for="qtd_total_atendimentos"
-                                                value="Total do plano" />
+                                            <BreezeLabel for="qtd_total_atendimentos" value="Total do plano" />
                                             <BreezeInput id="qtd_total_atendimentos" type="text"
-                                                class="mt-1 block w-full" disabled :value="paciente.atendimentos_total" />
+                                                class="mt-1 block w-full" disabled
+                                                :value="paciente.atendimentos_total" />
                                         </div>
                                         <div class="mt-4 lg:pl-2">
-                                            <BreezeLabel for="qtd_atendimentos_agendados"
-                                                value="Agendados" />
+                                            <BreezeLabel for="qtd_atendimentos_agendados" value="Agendados" />
                                             <BreezeInput id="qtd_atendimentos_agendados" type="text"
-                                                class="mt-1 block w-full" disabled :value="paciente.atendimentos_agendados" />
+                                                class="mt-1 block w-full" disabled
+                                                :value="paciente.atendimentos_agendados" />
                                         </div>
                                         <div class="mt-4 lg:pl-2">
-                                            <BreezeLabel for="qtd_atendimentos_cumpridos"
-                                                value="Cumpridos" />
+                                            <BreezeLabel for="qtd_atendimentos_cumpridos" value="Cumpridos" />
                                             <BreezeInput id="qtd_atendimentos_cumpridos" type="text"
-                                                class="mt-1 block w-full" disabled :value="paciente.atendimentos_cumpridos" />
+                                                class="mt-1 block w-full" disabled
+                                                :value="paciente.atendimentos_cumpridos" />
                                         </div>
                                         <div class="mt-4 lg:pl-2">
-                                            <BreezeLabel for="qtd_atendimentos_faltados"
-                                                value="Faltados" />
+                                            <BreezeLabel for="qtd_atendimentos_faltados" value="Faltados" />
                                             <BreezeInput id="qtd_atendimentos_faltados" type="text"
-                                                class="mt-1 block w-full" disabled :value="paciente.atendimentos_faltados" />
+                                                class="mt-1 block w-full" disabled
+                                                :value="paciente.atendimentos_faltados" />
                                         </div>
                                         <div class="mt-4 lg:pl-2">
-                                            <BreezeLabel for="qtd_atendimentos_restantes"
-                                                value="Restantes" />
+                                            <BreezeLabel for="qtd_atendimentos_restantes" value="Restantes" />
                                             <BreezeInput id="qtd_atendimentos_restantes" type="text"
-                                                class="mt-1 block w-full" disabled :value="(paciente.atendimentos - (paciente.atendimentos_agendados+paciente.atendimentos_cumpridos+paciente.atendimentos_faltados) )" />
+                                                class="mt-1 block w-full" disabled
+                                                :value="(paciente.atendimentos - (paciente.atendimentos_agendados+paciente.atendimentos_cumpridos+paciente.atendimentos_faltados) )" />
                                         </div>
                                     </div>
                                 </template>

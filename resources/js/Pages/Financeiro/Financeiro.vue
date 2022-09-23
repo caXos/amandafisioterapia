@@ -9,8 +9,7 @@ import FAB from '@/Components/FloatingActionButton.vue';
 
 const props = defineProps({
     lancamentos: Object,
-    resultado: Number,
-    status: String
+    resultado: String,
 });
 
 onMounted(() => {
@@ -58,9 +57,6 @@ let formatBrazilianReal = Intl.NumberFormat('pt-BR');
             <p class="font-semibold text-sky-800 leading-tight">
                 Financeiro
             </p>
-            <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-                {{ status }}
-            </div>
         </template>
 
         <div class="py-2 justify-center align-center">

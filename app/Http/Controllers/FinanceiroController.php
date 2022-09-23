@@ -62,7 +62,8 @@ class FinanceiroController extends Controller
             'valor' => $request->valor,
         ]);
         $financeiro->save();
-        return redirect()->route("financeiro",['status'=>'Lançamento criado']);
+        return redirect()->route("financeiro");
+        // return redirect()->route('financeiro')->with('status', 'Lançamento criado!');
     }
 
     /**

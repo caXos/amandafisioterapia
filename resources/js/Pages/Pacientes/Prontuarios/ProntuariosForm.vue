@@ -6,9 +6,6 @@ import BreezeLabel from '@/Components/Label.vue';
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
 import { Head, useForm, Link } from '@inertiajs/inertia-vue3';
 import { onMounted, computed, ref } from 'vue';
-import axios from 'axios';
-import FisioSelect from '@/Components/FisioSelect.vue';
-import PlanoSelect from '@/Components/PlanoSelect.vue';
 
 const props = defineProps({
     paciente: Object,
@@ -28,7 +25,6 @@ onMounted(function () {
         $('#hora').val('');
         $('#descricao').val('');
     } else {
-        // console.log(props.prontuario);
         $('#dia').val(props.prontuario.dia);
         $('#hora').val(props.prontuario.hora);
         $('#descricao').val(props.prontuario.descricao);
@@ -41,6 +37,20 @@ const submit = () => {
         if (form.hora == null || form.hora == undefined) form.hora = $('#hora').val();
         if (form.descricao == null || form.descricao == undefined) form.descricao = $('#descricao').val();
         form.post(route('gravarProntuario', [props.paciente.id]), {
+            onSuccess: () => {
+                Swal.fire ({
+                    title: 'Sucesso',
+                    icon: 'success',
+                    text: 'Prontuário criado!'
+                })
+            },
+            onError: () => {
+                Swal.fire ({
+                    title: 'Erro',
+                    icon: 'error',
+                    text: 'Erro ao criar prontuário'
+                })
+            },
             onFinish: () => {
                 form.reset()
             }
@@ -51,6 +61,20 @@ const submit = () => {
         form.hora = $('#hora').val();
         form.descricao = $('#descricao').val();
         form.post(route('editarProntuario', [props.paciente.id, props.prontuario.id]), {
+            onSuccess: () => {
+                Swal.fire ({
+                    title: 'Sucesso',
+                    icon: 'success',
+                    text: 'Prontuário editado!'
+                })
+            },
+            onError: () => {
+                Swal.fire ({
+                    title: 'Erro',
+                    icon: 'error',
+                    text: 'Erro ao editar prontuário'
+                })
+            },
             onFinish: () => {
                 form.reset()
             }

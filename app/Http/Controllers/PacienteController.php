@@ -67,6 +67,7 @@ class PacienteController extends Controller
             else $plano->atividade = 2;
         }
         $fisios = User::orderBy('name')->where('ativo', true)->get();//TODO traduzir para nome
+        // dd($planos, $fisios);
         return Inertia::render('Pacientes/PacientesForm',['planos'=>$planos, 'fisios'=>$fisios]);
     }
 
