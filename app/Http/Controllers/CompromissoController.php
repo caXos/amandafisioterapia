@@ -147,11 +147,9 @@ class CompromissoController extends Controller
     }
     // dd($diasEhorariosParadigmas);
 
-    $plano = Plano::find($request->plano);
-    // dd($plano);
     $atendimentosParaMarcar = array();
     // dd($request->qtdeAtendimentos, $diasArray, intval($request->qtdeAtendimentos), sizeof($diasArray), intval($request->qtdeAtendimentos)/sizeof($diasArray), floor(intval($request->qtdeAtendimentos)/sizeof($diasArray)));
-    for ($i = 0; $i < floor(intval($request->qtdeAtendimentos)/sizeof($diasArray)); $i++) {
+    for ($i = 0; $i < (floor( intval($request->qtdeAtendimentos)/sizeof($diasArray) ) + (intval($request->qtdeAtendimentos) % sizeof($diasArray) ) ); $i++) {
       $semanas = '';
       if ($semanas == 0) $semanas = "1 week";
       else $semanas = $i." weeks";
@@ -163,13 +161,24 @@ class CompromissoController extends Controller
               date_create($diasEhorariosParadigmas['dias'][$j]->format('Y-m-d')),
               date_interval_create_from_date_string($semanas)
             ),
-            'hora'=>$diasEhorariosParadigmas['horas'][$j]
+            'hora'=>$diasEhorariosParadigmas['horas'][$j].":00",
+            'ok'=>false
           )
         );
       }
     }
+    // dd($atendimentosParaMarcar);
+    // $compromisso = Compromisso::where('dia', '2022-09-13')->where('hora','09:10:10')->get();
+    // dd($compromisso, sizeof($compromisso));
+    foreach($atendimentosParaMarcar as $atendimento) {
+      $compromisso = Compromisso::where('dia', $atendimento['dia']->format('Y-m-d'))->where('hora', $atendimento['hora'])->where('ativo','true')->limit(1)->get();
+      if (sizeof($compromisso) > 0 ) {
+        if ($compromisso[0]->vagas_preenchidas < $compromisso[0]->vagas) $atendimento['ok'] = true;
+      } else {
+        $atendimento['ok'] = true;
+      }
+    }
     dd($atendimentosParaMarcar);
-
   }
 
 
