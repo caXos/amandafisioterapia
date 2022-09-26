@@ -103,7 +103,7 @@ class CompromissoController extends Controller
   public static function criarCompromissos(StorePacienteRequest $request)
   {
 
-    // dd($request);  
+    // dd($request);
     $diasEhorariosParadigmas = array('dias' => array(), 'horas' => array());
     $diasArray = []; //Dias da semana
     $horasArray = []; //Horários
@@ -150,7 +150,8 @@ class CompromissoController extends Controller
     $plano = Plano::find($request->plano);
     // dd($plano);
     $atendimentosParaMarcar = array();
-    for ($i = 0; $i < $plano->atendimentos/sizeof($diasArray); $i++) {
+    // dd($request->qtdeAtendimentos, $diasArray, intval($request->qtdeAtendimentos), sizeof($diasArray), intval($request->qtdeAtendimentos)/sizeof($diasArray), floor(intval($request->qtdeAtendimentos)/sizeof($diasArray)));
+    for ($i = 0; $i < floor(intval($request->qtdeAtendimentos)/sizeof($diasArray)); $i++) {
       $semanas = '';
       if ($semanas == 0) $semanas = "1 week";
       else $semanas = $i." weeks";

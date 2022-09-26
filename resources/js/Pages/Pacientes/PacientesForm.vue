@@ -29,6 +29,7 @@ const form = useForm({
   nascimento: Date,
   dias: String,
   horarios: String,
+  qtdeAtendimentos: String
 });
 
 const frequencia = ref(0)
@@ -70,36 +71,41 @@ const submit = () => {
   form.observacao = $('#observacao').val();
   form.telefone = $('#telefone').val();
   form.nascimento = $('#nascimento').val();
+  form.qtdeAtendimentos = $('#atendimentos_para_criar').val();
   let diasArray = []
   let horariosArray = []
-
   for (let i = 0; i < frequencia.value; i++) {
     diasArray.push($('#dias-' + i).val())
     horariosArray.push($('#horarios-' + i).val())
   }
-
   form.dias = diasArray
   form.horarios = horariosArray;
-
   if (props.paciente == null || props.paciente == undefined || props.paciente == '' || props.paciente.length == 0) {
     form.post(route('gravarPaciente'), {
       onFinish: () => {
-        $('#plano').val('0')
-        $('#fisio').val('0')
+        // $('#plano').val('0')
+        // $('#fisio').val('0')
         // form.reset()
       }
     });
   } else {
     form.post(route('editarPaciente', [props.paciente.id]), {
       onFinish: () => {
-        $('#plano').val('0')
-        $('#fisio').val('0')
+        // $('#plano').val('0')
+        // $('#fisio').val('0')
         // form.reset()
       }
     });
   }
 };
 
+function info_atendimentosParaMarcar() {
+  Swal.fire ({
+      title: 'Atendimentos para lançar',
+      icon: 'info',
+      html: '<p>Quantos atendimentos serão criados, independente da frequência</p><p>Exemplo:</p><p>Pilates 3x por semana, com 2 atendimentos para criar: serão gerados 2 atendimentos</p><p>Pilates 3x por semana, com 5 atendimentos para criar: serão gerados 5 atendimentos, ou seja, duas semanas completas e uma incompleta</p>',
+  })
+}
 </script>
 
 <script>
@@ -211,10 +217,15 @@ function desabilitaDias(evt) {
                   <BreezeLabel for="atendimentos_totais" value="Quantidade de atendimentos do plano" />
                   <BreezeInput id="atendimentos_totais" type="number" class="mt-1 block w-full" disabled />
                 </div>
-                <div class="mt-4 lg:pl-2">
+                <div class="mt-4 lg:pl-2 relative">
                   <BreezeLabel for="atendimentos_para_criar" value="Quantidade de atendimentos para gerar" />
                   <BreezeInput id="atendimentos_para_criar" type="number" step="1" min="0" class="mt-1 block w-full"
                     required />
+                  <div class="absolute right-0 top-0">
+                    <span class="material-symbols-outlined text-sky-800 cursor-pointer mx-2 hover:ring-2 hover:ring-offset-2 hover:rounded-full" @click="info_atendimentosParaMarcar">
+                      info
+                    </span>
+                  </div>
                 </div>
               </div>
 

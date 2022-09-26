@@ -115,6 +115,40 @@ const submit = () => {
 
 };
 
+function remover() {
+    Swal.fire({
+        title: 'Deletar lançamento',
+        text: "Esta operação não pode ser revertida",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, deletar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.delete(route('deletarFinanceiro',[props.financeiro.id]), {
+                onSuccess: () => {
+                    Swal.fire ({
+                        title: 'Sucesso',
+                        icon: 'success',
+                        text: 'Lançamento removido!'
+                    })
+                },
+                onError: () => {
+                    Swal.fire ({
+                        title: 'Erro',
+                        icon: 'error',
+                        text: 'Erro ao remover lançamento'
+                    })
+                },
+                onFinish: () => {
+                    $('#tipo').val('0')
+                    form.reset()
+                }
+            })
+        }
+    })
+}
 </script>
 
 <template>
@@ -180,7 +214,7 @@ const submit = () => {
                                 <Link class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:shadow-outline-slate transition ease-in-out duration-150" :href="route('financeiro')">
                                     Voltar
                                 </Link>
-                                <Link v-if='financeiro != null' class="inline-flex items-center ml-4 px-4 py-2 bg-rose-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-rose-700 active:bg-rose-900 focus:outline-none focus:border-rose-900 focus:shadow-outline-rose transition ease-in-out duration-150" :href="route('deletarFinanceiro',[financeiro.id])">
+                                <Link v-if='financeiro != null' class="inline-flex items-center ml-4 px-4 py-2 bg-rose-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-rose-700 active:bg-rose-900 focus:outline-none focus:border-rose-900 focus:shadow-outline-rose transition ease-in-out duration-150" @click="remover">
                                     Remover
                                 </Link>
                                 <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }"
