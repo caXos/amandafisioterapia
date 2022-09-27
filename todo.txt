@@ -1,43 +1,9 @@
-nome
-plano
-vencimento (data - ultimo dia do plano)
-inicio (primeiro do dia to plano)
-fisio
-observaco
-telefone
-data nascimento
-
-
-
 plano - tem férias?
 
 
-perfis
-adm - 1
-profissional - 2
-visitante - 3
-
-
-
-<?php
- 
- $date = new DateTime();
-
- $formatter = new IntlDateFormatter(
-   'pt_BR',
-    IntlDateFormatter::FULL,
-    IntlDateFormatter::NONE,
-    'America/Sao_Paulo',          
-    IntlDateFormatter::GREGORIAN
-  );
-
-  echo $formatter->format($date);
-  >
-
-
-
-  sugestoes:
-  1. tirar o saldo do financeiro do footer e colocar ele acima da tabela (provavelmente em uma div fora da tabela), para deixar a visualizacao mais pratica
-  2. organizar o financeiro, inicialmente, decrescente, sendo o mais recente por cima, tambem para deixar a visualizacao mais pratica
-  3. deixar a visualizacao da agenda tambem em formato datatable
-  
+sugestoes:
+1. organizar o financeiro, inicialmente, decrescente, sendo o mais recente por cima, tambem para deixar a visualizacao mais pratica
+2. na tabela dos planos, vincular uma fkey referente ao tipo de atividade
+isso é útil na hora de, por exemplo, criar os compromissos e atendimentos: é necessário saber o 
+id da atividade.
+Por enquanto, está hardcoded (planos até 25 são pilates, atividade 1, e os demais são RPG, atividade 2)

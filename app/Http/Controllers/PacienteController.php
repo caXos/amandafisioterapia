@@ -79,7 +79,7 @@ class PacienteController extends Controller
      */
     public function store(StorePacienteRequest $request)
     {
-        CompromissoController::criarCompromissos($request);
+        CompromissoController::criarCompromissos($request, 10);
         $this->authorize('create', Paciente::class);
         $paciente = new Paciente([
             'nome' => $request->nome,
