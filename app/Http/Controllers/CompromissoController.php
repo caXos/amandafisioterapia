@@ -149,9 +149,12 @@ class CompromissoController extends Controller
 
     $atendimentosParaMarcar = array();
     // dd($request->qtdeAtendimentos, $diasArray, intval($request->qtdeAtendimentos), sizeof($diasArray), intval($request->qtdeAtendimentos)/sizeof($diasArray), floor(intval($request->qtdeAtendimentos)/sizeof($diasArray)));
-    for ($i = 0; $i < (floor( intval($request->qtdeAtendimentos)/sizeof($diasArray) ) + (intval($request->qtdeAtendimentos) % sizeof($diasArray) ) ); $i++) {
+    /* bckp funcionando
+    for ($i = 1; $i <= (floor( intval($request->qtdeAtendimentos)/sizeof($diasArray) ) + (intval($request->qtdeAtendimentos) % sizeof($diasArray) ) ); $i++) {
       $semanas = '';
-      if ($semanas == 0) $semanas = "1 week";
+      // if ($semanas == 0) $semanas = "1 week";
+      // else $semanas = $i." weeks";
+      if ($i == 1) $semanas = "1 week";
       else $semanas = $i." weeks";
       for ($j =0; $j < sizeof($diasArray); $j++) {
         array_push(
@@ -167,18 +170,49 @@ class CompromissoController extends Controller
         );
       }
     }
-    // dd($atendimentosParaMarcar);
-    // $compromisso = Compromisso::where('dia', '2022-09-13')->where('hora','09:10:10')->get();
-    // dd($compromisso, sizeof($compromisso));
-    foreach($atendimentosParaMarcar as $atendimento) {
-      $compromisso = Compromisso::where('dia', $atendimento['dia']->format('Y-m-d'))->where('hora', $atendimento['hora'])->where('ativo','true')->limit(1)->get();
+
+    $vagasCheias = array();
+    for ($contador = 0; $contador < sizeof($atendimentosParaMarcar); $contador++) {
+      $compromisso = Compromisso::where('dia', $atendimentosParaMarcar[$contador]['dia']->format('Y-m-d'))->where('hora', $atendimentosParaMarcar[$contador]['hora'])->where('ativo','true')->limit(1)->get();
       if (sizeof($compromisso) > 0 ) {
-        if ($compromisso[0]->vagas_preenchidas < $compromisso[0]->vagas) $atendimento['ok'] = true;
+        if ($compromisso[0]->vagas_preenchidas < $compromisso[0]->vagas) $atendimentosParaMarcar[$contador]['ok'] = true;
+        else array_push($vagasCheias, $atendimentosParaMarcar[$contador]);
       } else {
-        $atendimento['ok'] = true;
+        $atendimentosParaMarcar[$contador]['ok'] = true;
       }
     }
-    dd($atendimentosParaMarcar);
+    */
+    $vagasCheias = array();
+    for ($i = 1; $i <= (floor( intval($request->qtdeAtendimentos)/sizeof($diasArray) ) + (intval($request->qtdeAtendimentos) % sizeof($diasArray) ) ); $i++) {
+      $semanas = '';
+      // if ($semanas == 0) $semanas = "1 week";
+      // else $semanas = $i." weeks";
+      if ($i == 1) $semanas = "1 week";
+      else $semanas = $i." weeks";
+      for ($j =0; $j < sizeof($diasArray); $j++) {
+        $candidatoAatendimento = array(
+          'dia'=>date_add(
+            date_create($diasEhorariosParadigmas['dias'][$j]->format('Y-m-d')),
+            date_interval_create_from_date_string($semanas)
+          ),
+          'hora'=>$diasEhorariosParadigmas['horas'][$j].":00",
+          // 'ok'=>false
+        );
+        $compromisso = Compromisso::where('dia', $candidatoAatendimento['dia']->format('Y-m-d'))->where('hora', $candidatoAatendimento['hora'])->where('ativo','true')->limit(1)->get();
+        if (sizeof($compromisso) > 0 ) {
+          if ($compromisso[0]->vagas_preenchidas < $compromisso[0]->vagas) {
+            // $candidatoAatendimento['ok'] = true;
+            array_push($atendimentosParaMarcar, $candidatoAatendimento);
+          }
+          else array_push($vagasCheias, $candidatoAatendimento);
+        } else {
+          // $candidatoAatendimento['ok'] = true;
+          array_push($atendimentosParaMarcar, $candidatoAatendimento);
+        }
+      }
+    }
+    dd($atendimentosParaMarcar, $vagasCheias);
+    
   }
 
 
@@ -191,7 +225,6 @@ class CompromissoController extends Controller
    */
   public function store(StoreCompromissoRequest $request)
   {
-    // $ultimoCompromisso = Compromisso::latest()->first();
     $this->authorize('create', Compromisso::class);
     $compromisso = new Compromisso([
       'user_id' => $request->fisio,
