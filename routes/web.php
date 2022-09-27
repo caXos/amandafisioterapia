@@ -66,7 +66,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('adicionarCompromisso',[CompromissoController::class, 'create'])->name('adicionarCompromisso');
     Route::post('adicionarCompromisso',[CompromissoController::class, 'store'])->name('gravarCompromisso');
     Route::get('editarCompromisso/{id}',[CompromissoController::class, 'edit'])->name('editarCompromisso');
-    Route::get('atualizarCompromisso',[CompromissoController::class, 'update'])->name('atualizarCompromisso');
+    Route::post('atualizarCompromisso',[CompromissoController::class, 'update'])->name('atualizarCompromisso');
     Route::get('completarCompromisso/{id}',[CompromissoController::class, 'completarCompromisso'])->name('completarCompromisso');
     Route::get('deletarCompromisso/{id}',[CompromissoController::class, 'deletarCompromisso'])->name('deletarCompromisso');
     Route::get('notificarCompromisso/{id}',[CompromissoController::class, 'notificarCompromisso'])->name('deletarCompromisso');
@@ -90,6 +90,8 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('editarProntuario/{paciente_id}/{id}',[ProntuarioController::class, 'edit'])->name('editarProntuario');
     Route::post('editarProntuario/{paciente_id}/{id}',[ProntuarioController::class, 'update'])->name('editarProntuario');
     Route::get('deletarProntuario/{paciente_id}/{id}',[ProntuarioController::class, 'deletarProntuario'])->name('deletarProntuario');
+
+    Route::get('debug', [FinanceiroController::class, 'debug'])->name('debug');
 });
 
 require __DIR__.'/auth.php';

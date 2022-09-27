@@ -6,7 +6,8 @@ import FAB from '@/Components/FloatingActionButton.vue';
 
 const props = defineProps({
     pacientes: Object,
-    status: String
+    status: String,
+    compromissosNaoMarcados: Object,
 });
 
 const statusLocal = ref(props.status);
@@ -40,6 +41,13 @@ onMounted(() => {
         }
     );
     $('select[name="tabela-pacientes_length"]').css('padding-right','25px');
+    if (props.compromissosNaoMarcados != undefined && props.compromissosNaoMarcados.length > 0) {
+        Swal.fire({
+            title: 'Aviso',
+            icon: 'warning',
+            text: 'Há atendimentos que não foram criados, pois não havia vagas suficientes!'
+        })
+    }
 });
 </script>
 

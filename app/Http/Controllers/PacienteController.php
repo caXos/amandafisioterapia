@@ -79,7 +79,7 @@ class PacienteController extends Controller
      */
     public function store(StorePacienteRequest $request)
     {
-        CompromissoController::criarCompromissos($request, 10);
+        // CompromissoController::prepararParaCriarCompromissos($request, 10);
         $this->authorize('create', Paciente::class);
         $paciente = new Paciente([
             'nome' => $request->nome,
@@ -99,7 +99,11 @@ class PacienteController extends Controller
             'ativo' => true
         ]);
         $planoPaciente->save();
-        return redirect()->route("pacientes",['status'=>'Paciente criado']);
+        $retornoDosCompromissos = CompromissoController::prepararParaCriarCompromissos($request, $paciente->id);
+        // return redirect()->route("pacientes",[])->with('status', 'Paciente e atendimentos criados!');
+        // dd($retornoDosCompromissos);
+        return redirect()->route("pacientes",['compromissosNaoMarcados'=>$retornoDosCompromissos[1]]);
+        // return Inertia::render('Pacientes/Pacientes',['compromissosNaoMarcados'=>$retornoDosCompromissos[1]]);
     }
 
     /**

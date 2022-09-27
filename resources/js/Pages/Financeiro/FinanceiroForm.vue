@@ -62,7 +62,13 @@ onMounted(function () {
     //     $('#valor').val(finan._rawValue.valor).trigger('input')
     // }
 });
-const submit = () => {
+const submit = async () => {
+    // await fetch(route('debug'))
+    // .then((response) => response.json())
+    // .then((data) => {
+    //     console.log(data)
+    //     if (data.outroTeste === 'outroTeste') console.log('ei, achei outro teste')
+    // })
     if (props.financeiro == null) {
         form.post(route('gravarFinanceiro'), {
             onSuccess: () => {
@@ -112,7 +118,6 @@ const submit = () => {
             }
         });
     }
-
 };
 
 function remover() {

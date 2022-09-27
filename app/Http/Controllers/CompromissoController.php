@@ -100,7 +100,7 @@ class CompromissoController extends Controller
   /**
    * Cria os primeiros atendimentos, quando vem da tela de criacao de paciente
    */
-  public static function criarCompromissos(StorePacienteRequest $request, $paciente_id)
+  public static function prepararParaCriarCompromissos(StorePacienteRequest $request, $paciente_id)
   {
 
     // dd($request);
@@ -165,7 +165,7 @@ class CompromissoController extends Controller
     $atendimentosParaMarcar = array();
     // dd($request->qtdeAtendimentos, $diasArray, intval($request->qtdeAtendimentos), sizeof($diasArray), intval($request->qtdeAtendimentos)/sizeof($diasArray), floor(intval($request->qtdeAtendimentos)/sizeof($diasArray)));
     /* bckp funcionando
-    for ($i = 1; $i <= (floor( intval($request->qtdeAtendimentos)/sizeof($diasArray) ) + (intval($request->qtdeAtendimentos) % sizeof($diasArray) ) ); $i++) {
+    for ($i = 0; $i < (floor( intval($request->qtdeAtendimentos)/sizeof($diasArray) ) + (intval($request->qtdeAtendimentos) % sizeof($diasArray) ) ); $i++) {
       $semanas = '';
       // if ($semanas == 0) $semanas = "1 week";
       // else $semanas = $i." weeks";
@@ -198,9 +198,9 @@ class CompromissoController extends Controller
     }
     */
     $vagasCheias = array();
-    for ($i = 1; $i <= (floor( intval($request->qtdeAtendimentos)/sizeof($diasArray) ) + (intval($request->qtdeAtendimentos) % sizeof($diasArray) ) ); $i++) {
+    for ($i = 0; $i < (floor( intval($request->qtdeAtendimentos)/sizeof($diasArray) ) + (intval($request->qtdeAtendimentos) % sizeof($diasArray) ) ); $i++) {
       $semanas = '';
-      // if ($semanas == 0) $semanas = "1 week";
+      // if ($semanas == 1) $semanas = "1 week";
       // else $semanas = $i." weeks";
       if ($i == 1) $semanas = "1 week";
       else $semanas = $i." weeks";
@@ -228,45 +228,101 @@ class CompromissoController extends Controller
           // $candidatoAatendimento['ok'] = true;
           array_push($atendimentosParaMarcar, $candidatoAatendimento);
           // dump('Criar novo Crompromisso');
+          $compromisso->dia = $candidatoAatendimento['dia']->format('Y-m-d');
+          $compromisso->hora = $candidatoAatendimento['hora'];
+          $compromisso->fisio_id = intval($request->fisio);
+          $compromisso->paciente_id = $paciente_id;
+          $request->plano <= 25 ? $compromisso->atividade_id = 1 : $compromisso->atividade_id = 2; //HARDcoded
+          $aparelhos = Aparelho::all()->count();//HARDcoded
+          $compromisso->atividade_id == 1 ? $compromisso->aparelho_id = rand(2, $aparelhos) : $compromisso->aparelho_id = 1;//HARDcoded
+          CompromissoController::criarCompromisso($compromisso);
         }
       }
     }
     // dd($atendimentosParaMarcar, $vagasCheias);
     // array_push($atendimentosParaMarcar, intval($request->fisio));
-    $compromissosObject = (object) $atendimentosParaMarcar;
-    $compromissosObject->fisio = intval($request->fisio);
-    $compromissosObject->paciente_id = $paciente_id;
-    $request->plano <= 25 ? $compromissosObject->atividade_id = 1 : $compromissosObject->atividade_id = 2;
-    $aparelhos = Aparelho::all()->count();
-    $compromissosObject->atividade_id == 1 ? $compromissosObject->aparelho = rand(2, $aparelhos) : $compromissosObject->aparelho = 1;
-    CompromissoController::criarCompromisso($compromissosObject);    
+    // $compromissosObject = (object) $atendimentosParaMarcar;
+    // $compromissosObject->fisio_id = intval($request->fisio);
+    // $compromissosObject->paciente_id = $paciente_id;
+    // $request->plano <= 25 ? $compromissosObject->atividade_id = 1 : $compromissosObject->atividade_id = 2;
+    // $aparelhos = Aparelho::all()->count();
+    // $compromissosObject->atividade_id == 1 ? $compromissosObject->aparelho_id = rand(2, $aparelhos) : $compromissosObject->aparelho_id = 1;
+    // CompromissoController::criarCompromissos($compromissosObject);
+
+    // return redirect()->route('agenda', ['compromissosNaoMarcados'=>$vagasCheias])->with('status', 'Compromissos criados!');
+    $resultado = array($atendimentosParaMarcar, $vagasCheias);
+    return $resultado;
   }
 
-  public static function criarCompromisso($compromissosParaMarcar)
+  public static function criarCompromissos($compromissosParaMarcar)
   {
     dd($compromissosParaMarcar);
+    /**
+     * +"0": array:2 [▼
+     *  "dia" => DateTime @1656892800 {#1286 ▶}
+     *  "hora" => "18:00:00"
+     * ]
+     * +"fisio_id": 1
+     * +"paciente_id": 10
+     * +"atividade_id": 1
+     * +"aparelho": 3
+     */
     for ($i = 0; $i < sizeof($compromissosParaMarcar); $i++)
     {
       $compromisso = new Compromisso([
         'user_id' => $compromissosParaMarcar->fisio,
-        'dia' => $compromissosParaMarcar->dia,
-        'hora' => $compromissosParaMarcar->hora,
-        'vagas' => $compromissosParaMarcar->vagas,
+        'dia' => $compromissosParaMarcar[$i]->dia,
+        'hora' => $compromissosParaMarcar[$i]->hora,
+        'vagas' => 3,
         'vagas_preenchidas' => 1,
         'ativo' => true,
-      ]);
+      ]);//HARDcoded vagas
       $compromisso->save();
       $novoAtendimento = new Atendimento([
         'compromisso_id' => $compromisso->id,
-        'paciente_id' => $compromissosParaMarcar->pacientes[$i],
-        'atividade_id' => $compromissosParaMarcar->atividades[$i],
-        'aparelho_id' => $compromissosParaMarcar->aparelhos[$i],
-        'fisio_id' => $compromissosParaMarcar->fisios[$i],
+        'paciente_id' => $compromissosParaMarcar->paciente_id,
+        'atividade_id' => $compromissosParaMarcar->atividade_id,
+        'aparelho_id' => $compromissosParaMarcar->aparelho_id,
+        'fisio_id' => $compromissosParaMarcar->fisio_id,
         'cumprido' => false,
         'ativo' => true
       ]);
       $novoAtendimento->save();
     }
+  }
+
+  public static function criarCompromisso($compromissosParaMarcar)
+  {
+    // dd($compromissosParaMarcar);
+    // Illuminate\Database\Eloquent\Collection {#1320 ▼
+    //   #items: []
+    //   #escapeWhenCastingToString: false
+    //   +"dia": "2022-07-04"
+    //   +"hora": "18:00:00"
+    //   +"fisio_id": 1
+    //   +"paciente_id": 10
+    //   +"atividade_id": 1
+    //   +"aparelho_id": 6
+    // }
+    $compromisso = new Compromisso([
+      'user_id' => $compromissosParaMarcar->fisio_id,
+      'dia' => $compromissosParaMarcar->dia,
+      'hora' => $compromissosParaMarcar->hora,
+      'vagas' => 3,
+      'vagas_preenchidas' => 1,
+      'ativo' => true,
+    ]);//HARDcoded vagas
+    $compromisso->save();
+    $novoAtendimento = new Atendimento([
+      'compromisso_id' => $compromisso->id,
+      'paciente_id' => $compromissosParaMarcar->paciente_id,
+      'atividade_id' => $compromissosParaMarcar->atividade_id,
+      'aparelho_id' => $compromissosParaMarcar->aparelho_id,
+      'fisio_id' => $compromissosParaMarcar->fisio_id,
+      'cumprido' => false,
+      'ativo' => true
+    ]);
+    $novoAtendimento->save();
   }
 
 

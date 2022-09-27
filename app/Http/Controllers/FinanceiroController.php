@@ -62,8 +62,7 @@ class FinanceiroController extends Controller
             'valor' => $request->valor,
         ]);
         $financeiro->save();
-        return redirect()->route("financeiro");
-        // return redirect()->route('financeiro')->with('status', 'Lançamento criado!');
+        return redirect()->route('financeiro')->with('status', 'Lançamento criado!');
     }
 
     /**
@@ -111,7 +110,7 @@ class FinanceiroController extends Controller
         $financeiro->tipo = $request->tipo;
         $financeiro->valor = $request->valor;
         $financeiro->save();
-        return redirect()->route("financeiro",['status'=>'Lançamento alterado']);
+        return redirect()->route("financeiro")->with('status','Lançamento alterado');
     }
 
     public function deletarFinanceiro(UpdateFinanceiroRequest $request)
@@ -123,7 +122,8 @@ class FinanceiroController extends Controller
         $financeiro->save();
         // $financeiro->delete();
  
-        return redirect()->route('financeiro',['status'=>'Lançamento removido']);
+        // return redirect()->route('financeiro',['status'=>'Lançamento removido']);
+        return redirect()->route('financeiro')->with('status','Lançamento removido');
     }
 
     /**
@@ -135,5 +135,16 @@ class FinanceiroController extends Controller
     public function destroy(Financeiro $financeiro)
     {
         
+    }
+
+    /**
+     * Debug de rota
+     */
+    public function debug() {
+        // return redirect()->route('financeiro')->with('status','Lançamento removido');
+        $blah = (object)[]; //Mesma coisa que $blah = new stdClass();
+        $blah->teste = "teste";
+        $blah->outroTeste = 'outroTeste';
+        return $blah;
     }
 }

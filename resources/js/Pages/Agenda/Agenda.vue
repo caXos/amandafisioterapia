@@ -3,7 +3,7 @@ import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import CompromissoCard from '@/Components/CompromissoCard.vue';
 import FAB from '@/Components/FloatingActionButton.vue';
 import { Head, Link } from '@inertiajs/inertia-vue3';
-import { computed, ref } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 import CompromissoModal from '@/Components/CompromissoModal.vue';
 import AtendimentoModal from '@/Components/AtendimentoModal.vue';
 
@@ -121,7 +121,6 @@ function fecharModal() {
 function fecharModalAtendimento() {
     modalAtendimento.value = false
 }
-
 </script>
 
 <script>
