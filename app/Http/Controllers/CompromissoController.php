@@ -103,7 +103,7 @@ class CompromissoController extends Controller
   public static function prepararParaCriarCompromissos(StorePacienteRequest $request, $paciente_id)
   {
 
-    dd($request, $paciente_id);
+    // dd($request, $paciente_id);
 
     /**
      * Request:

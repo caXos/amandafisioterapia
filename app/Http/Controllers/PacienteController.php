@@ -78,6 +78,7 @@ class PacienteController extends Controller
      */
     public function prepareStore(StorePacienteRequest $request)
     {
+        // dd($request);
         // CompromissoController::prepararParaCriarCompromissos($request, 10);
         $this->authorize('create', Paciente::class);
         // $paciente = new Paciente([
@@ -105,8 +106,8 @@ class PacienteController extends Controller
         // dd($retornoDosCompromissos);
         $objeto = (object)[];
         $objeto->blah = "blah";
-        return redirect()->back()->with('teste', $objeto);
-        // return $retornoDosCompromissos;
+        // return redirect()->back()->withInput()->with('teste', $objeto);
+        return $retornoDosCompromissos;
     }
 
     /**

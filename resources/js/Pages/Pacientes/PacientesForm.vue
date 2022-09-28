@@ -10,6 +10,7 @@ import FisioSelect from '@/Components/FisioSelect.vue';
 import PlanoSelect from '@/Components/PlanoSelect.vue';
 import Fieldset from '@/Components/Fieldset.vue';
 import { Inertia } from '@inertiajs/inertia';
+import axios from 'axios';
 
 const props = defineProps({
   status: String,
@@ -66,56 +67,6 @@ onMounted(function () {
 });
 
 const submit = async () => {
-  funcaoTeste();
-  // form.nome = $('#nome').val();
-  // form.plano = parseInt($('#plano').val());
-  // form.inicio = $('#inicio').val();
-  // form.fim = $('#fim').val();
-  // form.fisio = $('#fisio').val();
-  // form.observacao = $('#observacao').val();
-  // form.telefone = $('#telefone').val();
-  // form.nascimento = $('#nascimento').val();
-  // form.qtdeAtendimentos = $('#atendimentos_para_criar').val();
-  // let diasArray = []
-  // let horariosArray = []
-  // for (let i = 0; i < frequencia.value; i++) {
-  //   diasArray.push($('#dias-' + i).val())
-  //   horariosArray.push($('#horarios-' + i).val())
-  // }
-  // form.dias = diasArray
-  // form.horarios = horariosArray;
-  // if (props.paciente == null || props.paciente == undefined || props.paciente == '' || props.paciente.length == 0) {
-  //   // await fetch(route('prepararGravarPaciente'))
-  //   // .then(async (response) => console.log(await response.json()))
-  //   // .then((data) => console.log(data))
-  //   Inertia.get(route('prepararGravarPaciente'), [], {
-  //     preserveScroll: true,
-  //     resetOnSuccess: false,
-  //     onFinish: () => {
-  //       console.log(this.$page)
-  //     }
-  //   })
-
-  //   // form.post(route('gravarPaciente'), {
-  //   //   onFinish: (res) => {
-  //   //     // $('#plano').val('0')
-  //   //     // $('#fisio').val('0')
-  //   //     // form.reset()
-  //   //     console.log(res)
-  //   //   }
-  //   // });
-  // } else {
-  //   form.post(route('editarPaciente', [props.paciente.id]), {
-  //     onFinish: () => {
-  //       // $('#plano').val('0')
-  //       // $('#fisio').val('0')
-  //       // form.reset()
-  //     }
-  //   });
-  // }
-};
-
-async function funcaoTeste() {
   form.nome = $('#nome').val();
   form.plano = parseInt($('#plano').val());
   form.inicio = $('#inicio').val();
@@ -133,11 +84,54 @@ async function funcaoTeste() {
   }
   form.dias = diasArray
   form.horarios = horariosArray;
-  await fetch(route('prepararGravarPaciente'))
-  .then((res) => res.json())
-  .then((dados) => console.log(dados))
-  .then(()=> alert('ok'))
-}
+  if (props.paciente == null || props.paciente == undefined || props.paciente == '' || props.paciente.length == 0) {
+    await axios.post(route('prepararGravarPaciente'), form)
+    .then((res) => {
+      // console.log(res, res.data[0], res.data[0][0])
+      let texto = ''
+      if (res.data[0].length === parseInt($('#atendimentos_para_criar').val())) {
+        if (res.data[0].length === 1) texto = 'O atendimento pode ser marcado, pois não há incompatibilidade de horários, atividades e aparelhos. Confirma?'
+        else texto = `Todos os ${res.data[0].length} podem ser marcados, pois não há incompatibilidade de horários, atividades e aparelhos. Confirma?`
+      }
+      else {
+        if (res.data[0].length === 1) texto = 'O atendimento pode ser marcado, pois não há incompatibilidade de horários, atividades ou aparelhos. Confirma criação do registro do paciente, mesmo assim?'
+        else texto = `Dos ${$('#atendimentos_para_criar').val()}, é possível marcar apenas ${res.data[0].length}, pois há incompatibilidade de horários, atividades ou aparelhos em ${res.data[1].length}. Continuar?`
+      }
+      Swal.fire({
+        title: 'Preparação',
+        icon: 'question',
+        html: texto,
+        showCancelButton: true,
+        confirmButtonText: 'Sim',
+        cancelButtonText: 'Não'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire(
+            'Cumprir!',
+            'Chamar a função que executa de fato as marcações.',
+            'success'
+          )
+        }
+      })
+    })
+    // form.post(route('gravarPaciente'), {
+    //   onFinish: (res) => {
+    //     // $('#plano').val('0')
+    //     // $('#fisio').val('0')
+    //     // form.reset()
+    //     console.log(res)
+    //   }
+    // });
+  } else {
+    form.post(route('editarPaciente', [props.paciente.id]), {
+      onFinish: () => {
+        // $('#plano').val('0')
+        // $('#fisio').val('0')
+        // form.reset()
+      }
+    });
+  }
+};
 
 function info_atendimentosParaMarcar() {
   Swal.fire ({
