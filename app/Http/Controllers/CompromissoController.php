@@ -100,25 +100,8 @@ class CompromissoController extends Controller
   /**
    * Cria os primeiros atendimentos, quando vem da tela de criacao de paciente
    */
-  public static function prepararParaCriarCompromissos(StorePacienteRequest $request, $paciente_id)
+  public static function prepararParaCriarCompromissos(StorePacienteRequest $request)
   {
-
-    // dd($request, $paciente_id);
-
-    /**
-     * Request:
-     * "nome" => "Jorge Henrique Bueno Gomez"
-     * "plano" => 23
-     * "inicio" => "2022-07-01"
-     * "fim" => "2022-12-31"
-     * "fisio" => "1"
-     * "observacao" => "Servidor público e desenvolvedor web"
-     * "telefone" => "(45) 999-367-300"
-     * "nascimento" => "1987-10-14"
-     * "dias" => array:3 [▶]
-     * "horarios" => array:3 [▶]
-     * "qtdeAtendimentos" => "72"
-     */
     $diasEhorariosParadigmas = array('dias' => array(), 'horas' => array());
     $diasArray = []; //Dias da semana
     $horasArray = []; //Horários
@@ -129,8 +112,6 @@ class CompromissoController extends Controller
       array_push($horasArray, $horaString);
     }
     $diasEhorariosParadigmas['dias'][0] = date_create($request->inicio);
-    // $diasEhorariosParadigmas['dias'][0] = date($request->inicio);
-    // dd($diasEhorariosParadigmas['dias'][0]->format('N'));
     $indice = 0;
     for ($i = 0; $i < 7; $i++) {
       $indice = array_search(intval($diasEhorariosParadigmas['dias'][0]->format('N')), $diasArray);
@@ -140,8 +121,6 @@ class CompromissoController extends Controller
         date_add($diasEhorariosParadigmas['dias'][0], date_interval_create_from_date_string("1 day"));
       }
     }
-    // array_splice($diasArray, $indice, 1);
-    // array_splice($horasArray, $indice, 1);
     $diasArray[$indice] = -1;
     $horasArray[$indice] = -1;
 
@@ -160,48 +139,10 @@ class CompromissoController extends Controller
         }
       }
     }
-    // dd($diasEhorariosParadigmas);
-
     $atendimentosParaMarcar = array();
-    // dd($request->qtdeAtendimentos, $diasArray, intval($request->qtdeAtendimentos), sizeof($diasArray), intval($request->qtdeAtendimentos)/sizeof($diasArray), floor(intval($request->qtdeAtendimentos)/sizeof($diasArray)));
-    /* bckp funcionando
-    for ($i = 0; $i < (floor( intval($request->qtdeAtendimentos)/sizeof($diasArray) ) + (intval($request->qtdeAtendimentos) % sizeof($diasArray) ) ); $i++) {
-      $semanas = '';
-      // if ($semanas == 0) $semanas = "1 week";
-      // else $semanas = $i." weeks";
-      if ($i == 1) $semanas = "1 week";
-      else $semanas = $i." weeks";
-      for ($j =0; $j < sizeof($diasArray); $j++) {
-        array_push(
-          $atendimentosParaMarcar, 
-          array(
-            'dia'=>date_add(
-              date_create($diasEhorariosParadigmas['dias'][$j]->format('Y-m-d')),
-              date_interval_create_from_date_string($semanas)
-            ),
-            'hora'=>$diasEhorariosParadigmas['horas'][$j].":00",
-            'ok'=>false
-          )
-        );
-      }
-    }
-
-    $vagasCheias = array();
-    for ($contador = 0; $contador < sizeof($atendimentosParaMarcar); $contador++) {
-      $compromisso = Compromisso::where('dia', $atendimentosParaMarcar[$contador]['dia']->format('Y-m-d'))->where('hora', $atendimentosParaMarcar[$contador]['hora'])->where('ativo','true')->limit(1)->get();
-      if (sizeof($compromisso) > 0 ) {
-        if ($compromisso[0]->vagas_preenchidas < $compromisso[0]->vagas) $atendimentosParaMarcar[$contador]['ok'] = true;
-        else array_push($vagasCheias, $atendimentosParaMarcar[$contador]);
-      } else {
-        $atendimentosParaMarcar[$contador]['ok'] = true;
-      }
-    }
-    */
     $vagasCheias = array();
     for ($i = 0; $i < (floor( intval($request->qtdeAtendimentos)/sizeof($diasArray) ) + (intval($request->qtdeAtendimentos) % sizeof($diasArray) ) ); $i++) {
       $semanas = '';
-      // if ($semanas == 1) $semanas = "1 week";
-      // else $semanas = $i." weeks";
       if ($i == 1) $semanas = "1 week";
       else $semanas = $i." weeks";
       for ($j =0; $j < sizeof($diasArray); $j++) {
@@ -211,12 +152,10 @@ class CompromissoController extends Controller
             date_interval_create_from_date_string($semanas)
           ),
           'hora'=>$diasEhorariosParadigmas['horas'][$j].":00",
-          // 'ok'=>false
         );
         $compromisso = Compromisso::where('dia', $candidatoAatendimento['dia']->format('Y-m-d'))->where('hora', $candidatoAatendimento['hora'])->where('ativo','true')->limit(1)->get();
         if (sizeof($compromisso) > 0 ) {
           if ($compromisso[0]->vagas_preenchidas < $compromisso[0]->vagas) {
-            // $candidatoAatendimento['ok'] = true;
             array_push($atendimentosParaMarcar, $candidatoAatendimento);
             // dump('Editar Compromisso existente');
           }
@@ -225,9 +164,85 @@ class CompromissoController extends Controller
             // dump('Compromisso cheio!');
           }
         } else {
-          // $candidatoAatendimento['ok'] = true;
           array_push($atendimentosParaMarcar, $candidatoAatendimento);
           // dump('Criar novo Crompromisso');
+          // $compromisso->dia = $candidatoAatendimento['dia']->format('Y-m-d');
+          // $compromisso->hora = $candidatoAatendimento['hora'];
+          // $compromisso->fisio_id = intval($request->fisio);
+          // $compromisso->paciente_id = $paciente_id;
+          // $request->plano <= 25 ? $compromisso->atividade_id = 1 : $compromisso->atividade_id = 2; //HARDcoded
+          // $aparelhos = Aparelho::all()->count();//HARDcoded
+          // $compromisso->atividade_id == 1 ? $compromisso->aparelho_id = rand(2, $aparelhos) : $compromisso->aparelho_id = 1;//HARDcoded
+          // CompromissoController::criarCompromisso($compromisso);
+        }
+      }
+    }
+    $resultado = array($atendimentosParaMarcar, $vagasCheias);
+    return $resultado;
+  }
+
+  public static function criarCompromissos(StorePacienteRequest $request, $paciente_id)
+  {
+    $diasEhorariosParadigmas = array('dias' => array(), 'horas' => array());
+    $diasArray = []; //Dias da semana
+    $horasArray = []; //Horários
+    foreach ($request->dias as $diaInt) {
+      array_push($diasArray, intval($diaInt));
+    }
+    foreach ($request->horarios as $horaString) {
+      array_push($horasArray, $horaString);
+    }
+    $diasEhorariosParadigmas['dias'][0] = date_create($request->inicio);
+    $indice = 0;
+    for ($i = 0; $i < 7; $i++) {
+      $indice = array_search(intval($diasEhorariosParadigmas['dias'][0]->format('N')), $diasArray);
+      if ($indice !== false) {
+        $diasEhorariosParadigmas['horas'][0] = $horasArray[$indice];
+      } else {
+        date_add($diasEhorariosParadigmas['dias'][0], date_interval_create_from_date_string("1 day"));
+      }
+    }
+    $diasArray[$indice] = -1;
+    $horasArray[$indice] = -1;
+
+    $indice = 0;
+    for ($i = 0; $i < sizeof($diasArray)-1; $i++) {
+      $diasEhorariosParadigmas['dias'][$i + 1] = date_create($diasEhorariosParadigmas['dias'][$i]->format('Y-m-d'));
+      for ($d = 0; $d < 7; $d++) {
+        $indice = array_search(intval($diasEhorariosParadigmas['dias'][$i + 1]->format('N')), $diasArray);
+        if ($indice !== false) {
+          $diasEhorariosParadigmas['horas'][$i + 1] = $horasArray[$indice];
+          $diasArray[$indice] = -1;
+          $horasArray[$indice] = -1;
+          break 1;
+        } else {
+          date_add($diasEhorariosParadigmas['dias'][$i + 1], date_interval_create_from_date_string("1 day"));
+        }
+      }
+    }
+
+    for ($i = 0; $i < (floor( intval($request->qtdeAtendimentos)/sizeof($diasArray) ) + (intval($request->qtdeAtendimentos) % sizeof($diasArray) ) ); $i++) {
+      $semanas = '';
+      if ($i == 1) $semanas = "1 week";
+      else $semanas = $i." weeks";
+      for ($j =0; $j < sizeof($diasArray); $j++) {
+        $candidatoAatendimento = array(
+          'dia'=>date_add(
+            date_create($diasEhorariosParadigmas['dias'][$j]->format('Y-m-d')),
+            date_interval_create_from_date_string($semanas)
+          ),
+          'hora'=>$diasEhorariosParadigmas['horas'][$j].":00",
+        );
+        $compromisso = Compromisso::where('dia', $candidatoAatendimento['dia']->format('Y-m-d'))->where('hora', $candidatoAatendimento['hora'])->where('ativo','true')->limit(1)->get();
+        if (sizeof($compromisso) > 0 ) {
+          if ($compromisso[0]->vagas_preenchidas < $compromisso[0]->vagas) {
+            CompromissoController::editarCompromisso($compromisso[0], $request->fisio, $paciente_id, $request->plano);
+          }
+          else {
+            // dump('Compromisso cheio!');
+            //TODO: tirar esse else, pois aqui no criar, o usuário já sabe que há atendimentos que não serão criados...
+          }
+        } else {
           $compromisso->dia = $candidatoAatendimento['dia']->format('Y-m-d');
           $compromisso->hora = $candidatoAatendimento['hora'];
           $compromisso->fisio_id = intval($request->fisio);
@@ -239,75 +254,14 @@ class CompromissoController extends Controller
         }
       }
     }
-    // dd($atendimentosParaMarcar, $vagasCheias);
-    // array_push($atendimentosParaMarcar, intval($request->fisio));
-    // $compromissosObject = (object) $atendimentosParaMarcar;
-    // $compromissosObject->fisio_id = intval($request->fisio);
-    // $compromissosObject->paciente_id = $paciente_id;
-    // $request->plano <= 25 ? $compromissosObject->atividade_id = 1 : $compromissosObject->atividade_id = 2;
-    // $aparelhos = Aparelho::all()->count();
-    // $compromissosObject->atividade_id == 1 ? $compromissosObject->aparelho_id = rand(2, $aparelhos) : $compromissosObject->aparelho_id = 1;
-    // CompromissoController::criarCompromissos($compromissosObject);
-
-    // return redirect()->route('agenda', ['compromissosNaoMarcados'=>$vagasCheias])->with('status', 'Compromissos criados!');
-    $resultado = array($atendimentosParaMarcar, $vagasCheias);
-    return $resultado;
   }
 
-  public static function criarCompromissos($compromissosParaMarcar)
+  public static function criarCompromisso($compromissoParaMarcar)
   {
-    dd($compromissosParaMarcar);
-    /**
-     * +"0": array:2 [▼
-     *  "dia" => DateTime @1656892800 {#1286 ▶}
-     *  "hora" => "18:00:00"
-     * ]
-     * +"fisio_id": 1
-     * +"paciente_id": 10
-     * +"atividade_id": 1
-     * +"aparelho": 3
-     */
-    for ($i = 0; $i < sizeof($compromissosParaMarcar); $i++)
-    {
-      $compromisso = new Compromisso([
-        'user_id' => $compromissosParaMarcar->fisio,
-        'dia' => $compromissosParaMarcar[$i]->dia,
-        'hora' => $compromissosParaMarcar[$i]->hora,
-        'vagas' => 3,
-        'vagas_preenchidas' => 1,
-        'ativo' => true,
-      ]);//HARDcoded vagas
-      $compromisso->save();
-      $novoAtendimento = new Atendimento([
-        'compromisso_id' => $compromisso->id,
-        'paciente_id' => $compromissosParaMarcar->paciente_id,
-        'atividade_id' => $compromissosParaMarcar->atividade_id,
-        'aparelho_id' => $compromissosParaMarcar->aparelho_id,
-        'fisio_id' => $compromissosParaMarcar->fisio_id,
-        'cumprido' => false,
-        'ativo' => true
-      ]);
-      $novoAtendimento->save();
-    }
-  }
-
-  public static function criarCompromisso($compromissosParaMarcar)
-  {
-    // dd($compromissosParaMarcar);
-    // Illuminate\Database\Eloquent\Collection {#1320 ▼
-    //   #items: []
-    //   #escapeWhenCastingToString: false
-    //   +"dia": "2022-07-04"
-    //   +"hora": "18:00:00"
-    //   +"fisio_id": 1
-    //   +"paciente_id": 10
-    //   +"atividade_id": 1
-    //   +"aparelho_id": 6
-    // }
     $compromisso = new Compromisso([
-      'user_id' => $compromissosParaMarcar->fisio_id,
-      'dia' => $compromissosParaMarcar->dia,
-      'hora' => $compromissosParaMarcar->hora,
+      'user_id' => $compromissoParaMarcar->fisio_id,
+      'dia' => $compromissoParaMarcar->dia,
+      'hora' => $compromissoParaMarcar->hora,
       'vagas' => 3,
       'vagas_preenchidas' => 1,
       'ativo' => true,
@@ -315,16 +269,46 @@ class CompromissoController extends Controller
     $compromisso->save();
     $novoAtendimento = new Atendimento([
       'compromisso_id' => $compromisso->id,
-      'paciente_id' => $compromissosParaMarcar->paciente_id,
-      'atividade_id' => $compromissosParaMarcar->atividade_id,
-      'aparelho_id' => $compromissosParaMarcar->aparelho_id,
-      'fisio_id' => $compromissosParaMarcar->fisio_id,
+      'paciente_id' => $compromissoParaMarcar->paciente_id,
+      'atividade_id' => $compromissoParaMarcar->atividade_id,
+      'aparelho_id' => $compromissoParaMarcar->aparelho_id,
+      'fisio_id' => $compromissoParaMarcar->fisio_id,
       'cumprido' => false,
       'ativo' => true
     ]);
     $novoAtendimento->save();
   }
 
+  public static function editarCompromisso($compromissoParaEditar, $fisio_id, $paciente_id, $plano_id)
+  {
+    dd($compromissoParaEditar, $fisio_id, $paciente_id, $plano_id);
+
+    $compromissoParaEditar->vagas_preenchidas += 1;
+    $compromissoParaEditar->save();
+
+    $plano_id <= 25 ? $atividade_id = 1 : $atividade_id = 2; //HARDcoded
+    $aparelho_id = 1;
+    if ($atividade_id ==1) {
+      $aparelhos = Aparelho::all()->toArray();//HARDcoded
+      $aparelhosUsados = array();
+      foreach($compromissoParaEditar->atendimentosValidos as $atendimento) {
+        array_push($aparelhosUsados, $atendimento->aparelho_id);
+      }
+      $aparelhosPermitidos = array_diff($aparelhos, $aparelhosUsados);
+      $aparelho_id = rand(2, sizeof($aparelhosPermitidos));
+    }
+
+    $novoAtendimento = new Atendimento([
+      'compromisso_id' => $compromissoParaEditar->id,
+      'paciente_id' => $paciente_id,
+      'atividade_id' => $atividade_id,
+      'aparelho_id' => $aparelho_id,
+      'fisio_id' => $fisio_id,
+      'cumprido' => false,
+      'ativo' => true
+    ]);
+    $novoAtendimento->save();
+  }
 
   /**
    * Store a newly created resource in storage.

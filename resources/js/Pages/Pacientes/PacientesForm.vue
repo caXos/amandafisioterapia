@@ -94,8 +94,8 @@ const submit = async () => {
         else texto = `Todos os ${res.data[0].length} podem ser marcados, pois não há incompatibilidade de horários, atividades e aparelhos. Confirma?`
       }
       else {
-        if (res.data[0].length === 1) texto = 'O atendimento pode ser marcado, pois não há incompatibilidade de horários, atividades ou aparelhos. Confirma criação do registro do paciente, mesmo assim?'
-        else texto = `Dos ${$('#atendimentos_para_criar').val()}, é possível marcar apenas ${res.data[0].length}, pois há incompatibilidade de horários, atividades ou aparelhos em ${res.data[1].length}. Continuar?`
+        if (res.data[1].length === 1) texto = 'O atendimento não pode ser marcado, pois há incompatibilidade de horários, atividades ou aparelhos. Confirma criação do registro do paciente, mesmo assim?'
+        else texto = `Dos ${$('#atendimentos_para_criar').val()} atendimentos, é possível marcar apenas ${res.data[0].length}, pois há incompatibilidade de horários, atividades ou aparelhos em ${res.data[1].length}. Continuar?`
       }
       Swal.fire({
         title: 'Preparação',
@@ -106,22 +106,28 @@ const submit = async () => {
         cancelButtonText: 'Não'
       }).then((result) => {
         if (result.isConfirmed) {
-          Swal.fire(
-            'Cumprir!',
-            'Chamar a função que executa de fato as marcações.',
-            'success'
-          )
+          form.post(route('gravarPaciente'), {
+            onFinish: (res) => {
+              $('#plano').val('0')
+              $('#fisio').val('0')
+              for (let i = 0; i < frequencia.value; i++) {
+                diasArray.push($('#dias-' + i).val('0'))
+                horariosArray.push($('#horarios-' + i).val('0'))
+              }
+              form.reset()
+              Swal.fire({
+                title: 'Sucesso!',
+                text: 'Registro de paciente e atendimentos criados com sucesso!',
+                icon: 'success',
+                timer: 1500,
+                timerProgressBar: true
+              })
+            }
+          })
         }
       })
     })
-    // form.post(route('gravarPaciente'), {
-    //   onFinish: (res) => {
-    //     // $('#plano').val('0')
-    //     // $('#fisio').val('0')
-    //     // form.reset()
-    //     console.log(res)
-    //   }
-    // });
+    
   } else {
     form.post(route('editarPaciente', [props.paciente.id]), {
       onFinish: () => {
