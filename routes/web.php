@@ -79,6 +79,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::delete('deletarFinanceiro/{id}',[FinanceiroController::class, 'deletarFinanceiro'])->name('deletarFinanceiro');
 
     Route::get('adicionarPaciente',[PacienteController::class, 'create'])->name('adicionarPaciente');
+    Route::get('prepararGravarPaciente',[PacienteController::class, 'prepareStore'], ['paciente_id'=>10])->name('prepararGravarPaciente');
     Route::post('adicionarPaciente',[PacienteController::class, 'store'])->name('gravarPaciente');
     Route::get('editarPaciente/{id}',[PacienteController::class, 'edit'])->name('editarPaciente');
     Route::post('editarPaciente/{id}',[PacienteController::class, 'update'])->name('editarPaciente');

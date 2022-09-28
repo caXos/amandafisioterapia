@@ -72,6 +72,44 @@ class PacienteController extends Controller
     }
 
     /**
+     * Faz os cálculos para verificar se é possível criar o paciente e todos os atendimentos
+     * @param \App\Http\Requests\StorePacienteRequest  $request
+     * @return json contendo array de compromissos, seus atendimentos, possíveis de criar e também os compromissos que não poderão ser marcados (sem mais vagas)
+     */
+    public function prepareStore(StorePacienteRequest $request)
+    {
+        // CompromissoController::prepararParaCriarCompromissos($request, 10);
+        $this->authorize('create', Paciente::class);
+        // $paciente = new Paciente([
+        //     'nome' => $request->nome,
+        //     'plano_id' => $request->plano,
+        //     'fisio_id' => $request->fisio,
+        //     'observacao' => $request->observacao,
+        //     'nascimento' => $request->nascimento,
+        //     'telefone' => $request->telefone,
+        //     'ativo' => true
+        // ]);
+        // $paciente->save();
+        // $planoPaciente = new PlanoPaciente([
+        //     'paciente_id' => $paciente->id,
+        //     'plano_id' => $request->plano,
+        //     'inicio' => $request->inicio,
+        //     'fim' => $request->fim,
+        //     'ativo' => true
+        // ]);
+        // $planoPaciente->save();
+        // $retornoDosCompromissos = CompromissoController::prepararParaCriarCompromissos($request, $paciente->id);
+        // dump('Cheguei ao metodo PacienteController::prepareStore');
+        // dump($request);
+        $retornoDosCompromissos = CompromissoController::prepararParaCriarCompromissos($request, 10);
+        // dd($retornoDosCompromissos);
+        $objeto = (object)[];
+        $objeto->blah = "blah";
+        return redirect()->back()->with('teste', $objeto);
+        // return $retornoDosCompromissos;
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StorePacienteRequest  $request
@@ -79,7 +117,9 @@ class PacienteController extends Controller
      */
     public function store(StorePacienteRequest $request)
     {
-        // CompromissoController::prepararParaCriarCompromissos($request, 10);
+        $retornoDosCompromissos = CompromissoController::prepararParaCriarCompromissos($request, 10);
+        // dd($retornoDosCompromissos);
+        return $retornoDosCompromissos;
         $this->authorize('create', Paciente::class);
         $paciente = new Paciente([
             'nome' => $request->nome,

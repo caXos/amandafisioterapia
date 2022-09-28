@@ -9,13 +9,15 @@ import { onMounted, computed, ref } from 'vue';
 import FisioSelect from '@/Components/FisioSelect.vue';
 import PlanoSelect from '@/Components/PlanoSelect.vue';
 import Fieldset from '@/Components/Fieldset.vue';
+import { Inertia } from '@inertiajs/inertia';
 
 const props = defineProps({
   status: String,
   planos: Object,
   fisios: Object,
   paciente: Object,
-  plano: Object
+  plano: Object,
+  teste: Object
 });
 
 const form = useForm({
@@ -62,7 +64,58 @@ onMounted(function () {
     $('#nascimento').val(props.paciente.nascimento);
   }
 });
-const submit = () => {
+
+const submit = async () => {
+  funcaoTeste();
+  // form.nome = $('#nome').val();
+  // form.plano = parseInt($('#plano').val());
+  // form.inicio = $('#inicio').val();
+  // form.fim = $('#fim').val();
+  // form.fisio = $('#fisio').val();
+  // form.observacao = $('#observacao').val();
+  // form.telefone = $('#telefone').val();
+  // form.nascimento = $('#nascimento').val();
+  // form.qtdeAtendimentos = $('#atendimentos_para_criar').val();
+  // let diasArray = []
+  // let horariosArray = []
+  // for (let i = 0; i < frequencia.value; i++) {
+  //   diasArray.push($('#dias-' + i).val())
+  //   horariosArray.push($('#horarios-' + i).val())
+  // }
+  // form.dias = diasArray
+  // form.horarios = horariosArray;
+  // if (props.paciente == null || props.paciente == undefined || props.paciente == '' || props.paciente.length == 0) {
+  //   // await fetch(route('prepararGravarPaciente'))
+  //   // .then(async (response) => console.log(await response.json()))
+  //   // .then((data) => console.log(data))
+  //   Inertia.get(route('prepararGravarPaciente'), [], {
+  //     preserveScroll: true,
+  //     resetOnSuccess: false,
+  //     onFinish: () => {
+  //       console.log(this.$page)
+  //     }
+  //   })
+
+  //   // form.post(route('gravarPaciente'), {
+  //   //   onFinish: (res) => {
+  //   //     // $('#plano').val('0')
+  //   //     // $('#fisio').val('0')
+  //   //     // form.reset()
+  //   //     console.log(res)
+  //   //   }
+  //   // });
+  // } else {
+  //   form.post(route('editarPaciente', [props.paciente.id]), {
+  //     onFinish: () => {
+  //       // $('#plano').val('0')
+  //       // $('#fisio').val('0')
+  //       // form.reset()
+  //     }
+  //   });
+  // }
+};
+
+async function funcaoTeste() {
   form.nome = $('#nome').val();
   form.plano = parseInt($('#plano').val());
   form.inicio = $('#inicio').val();
@@ -80,24 +133,11 @@ const submit = () => {
   }
   form.dias = diasArray
   form.horarios = horariosArray;
-  if (props.paciente == null || props.paciente == undefined || props.paciente == '' || props.paciente.length == 0) {
-    form.post(route('gravarPaciente'), {
-      onFinish: () => {
-        // $('#plano').val('0')
-        // $('#fisio').val('0')
-        // form.reset()
-      }
-    });
-  } else {
-    form.post(route('editarPaciente', [props.paciente.id]), {
-      onFinish: () => {
-        // $('#plano').val('0')
-        // $('#fisio').val('0')
-        // form.reset()
-      }
-    });
-  }
-};
+  await fetch(route('prepararGravarPaciente'))
+  .then((res) => res.json())
+  .then((dados) => console.log(dados))
+  .then(()=> alert('ok'))
+}
 
 function info_atendimentosParaMarcar() {
   Swal.fire ({
