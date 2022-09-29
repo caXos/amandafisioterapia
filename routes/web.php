@@ -92,7 +92,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::post('editarProntuario/{paciente_id}/{id}',[ProntuarioController::class, 'update'])->name('editarProntuario');
     Route::get('deletarProntuario/{paciente_id}/{id}',[ProntuarioController::class, 'deletarProntuario'])->name('deletarProntuario');
 
-    Route::get('debug', [FinanceiroController::class, 'debug'])->name('debug');
+    Route::post('debug', [CompromissoController::class, 'debug'])->name('debug');
 });
 
 require __DIR__.'/auth.php';

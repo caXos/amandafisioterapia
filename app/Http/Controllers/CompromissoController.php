@@ -281,20 +281,22 @@ class CompromissoController extends Controller
 
   public static function editarCompromisso($compromissoParaEditar, $fisio_id, $paciente_id, $plano_id)
   {
-    dd($compromissoParaEditar, $fisio_id, $paciente_id, $plano_id);
-
     $compromissoParaEditar->vagas_preenchidas += 1;
-    $compromissoParaEditar->save();
+    // $compromissoParaEditar->save();
 
     $plano_id <= 25 ? $atividade_id = 1 : $atividade_id = 2; //HARDcoded
     $aparelho_id = 1;
     if ($atividade_id ==1) {
-      $aparelhos = Aparelho::all()->toArray();//HARDcoded
+      $aparelhos = Aparelho::all();//HARDcoded
+      $aparelhosInt = array();
+      foreach($aparelhos as $aparelho) {
+        array_push($aparelhosInt, $aparelho->id);
+      }
       $aparelhosUsados = array();
       foreach($compromissoParaEditar->atendimentosValidos as $atendimento) {
         array_push($aparelhosUsados, $atendimento->aparelho_id);
       }
-      $aparelhosPermitidos = array_diff($aparelhos, $aparelhosUsados);
+      $aparelhosPermitidos = array_diff($aparelhosInt, $aparelhosUsados);
       $aparelho_id = rand(2, sizeof($aparelhosPermitidos));
     }
 
@@ -308,6 +310,7 @@ class CompromissoController extends Controller
       'ativo' => true
     ]);
     $novoAtendimento->save();
+    $compromissoParaEditar->save();
   }
 
   /**

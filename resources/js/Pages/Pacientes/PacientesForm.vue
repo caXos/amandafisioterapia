@@ -94,7 +94,7 @@ const submit = async () => {
         else texto = `Todos os ${res.data[0].length} podem ser marcados, pois não há incompatibilidade de horários, atividades e aparelhos. Confirma?`
       }
       else {
-        if (res.data[1].length === 1) texto = 'O atendimento não pode ser marcado, pois há incompatibilidade de horários, atividades ou aparelhos. Confirma criação do registro do paciente, mesmo assim?'
+        if (res.data[1].length === 1) texto = 'O atendimento <span class="text-red-800">não</span> pode ser marcado, pois há incompatibilidade de horários, atividades ou aparelhos. Confirma criação do registro do paciente, mesmo assim?'
         else texto = `Dos ${$('#atendimentos_para_criar').val()} atendimentos, é possível marcar apenas ${res.data[0].length}, pois há incompatibilidade de horários, atividades ou aparelhos em ${res.data[1].length}. Continuar?`
       }
       Swal.fire({
@@ -139,12 +139,24 @@ const submit = async () => {
   }
 };
 
+function info_dataFim() {
+  Swal.fire ({
+      title: 'Data de Fim do Plano',
+      icon: 'info',
+      html: '<p>Representa a <span class="text-orange-600">provável</span> data de fim do plano, <span class="text-orange-600">já considerados os dias de férias</span>, caso o plano possua.</p>',
+  })
+}
+
 function info_atendimentosParaMarcar() {
   Swal.fire ({
       title: 'Atendimentos para lançar',
       icon: 'info',
       html: '<p>Quantos atendimentos serão criados, independente da frequência</p><p>Exemplo:</p><p>Pilates 3x por semana, com 2 atendimentos para criar: serão gerados 2 atendimentos</p><p>Pilates 3x por semana, com 5 atendimentos para criar: serão gerados 5 atendimentos, ou seja, duas semanas completas e uma incompleta</p>',
   })
+}
+
+function debugRoute() {
+  Inertia.post(route('debug'))
 }
 </script>
 
@@ -246,9 +258,14 @@ function desabilitaDias(evt) {
                   <BreezeInput id="inicio" type="date" class="mt-1 block w-full" v-model="form.inicio"
                     @change="calculaFim($event)" required disabled />
                 </div>
-                <div class="mt-4 lg:pl-2">
+                <div class="mt-4 lg:pl-2 relative">
                   <BreezeLabel for="fim" value="Data Fim" />
                   <BreezeInput id="fim" type="date" class="mt-1 block w-full" v-model="form.fim" disabled />
+                  <div class="absolute right-0 top-0">
+                    <span class="material-symbols-outlined text-sky-800 cursor-pointer mx-2 hover:ring-2 hover:ring-offset-2 hover:rounded-full" @click="info_dataFim">
+                      info
+                    </span>
+                  </div>
                 </div>
               </div>
 
