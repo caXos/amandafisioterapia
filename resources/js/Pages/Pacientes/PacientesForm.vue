@@ -18,7 +18,8 @@ const props = defineProps({
   fisios: Object,
   paciente: Object,
   plano: Object,
-  teste: Object
+  teste: Object,
+  fisio_id: Number
 });
 
 const form = useForm({
@@ -43,6 +44,9 @@ const diasDaSemana = ref([
   'Quintas-feiras',
   'Sextas-feiras'
 ])
+const datasHabilitadas = ref([false, false])//[0] início, [1] fim
+const dataInicioHabilitada = ref(false)
+const dataFimHabilitada = ref(false)
 
 onMounted(function () {
   if (props.paciente == null || props.paciente == undefined || props.paciente == '' || props.paciente.length == 0) {
@@ -163,6 +167,7 @@ function debugRoute() {
 <script>
 function habilitaDataInicio() {
   $('#inicio').removeAttr('disabled');
+  this.dataInicioHabilitada = true
   let freq = $('#plano>option:selected').attr('frequencia')
   freq = freq.substring(0, 1)
   if (freq === 'ú') this.frequencia = 1
@@ -172,6 +177,7 @@ function habilitaDataInicio() {
 }
 function calculaFim(evt) {
   $('#fim').removeAttr('disabled');
+  this.dataFimHabilitada = true
   var tempoPhp = $('#plano>option:selected').attr('tempoPHP');
   var dataInicio = $('#inicio').val();
   var dataFim = null;
@@ -253,12 +259,12 @@ function desabilitaDias(evt) {
                 </div>
               </div>
               <div class="lg:grid lg:grid-cols-2">
-                <div class="mt-4 lg:pr-2">
+                <div class="mt-4 lg:pr-2" :class="{'text-gray-500': !dataInicioHabilitada, 'text-inherit': dataInicioHabilitada}">
                   <BreezeLabel for="inicio" value="Data Início" />
                   <BreezeInput id="inicio" type="date" class="mt-1 block w-full" v-model="form.inicio"
                     @change="calculaFim($event)" required disabled />
                 </div>
-                <div class="mt-4 lg:pl-2 relative">
+                <div class="mt-4 lg:pl-2 relative" :class="{'text-gray-500': !dataFimHabilitada, 'text-inherit': dataFimHabilitada}">
                   <BreezeLabel for="fim" value="Data Fim" />
                   <BreezeInput id="fim" type="date" class="mt-1 block w-full" v-model="form.fim" disabled />
                   <div class="absolute right-0 top-0">
