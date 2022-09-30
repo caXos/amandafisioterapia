@@ -44,7 +44,13 @@ const diasDaSemana = ref([
   'Quintas-feiras',
   'Sextas-feiras'
 ])
-const datasHabilitadas = ref([false, false])//[0] início, [1] fim
+const diasDaSemanaHabilitados = ref([
+  false,
+  true,
+  true,
+  true,
+  true
+])
 const dataInicioHabilitada = ref(false)
 const dataFimHabilitada = ref(false)
 
@@ -191,11 +197,12 @@ function mascaraTelefone(evt) {
 }
 
 function desabilitaDias(evt) {
-  console.log(evt.target.selectedIndex)
-  if (evt.target.id === 'dias-0') {
-    // $('#dias-1>option').removeAttr('disabled')
-    $('#dias-1>option[value="' + (evt.target.selectedIndex + 1) + '"]').prop('disabled', 'disabled')
+  console.log(evt.target, evt.target.selectedIndex)
+  for (let i=0; i< this.diasDaSemanaHabilitados.length; i++) {
+    this.diasDaSemanaHabilitados[i] = true
   }
+  this.diasDaSemanaHabilitados[evt.target.selectedIndex] = false
+  if (evt.target.id !== 'dias-0') this.diasDaSemanaHabilitados[parseInt($('#dias-0').val())-1] = false
 }
 </script>
 
@@ -301,10 +308,17 @@ function desabilitaDias(evt) {
                     <div v-for="index in frequencia" class="lg:grid lg:grid-cols-2">
                       <div class="mt-4 lg:mt-0 lg:px-2" :class="{'mt-0':index==1}">
                         <BreezeLabel :for="`dias-${index-1}`" value="Dia" />
-                        <select
+                        <select v-if="index === 1"
                           class="border-cyan-300 focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-opacity-50 rounded-md shadow-sm block w-full"
                           :id="`dias-${index-1}`" @change="desabilitaDias($event)">
                           <option v-for="(diaDaSemana, index) in diasDaSemana" :key="index" :value="index+1">
+                            {{diaDaSemana}}
+                          </option>
+                        </select>
+                        <select v-else
+                          class="border-cyan-300 focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-opacity-50 rounded-md shadow-sm block w-full"
+                          :id="`dias-${index-1}`" @change="desabilitaDias($event)">
+                          <option v-for="(diaDaSemana, index) in diasDaSemana" :key="index" :value="index+1" :disabled="diasDaSemanaHabilitados[index] === false">
                             {{diaDaSemana}}
                           </option>
                         </select>
