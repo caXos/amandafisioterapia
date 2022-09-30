@@ -45,7 +45,7 @@ const diasDaSemana = ref([
   'Sextas-feiras'
 ])
 const diasDaSemanaHabilitados = ref([
-  false,
+  true,
   true,
   true,
   true,
@@ -197,12 +197,23 @@ function mascaraTelefone(evt) {
 }
 
 function desabilitaDias(evt) {
-  console.log(evt.target, evt.target.selectedIndex)
+  // console.log(evt.target, evt.target.selectedIndex)
   for (let i=0; i< this.diasDaSemanaHabilitados.length; i++) {
     this.diasDaSemanaHabilitados[i] = true
   }
-  this.diasDaSemanaHabilitados[evt.target.selectedIndex] = false
+  this.diasDaSemanaHabilitados[evt.target.selectedIndex-1] = false
+
   if (evt.target.id !== 'dias-0') this.diasDaSemanaHabilitados[parseInt($('#dias-0').val())-1] = false
+  if (evt.target.id === 'dias-0') {
+    if ( parseInt( $('#dias-1 > option:selected')[0].value ) === evt.target.selectedIndex) $('#dias-1')[0].selectedIndex = 0
+    if ( parseInt( $('#dias-2 > option:selected')[0].value ) === evt.target.selectedIndex) $('#dias-2')[0].selectedIndex = 0
+  }
+  if (evt.target.id === 'dias-1') {
+    if ( parseInt( $('#dias-2 > option:selected')[0].value ) === evt.target.selectedIndex-1) $('#dias-2')[0].selectedIndex = 0
+  }
+  if (evt.target.id === 'dias-2') {
+    if ( parseInt( $('#dias-1 > option:selected')[0].value ) === evt.target.selectedIndex-1) $('#dias-1')[0].selectedIndex = 0
+  }
 }
 </script>
 
@@ -311,6 +322,7 @@ function desabilitaDias(evt) {
                         <select v-if="index === 1"
                           class="border-cyan-300 focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-opacity-50 rounded-md shadow-sm block w-full"
                           :id="`dias-${index-1}`" @change="desabilitaDias($event)">
+                          <option value="0" disabled selected>Selecione um dia da semana</option>
                           <option v-for="(diaDaSemana, index) in diasDaSemana" :key="index" :value="index+1">
                             {{diaDaSemana}}
                           </option>
@@ -318,6 +330,7 @@ function desabilitaDias(evt) {
                         <select v-else
                           class="border-cyan-300 focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-opacity-50 rounded-md shadow-sm block w-full"
                           :id="`dias-${index-1}`" @change="desabilitaDias($event)">
+                          <option value="0" disabled selected>Selecione um dia da semana</option>
                           <option v-for="(diaDaSemana, index) in diasDaSemana" :key="index" :value="index+1" :disabled="diasDaSemanaHabilitados[index] === false">
                             {{diaDaSemana}}
                           </option>
