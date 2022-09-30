@@ -17,7 +17,6 @@ class AtendimentoController extends Controller
   public static function retirarPaciente($paciente_id)
   {
     $atendimentos = Atendimento::where('paciente_id', $paciente_id)->where('ativo',true)->get();
-    dump($atendimentos);
     foreach($atendimentos as $atendimento) {
         $atendimento->ativo = false;
         $atendimento->save();
