@@ -89,15 +89,17 @@ const submit = async () => {
   let diasArray = []
   let horariosArray = []
   for (let i = 0; i < frequencia.value; i++) {
-    diasArray.push($('#dias-' + i).val())
+    // diasArray.push($('#dias-' + i).val())
+    diasArray.push($('#dias-' + i)[0].selectedIndex)
     horariosArray.push($('#horarios-' + i).val())
   }
   form.dias = diasArray
   form.horarios = horariosArray;
   if (props.paciente == null || props.paciente == undefined || props.paciente == '' || props.paciente.length == 0) {
+    console.log(form)
     await axios.post(route('prepararGravarPaciente'), form)
     .then((res) => {
-      // console.log(res, res.data[0], res.data[0][0])
+      console.log(res, res.data[0], res.data[0][0])
       let texto = ''
       if (res.data[0].length === parseInt($('#atendimentos_para_criar').val())) {
         if (res.data[0].length === 1) texto = 'O atendimento pode ser marcado, pois não há incompatibilidade de horários, atividades e aparelhos. Confirma?'
@@ -168,6 +170,41 @@ function info_atendimentosParaMarcar() {
 function debugRoute() {
   Inertia.post(route('debug'))
 }
+
+function remover() {
+    Swal.fire({
+        title: 'Deletar paciente',
+        text: "Esta operação não pode ser revertida",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, deletar',
+        cancelButtonText: 'Não, cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.delete(route('deletarPaciente',[props.paciente.id]), {
+                onSuccess: () => {
+                    Swal.fire ({
+                        title: 'Sucesso',
+                        icon: 'success',
+                        text: 'Paciente removido!'
+                    })
+                },
+                onError: () => {
+                    Swal.fire ({
+                        title: 'Erro',
+                        icon: 'error',
+                        text: 'Erro ao remover paciente'
+                    })
+                },
+                onFinish: () => {
+                    form.reset()
+                }
+            })
+        }
+    })
+}
 </script>
 
 <script>
@@ -215,6 +252,8 @@ function desabilitaDias(evt) {
     if ( parseInt( $('#dias-1 > option:selected')[0].value ) === evt.target.selectedIndex-1) $('#dias-1')[0].selectedIndex = 0
   }
 }
+
+
 </script>
 
 <template>
@@ -387,11 +426,16 @@ function desabilitaDias(evt) {
                   :href="route('pacientes')">
                 Voltar
                 </Link>
-                <Link v-if="paciente !== undefined"
+                <!-- <Link v-if="paciente !== undefined"
                   class="inline-flex items-center ml-4 px-4 py-2 bg-rose-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-rose-700 active:bg-rose-900 focus:outline-none focus:border-rose-900 focus:shadow-outline-rose transition ease-in-out duration-150"
                   :href="route('deletarPaciente', [props.paciente.id])">
                 Remover
-                </Link>
+                </Link> -->
+                <div v-if="paciente !== undefined"
+                  class="inline-flex items-center ml-4 px-4 py-2 bg-rose-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-rose-700 active:bg-rose-900 focus:outline-none focus:border-rose-900 focus:shadow-outline-rose transition ease-in-out duration-150"
+                  @click="remover">
+                Remover
+                </div>
                 <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                   Salvar
                 </BreezeButton>

@@ -200,17 +200,16 @@ class PacienteController extends Controller
     public function deletarPaciente(UpdatePacienteRequest $request)
     {
         $this->authorize('delete',Paciente::class);
-        // dump($request);
         $paciente = Paciente::find($request->id);
         $paciente->ativo = false;
-        $paciente->save();
-        // dump($paciente);
         $planoPaciente = PlanoPaciente::where('plano_id', $paciente->plano_id)->where('ativo', true)->where('paciente_id',$paciente->id)->get();
-        // dump($planoPaciente);
-        $planoPaciente[0]->ativo = false;
-        // dd($planoPaciente);
-        $planoPaciente[0]->save();
-        return redirect()->route("pacientes",['status'=>'Cadastro de Paciente alterado']);
+        if(sizeof($planoPaciente) > 0 ) {
+            $planoPaciente[0]->ativo = false;
+            $planoPaciente[0]->save();
+        }
+        AtendimentoController::retirarPaciente($paciente->id);
+        $paciente->save();
+        return redirect()->route("pacientes")->with('status','Cadastro de Paciente removido');
     }
 
     /**

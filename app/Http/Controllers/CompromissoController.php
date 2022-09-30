@@ -287,7 +287,7 @@ class CompromissoController extends Controller
     $plano_id <= 25 ? $atividade_id = 1 : $atividade_id = 2; //HARDcoded
     $aparelho_id = 1;
     if ($atividade_id ==1) {
-      $aparelhos = Aparelho::all();//HARDcoded
+      $aparelhos = Aparelho::all();//HARDcoded //TODO: trocar para Aparelho::where('ativo',true)->value('id')->get();
       $aparelhosInt = array();
       foreach($aparelhos as $aparelho) {
         array_push($aparelhosInt, $aparelho->id);
@@ -342,7 +342,7 @@ class CompromissoController extends Controller
       ]);
       $novoAtendimento->save();
     }
-    return redirect()->route("agenda", ['status' => 'Compromisso criado']);
+    return redirect()->route("agenda")->with('status', 'Compromisso criado');
   }
 
   /**
@@ -429,7 +429,7 @@ class CompromissoController extends Controller
     $compromisso->hora = $request->hora;
     $compromisso->vagas = $request->vagas;
     $compromisso->save();
-    return redirect()->route("agenda", ['status' => 'Compromisso alterado']);
+    return redirect()->route("agenda")->with('status', 'Compromisso alterado');
   }
 
   // public function update(UpdateCompromissoRequest $request, Compromisso $compromisso)
