@@ -183,6 +183,7 @@ class CompromissoController extends Controller
 
   public static function criarCompromissos(StorePacienteRequest $request, $paciente_id)
   {
+    $contadorAparelhos = 2;
     $diasEhorariosParadigmas = array('dias' => array(), 'horas' => array());
     $diasArray = []; //Dias da semana
     $horasArray = []; //Horários
@@ -249,7 +250,13 @@ class CompromissoController extends Controller
           $compromisso->paciente_id = $paciente_id;
           $request->plano <= 25 ? $compromisso->atividade_id = 1 : $compromisso->atividade_id = 2; //HARDcoded
           $aparelhos = Aparelho::all()->count();//HARDcoded
-          $compromisso->atividade_id == 1 ? $compromisso->aparelho_id = rand(2, $aparelhos) : $compromisso->aparelho_id = 1;//HARDcoded
+          //$compromisso->atividade_id == 1 ? $compromisso->aparelho_id = rand(2, $aparelhos) : $compromisso->aparelho_id = 1;//HARDcoded
+          if ($compromisso->atividade_id == 1) {
+            $compromisso->aparelho_id = $contadorAparelhos;
+            ($contadorAparelhos + 1) <= $aparelhos ? $contadorAparelhos++ : $contadorAparelhos = 2;
+          } else {
+            $compromisso->aparelho_id = 1;
+          }
           CompromissoController::criarCompromisso($compromisso);
         }
       }
@@ -296,7 +303,18 @@ class CompromissoController extends Controller
       foreach($compromissoParaEditar->atendimentosValidos as $atendimento) {
         array_push($aparelhosUsados, $atendimento->aparelho_id);
       }
+
+      /**
+       * Verifica se o paciente já tem um atendimento anterior.
+       * Caso positivo, verifica qual o último aparelho usado e retira ele da lista dos aparelhos permitidos
+       */
+      $atendimentoAnterior = Atendimento::where('paciente_id', $paciente_id)->orderBy('id', 'desc')->first();
+      if ($atendimentoAnterior != null) {
+        array_push($aparelhosUsados, $atendimentoAnterior->aparelho_id);
+      }
+
       $aparelhosPermitidos = array_diff($aparelhosInt, $aparelhosUsados);
+      
       $aparelho_id = rand(2, sizeof($aparelhosPermitidos));
     }
 

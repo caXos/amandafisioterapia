@@ -7,3 +7,7 @@ sugestoes:
 isso é útil na hora de, por exemplo, criar os compromissos e atendimentos: é necessário saber o 
 id da atividade.
 Por enquanto, está hardcoded (planos até 25 são pilates, atividade 1, e os demais são RPG, atividade 2)
+
+3. Nas atividades, alterar usesAparatus de bool para um array de int.
+Esse array vai retornar quais aparelhos a atividade usa.
+Se o array retornado for vazio, significa que a atividade não usa aparelho.
