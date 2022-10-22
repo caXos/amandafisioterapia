@@ -172,20 +172,22 @@ function buscaCompromisso() {
     verificaHora = verificaHora.concat(":00")
     for (let i = 0; i < props.outrosCompromissos.length; i++) {
       if (props.outrosCompromissos[i].dia === verificaDia && props.outrosCompromissos[i].hora === verificaHora) {
-        console.log('achei um compromisso j marcado com esse dia e hora')
+        console.log('achei um compromisso j marcado com esse dia e hora', props.outrosCompromissos[i])
         compromisso.value = props.outrosCompromissos[i]
         vagas.value = props.outrosCompromissos[i].vagas
         $('#vagas').val(props.outrosCompromissos[i].vagas)
-        for (let j = 0; j < props.outrosCompromissos[i].vagas; j++) {
-          $('#paciente-' + j).val(parseInt(props.outrosCompromissos[i].atendimentos[j].paciente_id))
-          $('#atividade-' + j).val(props.outrosCompromissos[i].atendimentos[j].atividade_id)
-          if (props.outrosCompromissos[i].atendimentos[j].aparelho_id !== null && props.outrosCompromissos[i].atendimentos[j].aparelho_id !== undefined && props.outrosCompromissos[i].atendimentos[j].aparelho_id !== '' && props.outrosCompromissos[i].atendimentos[j].aparelho_id >= 0) {
-            $('#aparelho-' + j).val(props.outrosCompromissos[i].atendimentos[j].aparelho_id)
+        for (let j = 0; j < compromisso.value.vagas; j++) {
+          console.log(i, j, compromisso.value)
+          $('#paciente-' + j).val(parseInt(compromisso.value.atendimentos[j].paciente_id))
+          $('#atividade-' + j).val(compromisso.value.atendimentos[j].atividade_id)
+          if (compromisso.value.atendimentos[j].aparelho_id !== null && compromisso.value.atendimentos[j].aparelho_id !== undefined && compromisso.value.atendimentos[j].aparelho_id !== '' && compromisso.value.atendimentos[j].aparelho_id >= 0) {
+            $('#aparelho-' + j).val(compromisso.value.atendimentos[j].aparelho_id)
             habilitaAparelhos._rawValue[j] = true
             $('#aparelho-' + j).prop('disabled', '').prop('required', 'required').removeClass('text-gray-400')
           }
-          $('#fisio-' + i).val(props.outrosCompromissos[i].atendimentos[j].fisio_id)
+          $('#fisio-' + i).val(compromisso.value.atendimentos[j].fisio_id)
         }
+        break;
       }
     }
   }

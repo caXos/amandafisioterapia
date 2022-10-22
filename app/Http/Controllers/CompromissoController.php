@@ -398,12 +398,20 @@ class CompromissoController extends Controller
     $atividades = Atividade::all('id', 'name', 'usesAparatus');
     $aparelhos = Aparelho::all('id', 'name');
     $fisios = User::all('id', 'name');
+    // $outrosCompromissos = Compromisso::where('ativo', true)->get();
+    $outrosCompromissos = Compromisso::where('ativo', true)->first();
+    $outrosCompromissos->atendimentosValidos;
+    // foreach($outrosCompromissos as $comp) {
+    //   $comp->atendimentosValidos();
+    // }
+    // dd($outrosCompromissos);
     return Inertia::render('Agenda/CompromissoForm', [
       'compromisso' => $compromisso,
       'fisios' => $fisios,
       'pacientes' => $pacientes,
       'atividades' => $atividades,
       'aparelhos' => $aparelhos,
+      'outrosCompromissos' => $outrosCompromissos
     ]);
   }
 
