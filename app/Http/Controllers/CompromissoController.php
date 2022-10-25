@@ -405,13 +405,22 @@ class CompromissoController extends Controller
     //   $comp->atendimentosValidos();
     // }
     // dd($outrosCompromissos);
+
+    $planos_pacientes = PlanoPaciente::all();
+    foreach ($planos_pacientes as $plano_paciente) {
+      // $plano_paciente->atividades;
+      if ($plano_paciente->id <= 25) $plano_paciente->atividades = 1;
+      else $plano_paciente->atividades = 2;
+    }
+
     return Inertia::render('Agenda/CompromissoForm', [
       'compromisso' => $compromisso,
       'fisios' => $fisios,
       'pacientes' => $pacientes,
       'atividades' => $atividades,
       'aparelhos' => $aparelhos,
-      'outrosCompromissos' => $outrosCompromissos
+      'outrosCompromissos' => $outrosCompromissos,
+      'planos_pacientes' => $planos_pacientes
     ]);
   }
 

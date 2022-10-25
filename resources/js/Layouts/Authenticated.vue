@@ -153,7 +153,7 @@ const props = defineProps({
                     </div>
 
                     <!-- Responsive Settings Options -->
-                    <div class="pt-4 pb-1 border-t border-gray-200">
+                    <div class="pt-4 pb-1 border-t border-gray-200 z-50">
                         <div class="px-4">
                             <div class="font-medium text-base text-gray-800">{{ $page.props.auth.user.name }}</div>
                             <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
@@ -169,7 +169,7 @@ const props = defineProps({
             </nav>
 
             <!-- Page Heading -->
-            <header class="bg-white shadow sticky top-[6.5%] z-20" v-if="$slots.header">
+            <header class="bg-white shadow top-[6.5%] z-20" v-if="$slots.header">
                 <div class="max-w-7xl mx-auto py-1 px-4 sm:px-6 lg:px-8">
                     <slot name="header" />
                 </div>

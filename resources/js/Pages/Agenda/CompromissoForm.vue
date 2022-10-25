@@ -106,7 +106,7 @@ onMounted(function () {
     form.compromisso_id = props.compromisso.id
     nextTick(function () {
       for (let i = 0; i < props.compromisso.atendimentos.length; i++) {
-        console.log(props.compromisso.atendimentos[i])
+        // console.log(props.compromisso.atendimentos[i])
         form.pacientes[i] = props.compromisso.atendimentos[i].paciente_id
         form.atividades[i] = props.compromisso.atendimentos[i].atividade_id
         form.aparelhos[i] = props.compromisso.atendimentos[i].aparelho_id
@@ -172,12 +172,12 @@ function buscaCompromisso() {
     verificaHora = verificaHora.concat(":00")
     for (let i = 0; i < props.outrosCompromissos.length; i++) {
       if (props.outrosCompromissos[i].dia === verificaDia && props.outrosCompromissos[i].hora === verificaHora) {
-        console.log('achei um compromisso j marcado com esse dia e hora', props.outrosCompromissos[i])
+        // console.log('achei um compromisso j marcado com esse dia e hora', props.outrosCompromissos[i])
         compromisso.value = props.outrosCompromissos[i]
         vagas.value = props.outrosCompromissos[i].vagas
         $('#vagas').val(props.outrosCompromissos[i].vagas)
         for (let j = 0; j < compromisso.value.vagas_preenchidas; j++) {
-          console.log(i, j, compromisso.value)
+          // console.log(i, j, compromisso.value)
           $('#paciente-' + j).val(parseInt(compromisso.value.atendimentos[j].paciente_id))
           $('#atividade-' + j).val(compromisso.value.atendimentos[j].atividade_id)
           if (compromisso.value.atendimentos[j].aparelho_id !== null && compromisso.value.atendimentos[j].aparelho_id !== undefined && compromisso.value.atendimentos[j].aparelho_id !== '' && compromisso.value.atendimentos[j].aparelho_id >= 0) {
@@ -207,8 +207,8 @@ function verificaAtividadePaciente(event) {
 function trocaAtividade(evt) { //TODO: melhorar esse método
   // console.log(evt)
   let indice = evt.target.id.substring(10)
-  console.log(this.habilitaAparelhos)
-  console.log(this.habilitaAparelhos[indice])
+  // console.log(this.habilitaAparelhos)
+  // console.log(this.habilitaAparelhos[indice])
   this.habilitaAparelhos[indice] = this.props.atividades[evt.target.selectedIndex - 1].usesAparatus;
   // this.habilitaAparelhos[indice] === true ? $('#aparelho-' + indice).prop('required', 'required').prop('disabled', '') : $('#aparelho-' + indice).prop('disabled', 'disabled').removeProp('required').val(1)
 }
