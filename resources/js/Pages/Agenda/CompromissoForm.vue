@@ -176,7 +176,7 @@ function buscaCompromisso() {
         compromisso.value = props.outrosCompromissos[i]
         vagas.value = props.outrosCompromissos[i].vagas
         $('#vagas').val(props.outrosCompromissos[i].vagas)
-        for (let j = 0; j < compromisso.value.vagas; j++) {
+        for (let j = 0; j < compromisso.value.vagas_preenchidas; j++) {
           console.log(i, j, compromisso.value)
           $('#paciente-' + j).val(parseInt(compromisso.value.atendimentos[j].paciente_id))
           $('#atividade-' + j).val(compromisso.value.atendimentos[j].atividade_id)
