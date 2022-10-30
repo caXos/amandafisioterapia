@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Compromisso;
+use App\Models\Schedule;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class CompromissoPolicy
+class SchedulePolicy
 {
     use HandlesAuthorization;
 
@@ -26,10 +26,10 @@ class CompromissoPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Compromisso  $compromisso
+     * @param  \App\Models\Schedule  $schedule
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Compromisso $compromisso)
+    public function view(User $user, Schedule $schedule)
     {
         //
     }
@@ -42,50 +42,46 @@ class CompromissoPolicy
      */
     public function create(User $user)
     {
-        
+        return $user->id <= 2 ? Response::allow() : Response::deny('Ação vedada aos visitantes!');
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Compromisso  $compromisso
+     * @param  \App\Models\Schedule  $schedule
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user/*, Compromisso $compromisso*/)
+    public function update(User $user/*, Schedule $schedule*/)
     {
         return $user->id <= 2 ? Response::allow() : Response::deny('Usuário não tem permissão para atualizar compromissos!');
     }
 
-    public function completarCompromisso(User $user)
+    public function completeSchedule(User $user)
     {
         return $user->id <= 2 ? Response::allow() : Response::deny('Visitantes não podem completar compromissos!');
     }
 
-    public function deletarCompromisso(User $user)
-    {
-        return $user->id <= 2 ? Response::allow() : Response::deny('Visitantes não podem deletar compromissos!');
-    }
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Compromisso  $compromisso
+     * @param  \App\Models\Schedule  $schedule
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Compromisso $compromisso)
+    public function delete(User $user/*, Schedule $schedule*/)
     {
-        //
+        return $user->id <= 2 ? Response::allow() : Response::deny('Visitantes não podem deletar compromissos!');
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Compromisso  $compromisso
+     * @param  \App\Models\Schedule  $schedule
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Compromisso $compromisso)
+    public function restore(User $user, Schedule $schedule)
     {
         //
     }
@@ -94,10 +90,10 @@ class CompromissoPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Compromisso  $compromisso
+     * @param  \App\Models\Schedule  $schedule
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Compromisso $compromisso)
+    public function forceDelete(User $user, Schedule $schedule)
     {
         //
     }
