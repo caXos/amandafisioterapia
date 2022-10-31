@@ -35,7 +35,9 @@ onMounted (function () {
 <template>
     <div
         class="container shadow-lg shadow-sky-200 text-center text-sky-600 hover:bg-sky-100 transition-all border-2 rounded border-sky-600 mb-5">
-        <div class="bg-sky-100">{{ new Date( new Date(compromisso.dia).setDate( new Date(compromisso.dia).getDate()+ 1 ) ).toLocaleDateString() }}, {{ new Date( new Date(compromisso.dia).setDate( new Date(compromisso.dia).getDate()+ 1 ) ).toLocaleDateString('pt-BR', {weekday: 'long'}) }} - {{ compromisso.hora.substring(0, 5) }}
+        <div class="bg-sky-100">
+            <span>{{ new Date( new Date(compromisso.dia).setDate( new Date(compromisso.dia).getDate()+ 1 ) ).toLocaleDateString() }}, {{ new Date( new Date(compromisso.dia).setDate( new Date(compromisso.dia).getDate()+ 1 ) ).toLocaleDateString('pt-BR', {weekday: 'long'}) }} - {{ compromisso.hora.substring(0, 5) }}</span>
+            <span> - Vagas: {{ compromisso.vagas}}</span>
         </div>
         <div v-if="compromisso.atendimentos.length === 0">
             <Link :href="route('editarCompromisso', [props.compromisso.id])">

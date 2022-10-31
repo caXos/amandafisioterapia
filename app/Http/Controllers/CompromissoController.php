@@ -433,36 +433,117 @@ class CompromissoController extends Controller
    */
   public function update(UpdateCompromissoRequest $request/*, Compromisso $compromisso*/)
   {
+    /**
+     * Primeiro passo: encontrar o compromisso a ser editado
+     */
+    // dd($request);
     $this->authorize('update', Compromisso::class);
     $compromisso = Compromisso::find($request->compromisso_id);
-    /**
-     * Primeiro altera todos os atendimentos desse compromisso para cumprido=true e ativo = true, para registrar atendimento alterado, mas sem cumprir, sem faltar, sem nada, só editado do compromisso
-     */
     $atendimentos = $compromisso->atendimentosValidos;
-    foreach ($atendimentos as $atendimento) {
-      $atendimento->cumprido = true;
-      $atendimento->ativo = true;
-      // $atendimento->updated_at = date('Y-m-d H:i:s');
-      $atendimento->save();
+    $pacientes = $request->pacientes;
+    $atividades = $request->atividades;
+    $aparelhos = $request->aparelhos;
+    $fisios = $request->fisios;    
+    /**
+     * Segundo passo: verificar se a quantidade de atendimentos recebida pelo request eh igual a dos atendimentos validos
+     * Se a request tem menos atendimentos que os jah relacionados ao compromisso, tem que alterar a quantidade dos que se mantem e inativar os demais (ou excluir mesmo)
+     * (sim, deletar! hard! mas isso eh para evitar de olhar o historico e ter 999999999 atendimentos inativados para um mesmo compromisso;
+     * ou seja: editar um compromisso realmente pode apagar informacoes importantes, pois nao gera estatistica e historico)
+     * Se ambas as quantidades forem iguais, somente altera as informacoes
+     * Se a request tem mais atendimentos, tem que alterar os que jah existem e criar mais
+     
+     * antes:   vagas = 3, vagas_preenchidas = 1
+     * depois:  vagas = 3, vagas_preenchidas = 2
+     * Acao:    editar 1, criar 1
+     * 
+     * antes:   vagas = 3, vagas_preenchidas = 2
+     * depois:  vagas = 3, vagas_preenchidas = 1
+     * acao:    editar 1, apagar 1
+     * 
+     * antes:   vagas = 3, vagas_preenchidas = 1
+     * depois:  vagas = 1, vagas_preenchidas = 1
+     * acao:    editar 1
+     * 
+     * antes:   vagas = 3, vagas_preenchidas = 2
+     * depois:  vagas = 0, vagas_preenchidas = 0
+     * acao:    apagar 2
+     */
+    $atendimentosParaEditar = 0;
+    $atendimentosParaCriar = 0;
+    $atendimentosParaDeletar = 0;
+    if ($request->vagas == 0) {
+      $atendimentosParaDeletar = $compromisso->vagas_preenchidas; //Deletar todos os atendimentos anteriormente existentes
+    } else {
+      if ($compromisso->vagas_preenchidas == $request->vagas_preenchidas) {
+        $atendimentosParaEditar = $compromisso->vagas_preenchidas; //Editar os atendimentos
+      } else {
+        if ($compromisso->vagas_preenchidas < $request->vagas_preenchidas) {
+          $atendimentosParaEditar = $compromisso->vagas_preenchidas; //Editar alguns atendimentos
+          $atendimentosParaCriar = $request->vagas_preenchidas - $compromisso->vagas_preenchidas; //Criar alguns atendimentos
+        } else {
+          $atendimentosParaEditar = $request->vagas_preenchidas; //Editar alguns atendimentos
+          $atendimentosParaDeletar = $compromisso->vagas_preenchidas - $request->vagas_preenchidas; //Deletar alguns atendimentos
+        }
+      }
     }
     /**
-     * 'Cria' novos atendimentos
+     * Terceiro passo: Deletar os possisveis atendimentos removidos
      */
-    for ($i = 0; $i < $request->vagas; $i++) {
+    for ($contador = $request->vagas; $contador < ($request->vagas+$atendimentosParaDeletar); $contador++) {
+      $compromisso->atendimentosValidos->get($contador)->delete();
+    }
+    // $contador = 0;
+    // foreach($compromisso->atendimentosValidos as $atendimento) {
+    //   if ($contador >= $request->vagas) $atendimento->delete();
+    //   $contador++;
+    // }
+    /**
+     * Quarto passo: Atualizar os atendimentos jah existentes do compromisso.
+     * Inicialmente era procurar nos atendimentos validos o id do paciente, para o caso do usurio somente alterar a ordem dos atendimentos
+     * Tipo, tem o atendimento do Jorge e do Henrique no mesmo dia e horario, ai o usuario vai la e altera os dados dos atendimentos para constar
+     * do Henrique primeiro e do Jorge depois. Eh uma ideia... mas eu resolvi seguir a linha de pensamento que simplesmente altera os dados
+     * Ou seja, o atendimento com id=x era do jorge e o com id=y era do henrique.
+     * Ao trocar as informacoes, o atendimento x vai ser do henrique e o y do jorge.
+     * @TODO: verificar necessidade de implementar isso de uma forma diferente
+     * dica: $atendimentosArray = $compromisso->atendimentosValidos->toArray();
+     * depois usar array_search()
+     */
+    // dd('eizem', $compromisso->atendimentosValidos->values()->get(0)->paciente_id);
+    for ($contador = 0; $contador < $atendimentosParaEditar; $contador++) {
+      $compromisso->atendimentosValidos->values()->get($contador)->paciente_id = $pacientes[$contador];
+      $compromisso->atendimentosValidos->values()->get($contador)->atividade_id = $atividades[$contador];
+      $compromisso->atendimentosValidos->values()->get($contador)->aparelho_id = $aparelhos[$contador];
+      $compromisso->atendimentosValidos->values()->get($contador)->fisio_id = $fisios[$contador];
+      $compromisso->atendimentosValidos->values()->get($contador)->save();
+      $pacientes[$contador] = -1;
+      $atividades[$contador] = -1;
+      $aparelhos[$contador] = -1;
+      $fisios[$contador] = -1;
+    }
+    /**
+     * Quinto passo: Criar os possiveis novos atendimentos
+     */
+    $indice = array_search(-1,array_reverse($pacientes));
+    for ($contador = 0; $contador < $atendimentosParaCriar; $contador++) {
       $novoAtendimento = new Atendimento([
         'compromisso_id' => $compromisso->id,
-        'paciente_id' => $request->pacientes[$i],
-        'atividade_id' => $request->atividades[$i],
-        'aparelho_id' => $request->aparelhos[$i],
-        'fisio_id' => $request->fisios[$i],
+        'paciente_id' => $request->pacientes[$indice],
+        'atividade_id' => $request->atividades[$indice],
+        'aparelho_id' => $request->aparelhos[$indice],
+        'fisio_id' => $request->fisios[$indice],
         'cumprido' => false,
         'ativo' => true
       ]);
       $novoAtendimento->save();
+      $indice++;
     }
+    /**
+     * Sexto passo: atualizar as demais informacoes do compromisso, salvar e retornar
+     */
     $compromisso->dia = $request->dia;
     $compromisso->hora = $request->hora;
     $compromisso->vagas = $request->vagas;
+    $compromisso->vagas_preenchidas = $request->vagas_preenchidas;
     $compromisso->save();
     return redirect()->route("agenda")->with('status', 'Compromisso alterado');
   }

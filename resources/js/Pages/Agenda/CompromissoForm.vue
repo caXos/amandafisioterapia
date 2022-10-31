@@ -29,10 +29,11 @@ const form = useForm({
   dia: Date,
   hora: Date,
   pacientes: Number,
-  atividades: String,
-  aparelhos: Array,
-  fisios: Array,
+  atividades: Number,
+  aparelhos: Number,
+  fisios: Number,
   vagas: Number,
+  vagas_preenchidas: Number,
   quantidade: Number,
 
   compromisso_id: Number
@@ -56,11 +57,24 @@ const submit = () => {
     atividadesArray.push($('#atividade-' + i).val())
     aparelhosArray.push($('#aparelho-' + i).val())
     fisiosArray.push($('#fisio-' + i).val())
+    if (pacientesArray[i] === null && atividadesArray[i] === null && aparelhosArray[i] === null && fisiosArray[i] === null) {
+      pacientesArray[i] = false
+      atividadesArray[i] = false
+      aparelhosArray[i] = false
+      fisiosArray[i] = false
+    } else {
+      if ( pacientesArray[i] === null || atividadesArray[i] === null || aparelhosArray[i] === null || fisiosArray[i] === null) {
+        erroNoFormulario('Ha um erro nas informacoes preenchidas do atendimento '+ (i+1))
+        return null;
+      }
+    }
   }
-  form.pacientes = pacientesArray
-  form.atividades = atividadesArray
-  form.aparelhos = aparelhosArray
-  form.fisios = fisiosArray
+
+  form.vagas_preenchidas = pacientesArray.filter(Number).length
+  form.pacientes = pacientesArray.filter(Number)
+  form.atividades = atividadesArray.filter(Number)
+  form.aparelhos = aparelhosArray.filter(Number)
+  form.fisios = fisiosArray.filter(Number)
   // if(validaFormulario()) {
   //     //formulário ok, segue com o gravar compromisso ou editar compromisso
   // }
@@ -72,6 +86,13 @@ const submit = () => {
     });
   } else {
     form.post(route('atualizarCompromisso'), {
+      onSuccess: () => {
+          Swal.fire ({
+              title: 'Sucesso',
+              icon: 'success',
+              text: 'Compromisso alterado!'
+          })
+      },
       onFinish: () => form.reset(),
     });
   }
@@ -200,7 +221,13 @@ function verificaAtividadePaciente(event) {
   habilitaAparelhos[indice] === true ? $('#aparelho-' + indice).prop('required', 'required').prop('disabled', '') : $('#aparelho-' + indice).prop('disabled', 'disabled').removeProp('required').val(1)
 }
 
-
+function erroNoFormulario(mensagem) {
+  Swal.fire ({
+      title: 'Erro',
+      icon: 'error',
+      text: mensagem
+  })
+}
 </script>
 
 <script>
