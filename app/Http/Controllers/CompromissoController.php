@@ -523,19 +523,19 @@ class CompromissoController extends Controller
     /**
      * Quinto passo: Criar os possiveis novos atendimentos
      */
-    $indice = array_search(-1,array_reverse($pacientes));
-    for ($contador = 0; $contador < $atendimentosParaCriar; $contador++) {
-      $novoAtendimento = new Atendimento([
-        'compromisso_id' => $compromisso->id,
-        'paciente_id' => $request->pacientes[$indice],
-        'atividade_id' => $request->atividades[$indice],
-        'aparelho_id' => $request->aparelhos[$indice],
-        'fisio_id' => $request->fisios[$indice],
-        'cumprido' => false,
-        'ativo' => true
-      ]);
-      $novoAtendimento->save();
-      $indice++;
+    for ($contador = 0; $contador < sizeof($pacientes); $contador++) {
+      if ($pacientes[$contador] != -1) {
+        $novoAtendimento = new Atendimento([
+          'compromisso_id' => $compromisso->id,
+          'paciente_id' => $request->pacientes[$contador],
+          'atividade_id' => $request->atividades[$contador],
+          'aparelho_id' => $request->aparelhos[$contador],
+          'fisio_id' => $request->fisios[$contador],
+          'cumprido' => false,
+          'ativo' => true
+        ]);
+        $novoAtendimento->save();
+      }
     }
     /**
      * Sexto passo: atualizar as demais informacoes do compromisso, salvar e retornar
