@@ -242,14 +242,14 @@ function desabilitaDias(evt) {
 
   if (evt.target.id !== 'dias-0') this.diasDaSemanaHabilitados[parseInt($('#dias-0').val())-1] = false
   if (evt.target.id === 'dias-0') {
-    if ( parseInt( $('#dias-1 > option:selected')[0].value ) === evt.target.selectedIndex) $('#dias-1')[0].selectedIndex = 0
-    if ( parseInt( $('#dias-2 > option:selected')[0].value ) === evt.target.selectedIndex) $('#dias-2')[0].selectedIndex = 0
+    if ( $('#dias-1').length() > 0 && parseInt( $('#dias-1 > option:selected')[0].value ) === evt.target.selectedIndex) $('#dias-1')[0].selectedIndex = 0
+    if ( $('#dias-2').length() > 0 && parseInt( $('#dias-2 > option:selected')[0].value ) === evt.target.selectedIndex) $('#dias-2')[0].selectedIndex = 0
   }
   if (evt.target.id === 'dias-1') {
-    if ( parseInt( $('#dias-2 > option:selected')[0].value ) === evt.target.selectedIndex-1) $('#dias-2')[0].selectedIndex = 0
+    if ( $('#dias-2').length() > 0 && parseInt( $('#dias-2 > option:selected')[0].value ) === evt.target.selectedIndex-1) $('#dias-2')[0].selectedIndex = 0
   }
   if (evt.target.id === 'dias-2') {
-    if ( parseInt( $('#dias-1 > option:selected')[0].value ) === evt.target.selectedIndex-1) $('#dias-1')[0].selectedIndex = 0
+    if ( $('#dias-1').length() > 0 && parseInt( $('#dias-1 > option:selected')[0].value ) === evt.target.selectedIndex-1) $('#dias-1')[0].selectedIndex = 0
   }
 }
 

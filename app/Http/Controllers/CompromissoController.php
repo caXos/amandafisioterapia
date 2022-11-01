@@ -339,7 +339,8 @@ class CompromissoController extends Controller
    */
   public function store(StoreCompromissoRequest $request)
   {
-    $this->authorize('create', Compromisso::class);
+    // dd($request);
+    // $this->authorize('store', Compromisso::class);
     $compromisso = new Compromisso([
       'user_id' => $request->fisio,
       'dia' => $request->dia,
@@ -348,7 +349,7 @@ class CompromissoController extends Controller
       'ativo' => true,
     ]);
     $compromisso->save();
-    for ($i = 0; $i < $request->vagas; $i++) {
+    for ($i = 0; $i < $request->vagas_preenchidas; $i++) {
       $novoAtendimento = new Atendimento([
         'compromisso_id' => $compromisso->id,
         'paciente_id' => $request->pacientes[$i],

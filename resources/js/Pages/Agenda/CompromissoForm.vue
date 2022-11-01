@@ -82,6 +82,13 @@ const submit = () => {
   // form.setError('atendimento2', 'Ha erros no formulario do atendimento 2')
   if (props.compromisso == null) {
     form.post(route('gravarCompromisso'), {
+      onSuccess: () => {
+        Swal.fire ({
+            title: 'Sucesso',
+            icon: 'success',
+            text: 'Compromisso criado!'
+        })
+      },
       onFinish: () => form.reset(),
     });
   } else {
