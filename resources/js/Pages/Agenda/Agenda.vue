@@ -2,8 +2,8 @@
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import CompromissoCard from '@/Components/CompromissoCard.vue';
 import FAB from '@/Components/FloatingActionButton.vue';
-import { Head, Link } from '@inertiajs/inertia-vue3';
-import { onMounted, computed, ref } from 'vue';
+import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
+import { onMounted, computed, ref, shallowReadonly } from 'vue';
 import CompromissoModal from '@/Components/CompromissoModal.vue';
 import AtendimentoModal from '@/Components/AtendimentoModal.vue';
 
@@ -31,6 +31,8 @@ const modalAtendimentoConteudo = ref({
     'hora': null
 });
 
+const form = useForm({});
+
 function abrirModalNotificarCompromissoTodo(compromisso) {
     console.log(compromisso)
     if (compromisso.atendimentos.length === 1) {
@@ -48,18 +50,51 @@ function abrirModalNotificarCompromissoTodo(compromisso) {
 }
 
 function abrirModalCompletarCompromissoTodo(compromisso) {
+    let titulo = null
+    let primeiraLinha = null
+    let segundaLinha = null
+    let compromissoString = new Date(compromisso.dia).toLocaleDateString() +', '+ new Date(compromisso.dia).toLocaleString('pt-BR', {weekday: 'long'}) +', às '+ compromisso.hora.substring(0, 5)
     if (compromisso.atendimentos.length === 1) {
-        modalConteudo.value.titulo = 'Registrar atendimento completado'
-        modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja registrar o seguinte compromisso como completado?'
-        modalConteudo.value.segundaLinha = 'Um atendimento será marcado como completado.'
+        titulo= 'Registrar atendimento completado'
+        primeiraLinha = 'Tem certeza de que deseja registrar o seguinte compromisso como completado?'
+        segundaLinha = 'Um atendimento será marcado como completado.'
     } else {
-        modalConteudo.value.titulo = 'Registrar atendimentos completados'
-        modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja registrar o seguinte compromisso como completado?'
-        modalConteudo.value.segundaLinha = 'Serão registrados como completado ' + compromisso.atendimentos.length + ' atendimentos.'
+        titulo = 'Registrar atendimentos completados'
+        primeiraLinha = 'Tem certeza de que deseja registrar o seguinte compromisso como completado?'
+        segundaLinha = 'Serão registrados como completado ' + compromisso.atendimentos.length + ' atendimentos.'
     }
-    modalConteudo.value.compromisso = compromisso
-    modalConteudo.value.rota = 'completarCompromisso/'+compromisso.id
-    modal.value = true
+    Swal.fire({
+        title: titulo,
+        html: `<span>${primeiraLinha}</span><br/><br/>${compromissoString}<br/><br/><span>${segundaLinha}</span>`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#14532d',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, completar',
+        cancelButtonText: 'Não, cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+        form.delete(route('completarCompromisso',[compromisso.id]), {
+            onSuccess: () => {
+                Swal.fire ({
+                    title: 'Sucesso',
+                    icon: 'success',
+                    text: 'Compromisso completado!'
+                })
+            },
+            onError: () => {
+                Swal.fire ({
+                    title: 'Erro',
+                    icon: 'error',
+                    text: 'Erro ao completar compromisso'
+                })
+            },
+            onFinish: () => {
+                form.reset()
+            }
+        })
+        }
+    })
 }
 
 function abrirModalFaltarCompromissoTodo(compromisso) {
@@ -78,18 +113,51 @@ function abrirModalFaltarCompromissoTodo(compromisso) {
 }
 
 function abrirModalDeletarCompromissoTodo(compromisso) {
+    let titulo = null
+    let primeiraLinha = null
+    let segundaLinha = null
+    let compromissoString = new Date(compromisso.dia).toLocaleDateString() +', '+ new Date(compromisso.dia).toLocaleString('pt-BR', {weekday: 'long'}) +', às '+ compromisso.hora.substring(0, 5)
     if (compromisso.atendimentos.length === 1) {
-        modalConteudo.value.titulo = 'Desmarcar atendimento'
-        modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja desmarcar o seguinte compromisso?'
-        modalConteudo.value.segundaLinha = 'Um atendimento será desmarcado.'
+        titulo= 'Desmarcar atendimento'
+        primeiraLinha = 'Tem certeza de que deseja desmarcar o seguinte compromisso?'
+        segundaLinha = 'Um atendimento será desmarcado.'
     } else {
-        modalConteudo.value.titulo = 'Desmarcar atendimentos'
-        modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja desmarcar o seguinte compromisso?'
-        modalConteudo.value.segundaLinha = 'Serão desmarcados ' + compromisso.atendimentos.length + ' atendimentos.'
+        titulo = 'Desmarcar atendimentos'
+        primeiraLinha = 'Tem certeza de que deseja desmarcar o seguinte compromisso?'
+        segundaLinha = 'Serão desmarcados ' + compromisso.atendimentos.length + ' atendimentos.'
     }
-    modalConteudo.value.compromisso = compromisso
-    modalConteudo.value.rota = 'deletarCompromisso/'+compromisso.id
-    modal.value = true
+    Swal.fire({
+        title: titulo,
+        html: `<span>${primeiraLinha}</span><br/><br/>${compromissoString}<br/><br/><span>${segundaLinha}</span>`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, deletar',
+        cancelButtonText: 'Não, cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+        form.delete(route('deletarCompromisso',[compromisso.id]), {
+            onSuccess: () => {
+                Swal.fire ({
+                    title: 'Sucesso',
+                    icon: 'success',
+                    text: 'Compromisso removido!'
+                })
+            },
+            onError: () => {
+                Swal.fire ({
+                    title: 'Erro',
+                    icon: 'error',
+                    text: 'Erro ao remover compromisso'
+                })
+            },
+            onFinish: () => {
+                form.reset()
+            }
+        })
+        }
+    })
 }
 
 function abrirModalRetornarCompromissoTodo(compromisso) {
@@ -121,6 +189,7 @@ function fecharModal() {
 function fecharModalAtendimento() {
     modalAtendimento.value = false
 }
+
 </script>
 
 <script>

@@ -42,7 +42,7 @@ class CompromissoPolicy
      */
     public function create(User $user)
     {
-        
+        return $user->id <= 2 ? Response::allow() : Response::deny('Usuário não tem permissão para criar compromissos!');
     }
 
     /**

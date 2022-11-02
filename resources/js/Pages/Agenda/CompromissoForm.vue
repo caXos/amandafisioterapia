@@ -44,6 +44,10 @@ const compromisso = ref(props.compromisso)
 const habilitaAparelhos = ref([false, false, false])
 const vagas = ref(0)
 
+const teste = () => {
+  alert('teste')
+}
+
 const submit = () => {
   form.dia = $('#dia').val();
   form.hora = $('#hora').val();
@@ -235,6 +239,43 @@ function erroNoFormulario(mensagem) {
       text: mensagem
   })
 }
+
+function showDeletionConfirmationModal() {
+  let mensagem = `Deseja realmente remover o compromisso?\nEssa operação não pode ser desfeita`
+  Swal.fire({
+    title: 'Confirmar remocao',
+    icon: 'question',
+    text: mensagem,
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sim, deletar',
+    cancelButtonText: 'Não, cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      form.delete(route('deletarCompromisso',[compromisso.value.id]), {
+          onSuccess: () => {
+              Swal.fire ({
+                  title: 'Sucesso',
+                  icon: 'success',
+                  text: 'Compromisso removido!'
+              })
+          },
+          onError: () => {
+              Swal.fire ({
+                  title: 'Erro',
+                  icon: 'error',
+                  text: 'Erro ao remover compromisso'
+              })
+          },
+          onFinish: () => {
+              form.reset()
+          }
+      })
+    }
+  });
+}
+
 </script>
 
 <script>
@@ -373,11 +414,9 @@ function trocaAtividade_bckp(evt) {
                 Voltar
                 </Link>
 
-                <Link v-if="compromisso != null"
-                  class="inline-flex items-center ml-4 px-4 py-2 bg-rose-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-rose-700 active:bg-rose-900 focus:outline-none focus:border-rose-900 focus:shadow-outline-rose transition ease-in-out duration-150"
-                  :href="route('deletarCompromisso', [compromisso.id])">
-                Remover
-                </Link>
+                <BreezeButton v-if="compromisso != null" class="inline-flex items-center ml-4 px-4 py-2 bg-rose-800" :type="'button'" @click="showDeletionConfirmationModal">
+                  Remover
+                </BreezeButton>
 
                 <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                   Salvar

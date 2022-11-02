@@ -339,8 +339,7 @@ class CompromissoController extends Controller
    */
   public function store(StoreCompromissoRequest $request)
   {
-    // dd($request);
-    // $this->authorize('store', Compromisso::class);
+    $this->authorize('create', Compromisso::class);
     $compromisso = new Compromisso([
       'user_id' => $request->fisio,
       'dia' => $request->dia,
@@ -575,11 +574,9 @@ class CompromissoController extends Controller
     foreach ($atendimentos as $atendimento) {
       $atendimento->cumprido = true;
       $atendimento->ativo = false;
-      // $atendimento->updated_at = date('Y-m-d H:i:s');
       $atendimento->save();
     }
     $compromisso->ativo = false;
-    // $compromisso->updated_at = date('Y-m-d H:i:s');
     $compromisso->save();
     // return response(['status','Compromisso e '.sizeof($atendimentos).' completados!']);
     return redirect()->route("agenda", ['status' => 'Compromisso e ' . sizeof($atendimentos) . ' completados!']);
@@ -592,17 +589,15 @@ class CompromissoController extends Controller
   public function deletarCompromisso(UpdateCompromissoRequest $request)
   {
     $this->authorize('deletarCompromisso', Compromisso::class);
-
     $compromisso = Compromisso::find($request->id);
-    $compromisso->ativo = false;
-    $compromisso->save();
     $atendimentos = $compromisso->atendimentosValidos;
     foreach ($atendimentos as $atendimento) {
       $atendimento->cumprido = true;
       $atendimento->ativo = true;
-      // $atendimento->updated_at = date('Y-m-d H:i:s');
       $atendimento->save();
     }
+    $compromisso->ativo = false;
+    $compromisso->save();
     // return response(['status','Compromisso deletado']);
     return redirect()->route("agenda", ['status' => 'Compromisso deletado']);
   }
@@ -638,6 +633,10 @@ class CompromissoController extends Controller
     // return view('agenda', ['teste'=>'Pacientes notificados']);
     // session()->flash('teste', 'Pacientes');
     return redirect()->route('agenda')->with('status', 'Pacientes notificados');
+  }
+
+  public function debug(Request $request) {
+    dd($request);
   }
 }
 

@@ -43,7 +43,6 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route::get('/agenda', [AgendaController::class, 'index'])->middleware(['auth', 'verified'])->name('agenda');
 Route::get('/agenda', [CompromissoController::class, 'index'])->middleware(['auth', 'verified'])->name('agenda');
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
@@ -56,20 +55,15 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
 
     Route::get('historico',[CompromissoController::class, 'historico'])->name('historico');
 
-    // Route::get('adicionarAgenda',[AgendaController::class, 'create'])->name('adicionarAgenda');
-    // Route::post('adicionarAgenda',[AgendaController::class, 'store'])->name('gravarAgenda');
-    // Route::get('editarAgenda/{id}',[AgendaController::class, 'edit'])->name('editarAgenda');
-    // Route::post('atualizarAgenda',[AgendaController::class, 'edit'])->name('atualizarAgenda');
-    // Route::post('completarCompromisso/{id}',[AgendaController::class, 'completarCompromisso'])->name('completarCompromisso');
-    // Route::post('deletarCompromisso/{id}',[AgendaController::class, 'deletarCompromisso'])->name('deletarCompromisso');
-
     Route::get('adicionarCompromisso',[CompromissoController::class, 'create'])->name('adicionarCompromisso');
     Route::post('adicionarCompromisso',[CompromissoController::class, 'store'])->name('gravarCompromisso');
     Route::get('editarCompromisso/{id}',[CompromissoController::class, 'edit'])->name('editarCompromisso');
     Route::post('atualizarCompromisso',[CompromissoController::class, 'update'])->name('atualizarCompromisso');
-    Route::get('completarCompromisso/{id}',[CompromissoController::class, 'completarCompromisso'])->name('completarCompromisso');
-    Route::get('deletarCompromisso/{id}',[CompromissoController::class, 'deletarCompromisso'])->name('deletarCompromisso');
-    Route::get('notificarCompromisso/{id}',[CompromissoController::class, 'notificarCompromisso'])->name('deletarCompromisso');
+    // Route::get('completarCompromisso/{id}',[CompromissoController::class, 'completarCompromisso'])->name('completarCompromisso');
+    Route::delete('completarCompromisso/{id}',[CompromissoController::class, 'completarCompromisso'])->name('completarCompromisso');
+    // Route::get('deletarCompromisso/{id}',[CompromissoController::class, 'deletarCompromisso'])->name('deletarCompromisso');
+    Route::delete('deletarCompromisso/{id}',[CompromissoController::class, 'deletarCompromisso'])->name('deletarCompromisso');
+    Route::get('notificarCompromisso/{id}',[CompromissoController::class, 'notificarCompromisso'])->name('notificarCompromisso');
 
     Route::get('adicionarFinanceiro',[FinanceiroController::class, 'create'])->name('adicionarFinanceiro');
     Route::post('adicionarFinanceiro',[FinanceiroController::class, 'store'])->name('gravarFinanceiro');
@@ -92,7 +86,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::post('editarProntuario/{paciente_id}/{id}',[ProntuarioController::class, 'update'])->name('editarProntuario');
     Route::get('deletarProntuario/{paciente_id}/{id}',[ProntuarioController::class, 'deletarProntuario'])->name('deletarProntuario');
 
-    Route::post('debug', [CompromissoController::class, 'debug'])->name('debug');
+    Route::get('debug', [CompromissoController::class, 'debug'])->name('debug');
 });
 
 require __DIR__.'/auth.php';
