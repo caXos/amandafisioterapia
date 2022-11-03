@@ -66,6 +66,11 @@ class CompromissoPolicy
     {
         return $user->id <= 2 ? Response::allow() : Response::deny('Visitantes não podem deletar compromissos!');
     }
+
+    public function faltarCompromisso(User $user)
+    {
+        return $user->id <= 2 ? Response::allow() : Response::deny('Visitantes não podem registrar faltas para compromissos!');
+    }
     /**
      * Determine whether the user can delete the model.
      *

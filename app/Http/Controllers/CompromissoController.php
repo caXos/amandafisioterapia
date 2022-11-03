@@ -635,6 +635,26 @@ class CompromissoController extends Controller
     return redirect()->route('agenda')->with('status', 'Pacientes notificados');
   }
 
+  /**
+   * Registra falta para os atendimentos validos de um compromisso
+   * @param  \App\Models\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function faltarCompromisso(Request $request)
+  {
+    $this->authorize('faltarCompromisso', Compromisso::class);
+    $compromisso = Compromisso::find($request->id);
+    $atendimentos = $compromisso->atendimentosValidos;
+    foreach ($atendimentos as $atendimento) {
+      $atendimento->cumprido = false;
+      $atendimento->ativo = false;
+      $atendimento->save();
+    }
+    $compromisso->ativo = false;
+    $compromisso->save();
+    return redirect()->route('agenda')->with('status', 'Compromisso registrado como falta');
+  }
+
   public function debug(Request $request) {
     dd($request);
   }

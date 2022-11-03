@@ -74,42 +74,75 @@ function abrirModalCompletarCompromissoTodo(compromisso) {
         cancelButtonText: 'Não, cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-        form.delete(route('completarCompromisso',[compromisso.id]), {
-            onSuccess: () => {
-                Swal.fire ({
-                    title: 'Sucesso',
-                    icon: 'success',
-                    text: 'Compromisso completado!'
-                })
-            },
-            onError: () => {
-                Swal.fire ({
-                    title: 'Erro',
-                    icon: 'error',
-                    text: 'Erro ao completar compromisso'
-                })
-            },
-            onFinish: () => {
-                form.reset()
-            }
-        })
+            form.delete(route('completarCompromisso',[compromisso.id]), {
+                onSuccess: () => {
+                    Swal.fire ({
+                        title: 'Sucesso',
+                        icon: 'success',
+                        text: 'Compromisso completado!'
+                    })
+                },
+                onError: () => {
+                    Swal.fire ({
+                        title: 'Erro',
+                        icon: 'error',
+                        text: 'Erro ao completar compromisso'
+                    })
+                },
+                onFinish: () => {
+                    form.reset()
+                }
+            })
         }
     })
 }
 
 function abrirModalFaltarCompromissoTodo(compromisso) {
+    let titulo = null
+    let primeiraLinha = null
+    let segundaLinha = null
+    let compromissoString = new Date(compromisso.dia).toLocaleDateString() +', '+ new Date(compromisso.dia).toLocaleString('pt-BR', {weekday: 'long'}) +', às '+ compromisso.hora.substring(0, 5)
     if (compromisso.atendimentos.length === 1) {
-        modalConteudo.value.titulo = 'Registrar falta'
-        modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja registrar o seguinte compromisso como falta?'
-        modalConteudo.value.segundaLinha = 'Um atendimento será marcado como falta.'
+        titulo= 'Registrar falta'
+        primeiraLinha = 'Tem certeza de que deseja registrar falta para o seguinte compromisso?'
+        segundaLinha = 'Um atendimento será registrado como falta.'
     } else {
-        modalConteudo.value.titulo = 'Registrar faltas'
-        modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja registrar o seguinte compromisso como falta?'
-        modalConteudo.value.segundaLinha = 'Serão registrados como falta ' + compromisso.atendimentos.length + ' atendimentos.'
+        titulo = 'Registrar faltas'
+        primeiraLinha = 'Tem certeza de que deseja registrar faltas para o seguinte compromisso?'
+        segundaLinha = 'Serão registrados como falta ' + compromisso.atendimentos.length + ' atendimentos.'
     }
-    modalConteudo.value.compromisso = compromisso
-    modalConteudo.value.rota = 'notificarCompromisso/'+compromisso.id //alterar para faltar compromisso
-    modal.value = true
+    Swal.fire({
+        title: titulo,
+        html: `<span>${primeiraLinha}</span><br/><br/>${compromissoString}<br/><br/><span>${segundaLinha}</span>`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, registrar falta',
+        cancelButtonText: 'Não, cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.post(route('faltarCompromisso',[compromisso.id]), {
+                onSuccess: () => {
+                    Swal.fire ({
+                        title: 'Sucesso',
+                        icon: 'success',
+                        text: 'Compromisso registrado como falta!'
+                    })
+                },
+                onError: () => {
+                    Swal.fire ({
+                        title: 'Erro',
+                        icon: 'error',
+                        text: 'Erro ao registrar compromisso como falta'
+                    })
+                },
+                onFinish: () => {
+                    form.reset()
+                }
+            })
+        }
+    })
 }
 
 function abrirModalDeletarCompromissoTodo(compromisso) {
@@ -137,42 +170,108 @@ function abrirModalDeletarCompromissoTodo(compromisso) {
         cancelButtonText: 'Não, cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-        form.delete(route('deletarCompromisso',[compromisso.id]), {
-            onSuccess: () => {
-                Swal.fire ({
-                    title: 'Sucesso',
-                    icon: 'success',
-                    text: 'Compromisso removido!'
-                })
-            },
-            onError: () => {
-                Swal.fire ({
-                    title: 'Erro',
-                    icon: 'error',
-                    text: 'Erro ao remover compromisso'
-                })
-            },
-            onFinish: () => {
-                form.reset()
-            }
-        })
+            form.delete(route('deletarCompromisso',[compromisso.id]), {
+                onSuccess: () => {
+                    Swal.fire ({
+                        title: 'Sucesso',
+                        icon: 'success',
+                        text: 'Compromisso removido!'
+                    })
+                },
+                onError: () => {
+                    Swal.fire ({
+                        title: 'Erro',
+                        icon: 'error',
+                        text: 'Erro ao remover compromisso'
+                    })
+                },
+                onFinish: () => {
+                    form.reset()
+                }
+            })
         }
     })
 }
 
 function abrirModalRetornarCompromissoTodo(compromisso) {
-    if (compromisso.atendimentos.length === 1) {
-        modalConteudo.value.titulo = 'Agendar retorno'
-        modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja agendar retorno do seguinte compromisso?'
-        modalConteudo.value.segundaLinha = 'Será agendado retorno para um atendimento.'
-    } else {
-        modalConteudo.value.titulo = 'Agendar retornos'
-        modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja agendar retorno do seguinte compromisso?'
-        modalConteudo.value.segundaLinha = 'Serão agendados retornos para ' + compromisso.atendimentos.length + ' atendimentos.'
+    let compromissosSelect = {
+        '1': 'Um'
     }
-    modalConteudo.value.compromisso = compromisso
-    modalConteudo.value.rota = 'notificarCompromisso/'+compromisso.id //alterar para faltar compromisso
-    modal.value = true
+
+    let titulo = null
+    let primeiraLinha = null
+    let segundaLinha = null
+    let compromissoString = new Date(compromisso.dia).toLocaleDateString() +', '+ new Date(compromisso.dia).toLocaleString('pt-BR', {weekday: 'long'}) +', às '+ compromisso.hora.substring(0, 5)
+    if (compromisso.atendimentos.length === 1) {
+        titulo= 'Agendar retorno'
+        primeiraLinha = 'Tem certeza de que deseja agendar retorno para o seguinte compromisso?'
+        segundaLinha = 'Escolha abaixo se quer registrar falta ou presença para o atendimento deste compromisso:'
+    } else {
+        titulo = 'Agendar retornos'
+        primeiraLinha = 'Tem certeza de que deseja agendar retorno para o seguinte compromisso?'
+        segundaLinha = 'Escolha abaixo se quer registrar falta ou presença para os ' + compromisso.atendimentos.length + ' atendimentos.'
+    }
+    Swal.fire({
+        title: titulo,
+        html: `<span>${primeiraLinha}</span><br/><br/>${compromissoString}<br/><br/><span>${segundaLinha}</span>`,
+        icon: 'question',
+        showCancelButton: true,
+        showDenyButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        denyButtonColor: '#d33',
+        confirmButtonText: 'Registrar presenca e retorno',
+        denyButtonText: 'Registrar falta e retorno',
+        cancelButtonText: 'Cancelar',
+        input: 'select',
+        inputOptions: compromissosSelect
+    }).then((result) => {
+        if (result.isConfirmed) {
+            console.log(result)
+            /**
+             * Object {
+             *      isConfirmed: true,
+             *      isDenied: false,
+             *      isDismissed: false,
+             *      value: "1"
+             *  }
+             */
+            // form.delete(route('deletarCompromisso',[compromisso.id]), {
+            //     onSuccess: () => {
+            //         Swal.fire ({
+            //             title: 'Sucesso',
+            //             icon: 'success',
+            //             text: 'Compromisso removido!'
+            //         })
+            //     },
+            //     onError: () => {
+            //         Swal.fire ({
+            //             title: 'Erro',
+            //             icon: 'error',
+            //             text: 'Erro ao remover compromisso'
+            //         })
+            //     },
+            //     onFinish: () => {
+            //         form.reset()
+            //     }
+            // })
+        }
+    })
+
+
+
+    // if (compromisso.atendimentos.length === 1) {
+    //     modalConteudo.value.titulo = 'Agendar retorno'
+    //     modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja agendar retorno do seguinte compromisso?'
+    //     modalConteudo.value.segundaLinha = 'Será agendado retorno para um atendimento.'
+    // } else {
+    //     modalConteudo.value.titulo = 'Agendar retornos'
+    //     modalConteudo.value.primeiraLinha = 'Tem certeza de que deseja agendar retorno do seguinte compromisso?'
+    //     modalConteudo.value.segundaLinha = 'Serão agendados retornos para ' + compromisso.atendimentos.length + ' atendimentos.'
+    // }
+    // modalConteudo.value.compromisso = compromisso
+    // modalConteudo.value.rota = 'notificarCompromisso/'+compromisso.id //alterar para faltar compromisso
+    // modal.value = true
 }
 
 function abrirModalAtendimento(atendimento) {
