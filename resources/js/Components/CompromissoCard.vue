@@ -34,7 +34,7 @@ onMounted (function () {
 
 <template>
     <div
-        class="container shadow-lg shadow-sky-200 text-center text-sky-600 hover:bg-sky-100 transition-all border-2 rounded border-sky-600 mb-5">
+        class="container shadow-lg shadow-sky-200 text-center text-sky-600 hover:bg-sky-100 transition-all border-2 rounded border-sky-600 mb-5 flex-wrap">
         <div class="bg-sky-100 py-2 border-b-2 border-sky-600 font-bold">
             <span>{{ new Date( new Date(compromisso.dia).setDate( new Date(compromisso.dia).getDate()+ 1 ) ).toLocaleDateString() }}, {{ new Date( new Date(compromisso.dia).setDate( new Date(compromisso.dia).getDate()+ 1 ) ).toLocaleDateString('pt-BR', {weekday: 'long'}) }} - {{ compromisso.hora.substring(0, 5) }}</span>
             <span> - Vagas: {{ compromisso.vagas}}</span>

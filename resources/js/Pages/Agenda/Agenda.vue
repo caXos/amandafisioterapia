@@ -194,9 +194,13 @@ function abrirModalDeletarCompromissoTodo(compromisso) {
 }
 
 function abrirModalRetornarCompromissoTodo(compromisso) {
-    let compromissosSelect = {
-        '1': 'Um'
+    let compromissosString = '{'
+    for (let i=0; i<props.compromissos.length; i++) {
+        compromissosString += `"${props.compromissos[i].id}":"${props.compromissos[i].dia} - ${props.compromissos[i].hora.substring(0,5)} - ${props.compromissos[i].vagas}/${props.compromissos[i].vagas_preenchidas}"`
+        if (i < (props.compromissos.length-1)) compromissosString += ','
     }
+    compromissosString += '}'
+    let compromissosJson = JSON.parse(compromissosString)
 
     let titulo = null
     let primeiraLinha = null
@@ -204,11 +208,11 @@ function abrirModalRetornarCompromissoTodo(compromisso) {
     let compromissoString = new Date(compromisso.dia).toLocaleDateString() +', '+ new Date(compromisso.dia).toLocaleString('pt-BR', {weekday: 'long'}) +', às '+ compromisso.hora.substring(0, 5)
     if (compromisso.atendimentos.length === 1) {
         titulo= 'Agendar retorno'
-        primeiraLinha = 'Tem certeza de que deseja agendar retorno para o seguinte compromisso?'
+        primeiraLinha = 'Tem certeza de que deseja agendar retorno para do seguinte compromisso?'
         segundaLinha = 'Escolha abaixo se quer registrar falta ou presença para o atendimento deste compromisso:'
     } else {
         titulo = 'Agendar retornos'
-        primeiraLinha = 'Tem certeza de que deseja agendar retorno para o seguinte compromisso?'
+        primeiraLinha = 'Tem certeza de que deseja agendar retorno do seguinte compromisso?'
         segundaLinha = 'Escolha abaixo se quer registrar falta ou presença para os ' + compromisso.atendimentos.length + ' atendimentos.'
     }
     Swal.fire({
@@ -224,10 +228,10 @@ function abrirModalRetornarCompromissoTodo(compromisso) {
         denyButtonText: 'Registrar falta e retorno',
         cancelButtonText: 'Cancelar',
         input: 'select',
-        inputOptions: compromissosSelect
+        inputOptions: compromissosJson
     }).then((result) => {
         if (result.isConfirmed) {
-            console.log(result)
+            console.log('Confirmado', result)
             /**
              * Object {
              *      isConfirmed: true,
@@ -255,6 +259,38 @@ function abrirModalRetornarCompromissoTodo(compromisso) {
             //         form.reset()
             //     }
             // })
+        }
+        else {
+            if (result.isDenied) {
+                console.log('Denied', result)
+                /**
+                 * Object {
+                 *      isConfirmed: true,
+                 *      isDenied: false,
+                 *      isDismissed: false,
+                 *      value: "1"
+                 *  }
+                 */
+                // form.delete(route('deletarCompromisso',[compromisso.id]), {
+                //     onSuccess: () => {
+                //         Swal.fire ({
+                //             title: 'Sucesso',
+                //             icon: 'success',
+                //             text: 'Compromisso removido!'
+                //         })
+                //     },
+                //     onError: () => {
+                //         Swal.fire ({
+                //             title: 'Erro',
+                //             icon: 'error',
+                //             text: 'Erro ao remover compromisso'
+                //         })
+                //     },
+                //     onFinish: () => {
+                //         form.reset()
+                //     }
+                // })
+            }
         }
     })
 
