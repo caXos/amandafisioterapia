@@ -196,7 +196,7 @@ function abrirModalDeletarCompromissoTodo(compromisso) {
 function abrirModalRetornarCompromissoTodo(compromisso) {
     let compromissosString = '{'
     for (let i=0; i<props.compromissos.length; i++) {
-        compromissosString += `"${props.compromissos[i].id}":"${props.compromissos[i].dia} - ${props.compromissos[i].hora.substring(0,5)} - ${props.compromissos[i].vagas}/${props.compromissos[i].vagas_preenchidas}"`
+        compromissosString += `"${props.compromissos[i].id}":"${props.compromissos[i].dia} ${new Date(compromisso.dia).toLocaleString('pt-BR', {weekday: 'long'})} - ${props.compromissos[i].hora.substring(0,5)} - ${props.compromissos[i].vagas}/${props.compromissos[i].vagas_preenchidas}"`
         if (i < (props.compromissos.length-1)) compromissosString += ','
     }
     compromissosString += '}'
