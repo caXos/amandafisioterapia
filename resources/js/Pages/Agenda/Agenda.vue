@@ -196,10 +196,13 @@ function abrirModalDeletarCompromissoTodo(compromisso) {
 function abrirModalRetornarCompromissoTodo(compromisso) {
     let compromissosString = '{'
     for (let i=0; i<props.compromissos.length; i++) {
-        compromissosString += `"${props.compromissos[i].id}":"${props.compromissos[i].dia} - ${props.compromissos[i].hora.substring(0,5)} - ${props.compromissos[i].vagas}/${props.compromissos[i].vagas_preenchidas}"`
-        if (i < (props.compromissos.length-1)) compromissosString += ','
+        if (props.compromissos[i].id !== compromisso.id) {
+            compromissosString += `"${props.compromissos[i].id}":"${props.compromissos[i].dia} - ${props.compromissos[i].hora.substring(0,5)} - ${props.compromissos[i].vagas}/${props.compromissos[i].vagas_preenchidas}"`
+            if (i < (props.compromissos.length-1)) compromissosString += ','
+        }
     }
     compromissosString += '}'
+    if (compromissosString === '{}') compromissosString = `{"0":"Não há outros compromissos!"}`
     let compromissosJson = JSON.parse(compromissosString)
 
     let titulo = null
@@ -232,6 +235,15 @@ function abrirModalRetornarCompromissoTodo(compromisso) {
     }).then((result) => {
         if (result.isConfirmed) {
             console.log('Confirmado', result)
+            //Verificar se value === 0 , ou seja, não há outros atendimentos. Caso true, tem que informar que nada foi feito. Ou nem mostrar a opção, na verdade... mostrar um outro swal no lugar... um para criar atendimento
+            form.delete(route('completarCompromissoComRetorno', [compromisso.id, parseInt(result.value)]), {
+                onSucess: () => {
+                    console.log('sucesso no formulário')
+                },
+                onFinish: () => {
+                    console.log('formulário finalizado')
+                }
+            })
             /**
              * Object {
              *      isConfirmed: true,

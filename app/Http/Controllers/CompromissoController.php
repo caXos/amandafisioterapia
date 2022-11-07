@@ -15,7 +15,7 @@ use App\Models\Atendimento;
 use App\Models\User;
 use App\Models\PlanoPaciente;
 use App\Models\Plano;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 class CompromissoController extends Controller
@@ -578,6 +578,39 @@ class CompromissoController extends Controller
     }
     $compromisso->ativo = false;
     $compromisso->save();
+    // return response(['status','Compromisso e '.sizeof($atendimentos).' completados!']);
+    return redirect()->route("agenda", ['status' => 'Compromisso e ' . sizeof($atendimentos) . ' completados!']);
+  }
+
+  public function completarCompromissoComRetorno($id, $idNovo)
+  {
+    // Auth::user()->teste = 'testeFlashData';
+    
+    $this->authorize('completarCompromisso', Compromisso::class);
+    $compromisso = Compromisso::find($id);
+    $compromissoDestino = Compromisso::find($idNovo);
+    $atendimentos = $compromisso->atendimentosValidos;
+    foreach ($atendimentos as $atendimento) {
+      $novoAtendimento = new Atendimento([
+        'compromisso_id' => $compromissoDestino->id,
+        'paciente_id' => $atendimento->paciente_id,
+        'atividade_id' => $atendimento->atividade_id,
+        'aparelho_id' => $atendimento->aparelho_id,
+        'fisio_id' => $atendimento->fisio_id
+      ]);
+      $novoAtendimento->save();
+      $compromissoDestino->vagas++;
+      $compromissoDestino->vagas_preenchidas++;
+      $compromissoDestino->save();
+      $atendimento->cumprido = true;
+      $atendimento->ativo = false;
+      $atendimento->save();
+    }
+    $compromisso->ativo = false;
+    $compromisso->save();
+
+    // session()->forget('eizem');
+    // session()->flash('eizem', 'teste');
     // return response(['status','Compromisso e '.sizeof($atendimentos).' completados!']);
     return redirect()->route("agenda", ['status' => 'Compromisso e ' . sizeof($atendimentos) . ' completados!']);
   }
